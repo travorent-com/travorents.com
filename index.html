@@ -426,7 +426,7 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
       <li><a href="#vehicles">All Bikes</a></li>
       <li><a href="#blog">Gallery</a></li>
       <li><a href="#footer">Contact</a></li>
-      <li><a href="tel:+6372465107" class="nav-call"><i class="fas fa-phone-alt"></i> +91 916372465107</a></li>
+      <li><a href="tel:+6372465107" class="nav-call"><i class="fas fa-phone-alt"></i> +91 6372465107</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
   </nav>
@@ -625,7 +625,7 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
           <li><i class="fas fa-check-circle"></i> Multiple pickup locations in Bhubaneswar</li>
           <li><i class="fas fa-check-circle"></i> No vehicle over 12 months old</li>
         </ul>
-        <a href="tel:+6372465107" class="btn-primary"><i class="fas fa-phone-alt"></i> +91 916372465107</a>
+        <a href="tel:+6372465107" class="btn-primary"><i class="fas fa-phone-alt"></i> +91 6372465107</a>
       </div>
     </div>
   </div>
@@ -702,7 +702,7 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <span class="footer-logo-name">Travo<span>Rents</span>.com</span>
         <p>Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
         <p><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
-        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+6372465107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 916372465107</a></p>
+        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+6372465107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 6372465107</a></p>
         <p><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:info@travorents.com" style="color:rgba(255,255,255,0.6);text-decoration:none">info@travorents.com</a></p>
         <div class="social-links">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -1150,14 +1150,23 @@ var options = {
 
     handler: function (response) {
 
-        alert("Payment Successful!");
+ const bookingId = "TR-" + Date.now();
+ const vehicle=(window.currentVehicle&&currentVehicle.name)?currentVehicle.name:"Vehicle Booking";
+ const message = encodeURIComponent(`🚗 TravoRents Booking Confirmed
 
-        window.open(
-          "https://wa.me/918984330609?text=New Booking Paid%0APayment ID: "
-          + response.razorpay_payment_id,
-          "_blank"
-        );
-    },
+Booking ID: ${bookingId}
+
+Vehicle: ${vehicle}
+
+Payment ID: ${response.razorpay_payment_id}
+
+Status: Paid ✅
+
+Customer Support: +91 6372465107`);
+
+ alert("Payment Successful!");
+ window.location.href = "https://wa.me/918455065107?text=" + message;
+ },
 
     theme: {
         color: "#0C447C"
@@ -1446,7 +1455,7 @@ function waMessage(bookId, role) {
     `📅 From: *${pDate}*  →  *${rDate}*`,
     `💰 Amount Paid: *₹${totalDue.toFixed(2)}*`,
     '',
-    'Thank you for choosing TravoRents! 📞 +91 916372465107',
+    'Thank you for choosing TravoRents! 📞 +91 6372465107',
   ].join('\n');
 }
 
