@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Booking Summary | TravoRents</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style1.css">
+</head>
+
+<body>
+
+<!-- BOOKING FLOW INDICATOR -->
+<div class="booking-flow">
+  Select Details
+  →
+  Choose Vehicle
+  →
+  Terms & Conditions
+  →
+  Booking Summary
+  →
+  Make Payment
+  →
+  WhatsApp Confirmation
+</div>
+
+<div class="container">
+
+<div class="summary-card">
+
+<h2>SUMMARY</h2>
+
+<div class="summary-content">
+
+<div class="vehicle-box">
+
+<img id="vehicleImage" src="" alt="Vehicle">
+
+<h3 id="vehicleName">Vehicle Name</h3>
+
+</div>
+
+<div class="booking-details">
+
+<div class="date-row">
+
+<div>
+<h4 id="pickupTime"></h4>
+<p id="pickupDate"></p>
+</div>
+
+<span>to</span>
+
+<div>
+<h4 id="returnTime"></h4>
+<p id="returnDate"></p>
+</div>
+
+</div>
+
+<hr>
+
+<p>
+<strong>Pickup Location</strong>
+</p>
+
+<p id="pickupLocation"></p>
+
+<hr>
+
+<div class="extra-info">
+
+<div>
+<span>Helmet</span>
+<select id="helmetQty">
+<option>0</option>
+<option>1</option>
+<option>2</option>
+</select>
+</div>
+
+<div>
+<span>KM Limit</span>
+<b>170 KM</b>
+</div>
+
+<div>
+<span>Extra KM Charge</span>
+<b>₹4/KM</b>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="billing-card">
+
+<h2>Billing Details</h2>
+
+<div class="reward-box">
+<input type="checkbox">
+<span>Travo Reward Points</span>
+<b>₹20</b>
+</div>
+
+<div class="coupon-box">
+<input type="text" placeholder="Coupon Code">
+<button>APPLY</button>
+</div>
+
+<div class="price-row">
+<span>Vehicle Rental Charges</span>
+<span>₹<span id="rentPrice">0</span></span>
+</div>
+
+<div class="price-row">
+<span>GST (18%)</span>
+<span>₹<span id="gstPrice">0</span></span>
+</div>
+
+<div class="price-row">
+<span>Refundable Deposit</span>
+<span>₹0</span>
+</div>
+
+<hr>
+
+<div class="total-row">
+<span>Total Due</span>
+<span>₹<span id="totalPrice">0</span></span>
+</div>
+
+</div>
+
+</div>
+
+<!-- CUSTOMER DETAILS SECTION -->
+<div class="billing-card">
+
+<h2>Your Details</h2>
+
+<div class="form-group">
+<label>Full Name *</label>
+<input type="text" id="customerName" placeholder="Enter your full name" required>
+</div>
+
+<div class="form-group">
+<label>Phone Number *</label>
+<input type="tel" id="customerPhone" placeholder="Enter your phone number" required>
+</div>
+
+<div class="form-group">
+<label>Email Address *</label>
+<input type="email" id="customerEmail" placeholder="Enter your email" required>
+</div>
+
+<hr>
+
+<h3>Terms & Conditions</h3>
+
+<div class="terms-content">
+<p><strong>✓ Booking Confirmation:</strong> You will receive a WhatsApp confirmation with your booking details.</p>
+<p><strong>✓ Fuel Policy:</strong> Vehicle will be provided with full fuel. Return with full fuel tank.</p>
+<p><strong>✓ Mileage:</strong> 170 KM included. Extra KM charged at ₹4/KM.</p>
+<p><strong>✓ Refundable Deposit:</strong> Security deposit will be refunded after vehicle return.</p>
+<p><strong>✓ Cancellation:</strong> Free cancellation up to 2 hours before pickup.</p>
+<p><strong>✓ Insurance:</strong> Basic insurance included. Premium coverage available.</p>
+</div>
+
+<div class="terms-checkbox">
+<input type="checkbox" id="termsCheckbox">
+<label for="termsCheckbox">I accept the Terms & Conditions and agree to the booking policy</label>
+</div>
+
+<button class="payment-btn" onclick="makePayment()">
+💳 Make Payment (Razorpay)
+</button>
+</div>
+
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>

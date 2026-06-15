@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful | TravoRents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .success-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #07213f 0%, #0a2d56 50%, #0C447C 100%);
+      padding: 20px;
+    }
+    
+    .success-card {
+      background: white;
+      border-radius: 20px;
+      padding: 60px 40px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideInUp 0.6s ease;
+    }
+    
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: #28a745;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px;
+      font-size: 40px;
+      color: white;
+      animation: successBounce 0.6s ease;
+    }
+    
+    .success-card h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #0C447C;
+      margin-bottom: 15px;
+    }
+    
+    .success-card p {
+      color: #6c757d;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    
+    .booking-id {
+      background: #f1f3f5;
+      border-left: 4px solid #0C447C;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 30px 0;
+      text-align: left;
+    }
+    
+    .booking-id label {
+      font-size: 12px;
+      color: #6c757d;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    
+    .booking-id .value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0C447C;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: 1px;
+    }
+    
+    .success-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: #0C447C;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #185FA5;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(12,68,124,0.4);
+    }
+    
+    .btn-secondary {
+      background: #f1f3f5;
+      color: #0C447C;
+      border: 2px solid #0C447C;
+    }
+    
+    .btn-secondary:hover {
+      background: #e9ecef;
+    }
+    
+    .success-details {
+      text-align: left;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 30px 0;
+      font-size: 14px;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    
+    .detail-row span:first-child {
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    .detail-row span:last-child {
+      color: #0C447C;
+      font-weight: 600;
+    }
+    
+    .next-steps {
+      background: #e7f3ff;
+      border-left: 4px solid #0C447C;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: left;
+      font-size: 14px;
+      color: #0C447C;
+    }
+    
+    .next-steps strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+    
+    .next-steps ol {
+      margin-left: 20px;
+      padding: 0;
+    }
+    
+    .next-steps li {
+      margin-bottom: 8px;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes successBounce {
+      0%, 100% { transform: scale(0); }
+      50% { transform: scale(1.1); }
+      80% { transform: scale(0.95); }
+    }
+    
+    @media (max-width: 768px) {
+      .success-card {
+        padding: 40px 25px;
+      }
+      
+      .success-card h1 {
+        font-size: 24px;
+      }
+      
+      .success-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BOOKING FLOW INDICATOR -->
+<div style="background: linear-gradient(to right, #28a745, #20c997); color: white; padding: 20px; text-align: center; font-weight: 600; font-family: Poppins;">
+  ✅ Step 5 Complete: Payment Successful → WhatsApp Confirmation Sent
+</div>
+
+<div class="success-container">
+  <div class="success-card">
+    <div class="success-icon">
+      <i class="fas fa-check"></i>
+    </div>
+    
+    <h1>Booking Successful!</h1>
+    <p>Your booking request has been received and confirmed.</p>
+    
+    <div class="booking-id">
+      <label>Booking ID</label>
+      <div class="value" id="bookingId">TR-XXXXXX</div>
+    </div>
+    
+    <div class="next-steps">
+      <strong>What's Next?</strong>
+      <ol>
+        <li>You'll receive a WhatsApp confirmation shortly</li>
+        <li>Our team will verify your documents</li>
+        <li>Vehicle will be ready at the specified pickup location and time</li>
+        <li>Enjoy your trip with TravoRents!</li>
+      </ol>
+    </div>
+    
+    <div class="success-actions">
+      <button id="whatsappBtn" class="btn-primary">📱 Open WhatsApp Confirmation</button>
+      <a href="index.html" class="btn btn-secondary">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+      <a href="tel:+6372465107" class="btn btn-secondary">
+        <i class="fas fa-phone-alt"></i> Call Us
+      </a>
+    </div>
+    
+    <p style="margin-top: 30px; font-size: 13px; color: #6c757d;">
+      <i class="fas fa-info-circle"></i> Check your WhatsApp messages for booking details
+    </p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const booking = JSON.parse(localStorage.getItem('booking')) || {};
+    const bookingIdElement = document.getElementById('bookingId');
+
+    let bookingId =
+        booking.paymentId ||
+        'TR-' + Math.floor(100000 + Math.random() * 900000);
+
+    if (bookingId === 'pending') {
+        bookingId =
+            'TR-' + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    bookingIdElement.textContent = bookingId;
+
+    localStorage.setItem('lastBookingId', bookingId);
+
+    // WhatsApp Button
+    document.getElementById("whatsappBtn").addEventListener("click", () => {
+
+        const phone = "916372465107";
+
+        const message =
+`🚗 TravoRents Booking Confirmed
+
+Vehicle: ${booking.vehicleName || ""}
+Customer: ${booking.customerName || ""}
+Phone: ${booking.customerPhone || ""}
+Amount Paid: ₹${booking.totalAmount || ""}
+Booking ID: ${bookingId}
+
+Thank You for choosing TravoRents`;
+
+        window.open(
+            `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+            "_blank"
+        );
+    });
+
+});
+</script>
+
+
+</body>
+</html>

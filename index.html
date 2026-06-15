@@ -6,431 +6,7 @@
 <title>TravoRents.com – Car & Bike Rental in Bhubaneswar</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root{
-  --primary:#0C447C;--primary-mid:#185FA5;--primary-light:#378ADD;
-  --accent:#EF9F27;--accent-dark:#BA7517;
-  --dark:#1a1a2e;--darker:#0a0f1e;
-  --light:#f8f9fa;--gray:#6c757d;--light-gray:#f1f3f5;--white:#fff;
-  --shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 8px 40px rgba(0,0,0,0.18);
-  --radius:12px;--transition:all 0.3s ease;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Poppins',sans-serif;color:var(--dark);background:var(--white);overflow-x:hidden;}
-
-/* ===== HEADER ===== */
-header{position:fixed;top:0;width:100%;z-index:1000;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);box-shadow:0 2px 20px rgba(0,0,0,0.08);transition:var(--transition);}
-.header-top{background:var(--primary);color:white;text-align:right;padding:6px 40px;font-size:13px;}
-.header-top a{color:#fff;text-decoration:none;}
-.header-top a:hover{color:var(--accent);}
-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 40px;max-width:1300px;margin:0 auto;}
-
-/* TR Logo SVG */
-.logo-wrap{display:flex;align-items:center;gap:12px;text-decoration:none;}
-.logo-svg{width:46px;height:46px;flex-shrink:0;}
-.logo-text-wrap{display:flex;flex-direction:column;line-height:1;}
-.logo-name{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:900;color:var(--primary);letter-spacing:-0.5px;}
-.logo-name span{color:var(--primary-light);}
-.logo-dot{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--gray);letter-spacing:1px;}
-
-.nav-links{display:flex;list-style:none;gap:6px;align-items:center;}
-.nav-links a{text-decoration:none;color:var(--dark);font-size:14px;font-weight:500;padding:8px 13px;border-radius:8px;transition:var(--transition);}
-.nav-links a:hover{color:var(--primary);background:rgba(12,68,124,0.07);}
-.nav-call{background:var(--primary)!important;color:white!important;border-radius:50px!important;padding:8px 20px!important;font-weight:600!important;}
-.nav-call:hover{background:var(--primary-mid)!important;}
-.hamburger{display:none;font-size:22px;cursor:pointer;color:var(--dark);}
-
-/* ===== HERO ===== */
-.hero{min-height:100vh;background:linear-gradient(135deg,#07213f 0%,#0a2d56 50%,#0C447C 100%);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:90px;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 15% 50%,rgba(55,138,221,0.15) 0%,transparent 60%),radial-gradient(ellipse at 85% 30%,rgba(239,159,39,0.10) 0%,transparent 55%);}
-.hero-content{max-width:1300px;margin:0 auto;padding:60px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
-.hero-text{color:white;}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(239,159,39,0.18);border:1px solid rgba(239,159,39,0.4);color:#f8c96b;padding:6px 16px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;animation:fadeInDown 0.6s ease;}
-.hero-text h1{font-family:'Montserrat',sans-serif;font-size:clamp(34px,4.5vw,56px);font-weight:900;line-height:1.1;margin-bottom:20px;animation:fadeInUp 0.7s ease 0.1s both;}
-.hero-text h1 span{color:var(--accent);}
-.hero-text p{color:rgba(255,255,255,0.72);font-size:16px;line-height:1.75;margin-bottom:30px;animation:fadeInUp 0.7s ease 0.2s both;}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeInUp 0.7s ease 0.3s both;}
-.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:13px 30px;border-radius:50px;font-size:15px;font-weight:600;font-family:'Poppins',sans-serif;border:none;transition:var(--transition);cursor:pointer;text-decoration:none;}
-.btn-primary:hover{background:var(--primary-mid);transform:translateY(-2px);box-shadow:0 8px 25px rgba(12,68,124,0.4);}
-.btn-accent{background:var(--accent)!important;color:#3a1f00!important;}
-.btn-accent:hover{background:var(--accent-dark)!important;box-shadow:0 8px 25px rgba(239,159,39,0.4)!important;}
-.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.4);padding:13px 30px;border-radius:50px;font-size:15px;font-weight:600;transition:var(--transition);cursor:pointer;text-decoration:none;}
-.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.1);}
-
-/* Booking Box */
-.booking-box{background:#fff;border-radius:20px;padding:35px;box-shadow:var(--shadow-lg);animation:fadeInRight 0.7s ease 0.2s both;}
-.booking-box h3{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--dark);margin-bottom:4px;}
-.booking-box>p{color:var(--gray);font-size:14px;margin-bottom:24px;}
-.form-group{margin-bottom:16px;}
-.form-group label{display:block;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:6px;}
-.form-group select,.form-group input{width:100%;padding:12px 16px;border:2px solid #e9ecef;border-radius:10px;font-size:14px;font-family:'Poppins',sans-serif;color:var(--dark);background:var(--light);transition:var(--transition);outline:none;}
-.form-group select:focus,.form-group input:focus{border-color:var(--primary);background:#fff;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.find-btn{width:100%;background:var(--primary);color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:10px;}
-.find-btn:hover{background:var(--primary-mid);transform:translateY(-1px);box-shadow:0 6px 20px rgba(12,68,124,0.35);}
-
-/* ===== SHARED ===== */
-section{padding:90px 0;}
-.container{max-width:1300px;margin:0 auto;padding:0 40px;}
-.section-header{text-align:center;margin-bottom:60px;}
-.section-label{display:inline-flex;align-items:center;gap:10px;color:var(--primary);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
-.section-label::before,.section-label::after{content:'';width:28px;height:2px;background:currentColor;flex-shrink:0;}
-.section-header h2{font-family:'Montserrat',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;color:var(--dark);line-height:1.2;}
-.section-header p{color:var(--gray);max-width:550px;margin:14px auto 0;font-size:15px;line-height:1.75;}
-
-/* ===== VEHICLES ===== */
-.vehicles-section{background:var(--light-gray);}
-.tab-buttons{display:flex;justify-content:center;gap:12px;margin-bottom:50px;}
-.tab-btn{padding:12px 32px;border-radius:50px;border:2px solid var(--primary);font-size:15px;font-weight:600;font-family:'Poppins',sans-serif;color:var(--primary);background:#fff;transition:var(--transition);cursor:pointer;}
-.tab-btn.active,.tab-btn:hover{background:var(--primary);color:#fff;}
-.tab-content{display:none;}
-.tab-content.active{display:grid;}
-.vehicles-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
-.vehicle-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);}
-.vehicle-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
-.card-img{height:180px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
-.card-badge{position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;}
-.card-body{padding:20px;}
-.card-body h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:12px;}
-.card-specs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.spec-tag{background:var(--light-gray);color:var(--gray);font-size:11px;font-weight:600;padding:4px 10px;border-radius:50px;display:flex;align-items:center;gap:4px;}
-.card-price{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--light-gray);}
-.price-item{text-align:center;}
-.price-item .amount{font-size:18px;font-weight:800;color:var(--primary);}
-.price-item .duration{font-size:11px;color:var(--gray);}
-.book-btn{background:var(--primary);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;}
-.book-btn:hover{background:var(--primary-mid);}
-.view-all-wrap{text-align:center;margin-top:50px;}
-
-/* ===== ABOUT ===== */
-.about-section{background:#fff;}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
-.about-img{width:100%;height:460px;border-radius:20px;background:linear-gradient(135deg,#07213f,#185FA5);display:flex;align-items:center;justify-content:center;font-size:100px;}
-.about-badge{position:absolute;bottom:-20px;right:-20px;background:var(--accent);color:#3a1f00;padding:20px 30px;border-radius:16px;text-align:center;box-shadow:var(--shadow-lg);}
-.about-badge .number{font-family:'Montserrat',sans-serif;font-size:36px;font-weight:900;line-height:1;}
-.about-badge .label{font-size:12px;font-weight:600;}
-.about-img-wrap{position:relative;}
-.about-text h2{font-family:'Montserrat',sans-serif;font-size:clamp(26px,3vw,38px);font-weight:800;line-height:1.2;margin-bottom:20px;}
-.about-text h2 span{color:var(--primary);}
-.about-text p{color:var(--gray);font-size:15px;line-height:1.8;margin-bottom:18px;}
-.about-features{list-style:none;margin-bottom:30px;}
-.about-features li{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--light-gray);}
-.about-features li i{color:var(--primary);width:18px;}
-
-/* ===== SERVICES ===== */
-.services-section{background:var(--darker);color:#fff;}
-.services-section .section-header h2,.services-section .section-header p{color:#fff;}
-.services-section .section-label{color:#7eb8f0;}
-.services-section .section-label::before,.services-section .section-label::after{background:#7eb8f0;}
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;}
-.service-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:36px 30px;text-align:center;transition:var(--transition);}
-.service-card:hover{background:rgba(24,95,165,0.2);border-color:var(--primary-mid);transform:translateY(-4px);}
-.service-icon{width:70px;height:70px;background:var(--primary-mid);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;color:#fff;}
-.service-card h3{font-size:18px;font-weight:700;margin-bottom:12px;}
-.service-card p{color:rgba(255,255,255,0.6);font-size:14px;line-height:1.7;}
-
-/* ===== STATS ===== */
-.stats-section{background:var(--primary);color:#fff;padding:70px 0;}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center;}
-.stat-item .number{font-family:'Montserrat',sans-serif;font-size:clamp(36px,5vw,52px);font-weight:900;line-height:1;margin-bottom:8px;}
-.stat-item .label{font-size:14px;font-weight:500;opacity:.92;}
-
-/* ===== WHY ===== */
-.why-section{background:var(--light-gray);}
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-.why-card{background:#fff;border-radius:var(--radius);padding:34px 28px;text-align:center;box-shadow:var(--shadow);border-bottom:4px solid transparent;transition:var(--transition);}
-.why-card:hover{transform:translateY(-6px);border-color:var(--primary);}
-.why-icon{font-size:40px;margin-bottom:16px;}
-.why-card h4{font-size:17px;font-weight:700;color:var(--dark);margin-bottom:12px;}
-.why-card p{font-size:14px;color:var(--gray);line-height:1.75;}
-
-/* ===== BLOG ===== */
-.blog-section{background:#fff;}
-.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;}
-.blog-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);}
-.blog-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
-.blog-img{height:200px;background:linear-gradient(135deg,#07213f,#185FA5);display:flex;align-items:center;justify-content:center;font-size:60px;}
-.blog-body{padding:24px;}
-.blog-date{color:var(--primary);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
-.blog-body h3{font-size:18px;font-weight:700;line-height:1.4;color:var(--dark);margin-bottom:12px;}
-.blog-body p{color:var(--gray);font-size:14px;line-height:1.75;margin-bottom:16px;}
-.read-more{color:var(--primary);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:var(--transition);text-decoration:none;}
-.read-more:hover{gap:10px;}
-
-/* ===== FOOTER ===== */
-footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:50px;margin-bottom:60px;}
-.footer-logo-name{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:900;color:#fff;margin-bottom:16px;display:block;}
-.footer-logo-name span{color:var(--primary-light);}
-footer p{font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);}
-footer h4{font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;}
-footer ul{list-style:none;}
-footer ul li{margin-bottom:10px;}
-footer ul li a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;display:flex;align-items:center;gap:8px;transition:var(--transition);}
-footer ul li a:hover{color:var(--primary-light);gap:12px;}
-.social-links{display:flex;gap:12px;margin-top:20px;}
-.social-links a{width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;transition:var(--transition);}
-.social-links a:hover{background:var(--primary-mid);}
-.newsletter-form{display:flex;gap:10px;margin-top:16px;}
-.newsletter-form input{flex:1;padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.07);color:#fff;font-size:13px;font-family:'Poppins',sans-serif;outline:none;}
-.newsletter-form input::placeholder{color:rgba(255,255,255,0.4);}
-.newsletter-form button{background:var(--primary-mid);color:#fff;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;transition:var(--transition);}
-.newsletter-form button:hover{background:var(--primary);}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding:24px 0;display:flex;justify-content:space-between;align-items:center;}
-.footer-bottom p{font-size:13px;}
-.footer-bottom a{color:var(--primary-light);text-decoration:none;}
-
-/* ===== FLOAT CALL ===== */
-.float-call{position:fixed;bottom:30px;right:30px;z-index:999;background:var(--primary);color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 25px rgba(12,68,124,0.5);animation:pulse 2s infinite;transition:var(--transition);text-decoration:none;}
-.float-call:hover{transform:scale(1.1);}
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
-@keyframes fadeInRight{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
-@keyframes pulse{0%,100%{box-shadow:0 6px 25px rgba(12,68,124,0.5);}50%{box-shadow:0 6px 40px rgba(12,68,124,0.8);}}
-@keyframes slideIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes spin{to{transform:rotate(360deg);}}
-@keyframes countdownPulse{0%,100%{opacity:1;}50%{opacity:0.6;}}
-
-/* ══════════════════════════════════════
-   PAYMENT OVERLAY SYSTEM
-══════════════════════════════════════ */
-.page-overlay{display:none;position:fixed;inset:0;z-index:5000;background:#f1f3f5;overflow-y:auto;}
-.page-overlay.active{display:block;}
-.pay-header{background:#fff;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:14px 40px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:10;}
-.pay-header .back-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--dark);display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;padding:6px 0;}
-.pay-header .back-btn:hover{color:var(--primary);}
-.pay-header .logo-small{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:900;color:var(--primary);}
-.pay-header .logo-small span{color:var(--primary-light);}
-
-/* ── BOOKING SUMMARY PAGE ── */
-.summary-page{max-width:1200px;margin:0 auto;padding:40px;}
-.summary-grid{display:grid;grid-template-columns:1fr 380px;gap:30px;align-items:start;}
-.summary-left{background:#fff;border-radius:16px;padding:32px;box-shadow:var(--shadow);}
-.summary-left h2{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:var(--dark);margin-bottom:24px;text-transform:uppercase;letter-spacing:1px;}
-.summ-vehicle{display:flex;gap:24px;align-items:flex-start;padding-bottom:24px;border-bottom:1px solid var(--light-gray);margin-bottom:24px;}
-.summ-vehicle-img{width:200px;height:130px;border-radius:12px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;font-size:64px;flex-shrink:0;}
-.summ-vehicle-info h3{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--dark);margin-bottom:12px;}
-.summ-time-row{display:flex;align-items:center;gap:20px;margin-bottom:14px;}
-.time-block{text-align:center;}
-.time-block .t-time{font-size:20px;font-weight:700;color:var(--dark);}
-.time-block .t-date{font-size:13px;color:var(--gray);}
-.time-arrow{color:var(--primary);font-size:18px;}
-.summ-location{background:var(--light-gray);border-radius:10px;padding:12px 16px;margin-bottom:14px;}
-.summ-location p{font-size:13px;color:var(--gray);line-height:1.6;margin:0;}
-.summ-location p strong{color:var(--dark);}
-.summ-extras{display:flex;justify-content:space-between;align-items:center;}
-.summ-extra-item{font-size:13px;color:var(--gray);}
-.summ-extra-item strong{color:var(--dark);}
-.summ-helmet{display:flex;align-items:center;gap:10px;font-size:14px;}
-.summ-helmet select{border:1px solid #ddd;padding:6px 10px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;outline:none;}
-
-/* Billing Panel */
-.billing-panel{background:#fff;border-radius:16px;padding:28px;box-shadow:var(--shadow);position:sticky;top:90px;}
-.billing-panel h3{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:var(--dark);margin-bottom:20px;}
-.reward-row{display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--primary);border-radius:10px;padding:12px 16px;margin-bottom:20px;cursor:pointer;}
-.reward-row label{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;cursor:pointer;}
-.reward-row .reward-amt{font-size:14px;font-weight:700;color:var(--primary);}
-.reward-checkbox{width:18px;height:18px;accent-color:var(--primary);cursor:pointer;}
-.coupon-row{display:flex;gap:10px;margin-bottom:24px;}
-.coupon-row input{flex:1;border:none;border-bottom:2px solid #ddd;padding:10px 4px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:var(--transition);}
-.coupon-row input:focus{border-color:var(--primary);}
-.coupon-row button{background:none;border:none;font-size:14px;font-weight:700;color:var(--primary);cursor:pointer;}
-.billing-line{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px;}
-.billing-line.sub{color:var(--gray);font-size:13px;}
-.billing-line.section-title{font-weight:700;color:var(--dark);margin-top:12px;}
-.billing-divider{border:none;border-top:1px solid var(--light-gray);margin:14px 0;}
-.billing-total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;color:var(--dark);margin:16px 0 20px;}
-.billing-total span:last-child{color:var(--primary);}
-.make-pay-btn{width:100%;background:var(--accent);color:#3a1f00;border:none;padding:16px;border-radius:12px;font-size:17px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;transition:var(--transition);}
-.make-pay-btn:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(239,159,39,0.4);}
-
-/* ── TERMS MODAL ── */
-.modal-backdrop{display:none;position:fixed;inset:0;z-index:6000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:20px;}
-.modal-backdrop.active{display:flex;}
-.modal-box{background:#fff;border-radius:20px;width:100%;max-width:680px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
-.modal-header{background:var(--accent);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;}
-.modal-header h3{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#3a1f00;}
-.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:#3a1f00;}
-.modal-body{padding:24px 28px;overflow-y:auto;flex:1;}
-.modal-body ul{padding-left:20px;margin-bottom:20px;}
-.modal-body ul li{font-size:14px;line-height:1.7;color:var(--dark);margin-bottom:10px;}
-.modal-body ul li strong{color:var(--primary);}
-.modal-meta{display:flex;justify-content:space-between;font-size:14px;padding:14px 0;border-top:1px dashed #ddd;border-bottom:1px dashed #ddd;margin-bottom:20px;}
-.modal-meta span{color:var(--gray);}
-.modal-meta strong{color:var(--dark);}
-.modal-agree{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;color:var(--dark);margin-bottom:14px;cursor:pointer;}
-.modal-agree input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);cursor:pointer;}
-.modal-footer{padding:16px 28px;border-top:1px solid var(--light-gray);display:flex;justify-content:flex-end;}
-.proceed-btn{background:var(--accent);color:#3a1f00;border:none;padding:14px 40px;border-radius:10px;font-size:16px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;transition:var(--transition);}
-.proceed-btn:disabled{opacity:0.45;cursor:not-allowed;}
-.proceed-btn:not(:disabled):hover{background:var(--accent-dark);}
-
-/* ── PAYMENT PAGE ── */
-.payment-page{max-width:1200px;margin:0 auto;padding:40px;}
-.payment-grid{display:grid;grid-template-columns:1fr 340px;gap:30px;}
-.payment-left{background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);}
-.pay-method-header{background:var(--light-gray);padding:16px 28px;font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase;}
-.pay-methods-list{display:flex;flex-direction:column;}
-.pay-method-item{display:flex;align-items:center;gap:14px;padding:16px 28px;border-bottom:1px solid var(--light-gray);cursor:pointer;transition:var(--transition);}
-.pay-method-item:hover,.pay-method-item.active{background:rgba(12,68,124,0.05);}
-.pay-method-item.active{border-left:3px solid var(--primary);}
-.pay-method-item span{font-size:15px;font-weight:500;color:var(--dark);}
-.pay-method-item .method-badge{font-size:11px;font-weight:700;background:#28a745;color:#fff;padding:2px 8px;border-radius:50px;margin-left:auto;}
-.pay-method-logo{width:40px;height:28px;object-fit:contain;font-size:22px;display:flex;align-items:center;justify-content:center;}
-.pay-content-area{padding:28px;}
-.upi-section h4{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
-.qr-block{display:flex;align-items:center;gap:28px;margin-bottom:24px;}
-.qr-box{width:170px;height:170px;border:2px solid #ddd;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;background:#fff;}
-.qr-inner{width:144px;height:144px;}
-.instant-badge{background:#28a745;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;margin-left:8px;}
-.qr-divider{display:flex;align-items:center;gap:14px;margin:20px 0;color:var(--gray);font-size:14px;}
-.qr-divider::before,.qr-divider::after{content:'';flex:1;height:1px;background:#e0e0e0;}
-.upi-input-row{display:flex;gap:12px;align-items:flex-end;}
-.upi-input-group{flex:1;}
-.upi-input-group label{display:block;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-.upi-input-group input{width:100%;padding:13px 16px;border:2px solid #e0e0e0;border-radius:10px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:var(--transition);}
-.upi-input-group input:focus{border-color:var(--primary);}
-.upi-hint{font-size:12px;color:var(--gray);margin-top:6px;}
-.pay-now-btn{background:var(--accent);color:#3a1f00;border:none;padding:13px 28px;border-radius:10px;font-size:15px;font-weight:800;font-family:'Poppins',sans-serif;cursor:pointer;white-space:nowrap;transition:var(--transition);}
-.pay-now-btn:hover{background:var(--accent-dark);}
-.gateway-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1.5px solid #ddd;border-radius:10px;padding:14px;background:#fff;font-size:14px;font-weight:600;color:var(--dark);cursor:pointer;margin-top:20px;transition:var(--transition);}
-.gateway-btn:hover{border-color:var(--primary);color:var(--primary);}
-
-/* Card form */
-.card-form{display:flex;flex-direction:column;gap:16px;}
-.card-form label{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:4px;display:block;}
-.card-form input{width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:10px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:var(--transition);}
-.card-form input:focus{border-color:var(--primary);}
-.card-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.netbanking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
-.bank-item{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:var(--transition);font-size:13px;font-weight:600;color:var(--dark);}
-.bank-item:hover,.bank-item.active{border-color:var(--primary);background:rgba(12,68,124,0.06);}
-.bank-item .bank-icon{font-size:24px;display:block;margin-bottom:6px;}
-.wallet-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.wallet-item{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:var(--transition);}
-.wallet-item:hover,.wallet-item.active{border-color:var(--primary);background:rgba(12,68,124,0.05);}
-.wallet-item .wallet-name{font-size:14px;font-weight:600;}
-.wallet-offer{font-size:11px;color:#28a745;font-weight:600;}
-
-/* Payment summary panel */
-.pay-summary-panel{background:#fff;border-radius:16px;padding:28px;box-shadow:var(--shadow);position:sticky;top:90px;}
-.pay-summary-panel h3{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:20px;}
-.pay-total-amt{text-align:center;margin-bottom:24px;}
-.pay-total-amt .label{font-size:14px;color:var(--gray);margin-bottom:4px;}
-.pay-total-amt .amount{font-size:36px;font-weight:900;font-family:'Montserrat',sans-serif;color:var(--dark);}
-/* Countdown timer */
-.countdown-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:20px;}
-.countdown-circle{position:relative;width:100px;height:100px;}
-.countdown-svg{transform:rotate(-90deg);}
-.countdown-bg{fill:none;stroke:#e0e0e0;stroke-width:6;}
-.countdown-bar{fill:none;stroke:#28a745;stroke-width:6;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke 0.5s;}
-.countdown-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.countdown-time{font-size:20px;font-weight:800;font-family:'Montserrat',sans-serif;color:var(--dark);}
-.countdown-label{font-size:10px;color:var(--gray);font-weight:600;letter-spacing:1px;}
-.countdown-note{font-size:12px;color:var(--gray);text-align:center;}
-.pay-secure-note{font-size:12px;color:var(--gray);line-height:1.6;margin-top:20px;padding-top:16px;border-top:1px solid var(--light-gray);}
-
-/* ══════════════════════════════════════
-   WHATSAPP CONFIRMATION SYSTEM
-══════════════════════════════════════ */
-.wa-overlay{display:none;position:fixed;inset:0;z-index:7000;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;}
-.wa-overlay.active{display:flex;}
-.wa-modal{background:#ECE5DD;border-radius:18px;width:100%;max-width:430px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.45);animation:slideIn 0.4s cubic-bezier(0.34,1.56,0.64,1);}
-.wa-top-bar{background:#075E54;padding:14px 18px;display:flex;align-items:center;gap:13px;}
-.wa-top-avatar{width:42px;height:42px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.wa-top-avatar svg{width:26px;height:26px;fill:white;}
-.wa-top-info h4{color:white;font-size:15px;font-weight:700;line-height:1.2;}
-.wa-top-info p{color:rgba(255,255,255,0.6);font-size:12px;}
-.wa-chat-area{padding:12px 14px 6px;max-height:330px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:#ECE5DD;}
-.wa-datestamp{text-align:center;font-size:11px;color:#888;background:rgba(255,255,255,0.65);border-radius:50px;padding:3px 12px;align-self:center;margin-bottom:4px;}
-.wa-recipient-group{display:flex;flex-direction:column;gap:2px;}
-.wa-recipient-tag{font-size:11px;font-weight:700;color:#075E54;padding-left:2px;margin-bottom:2px;}
-.wa-bubble{background:#DCF8C6;border-radius:2px 12px 12px 12px;padding:9px 12px 6px;max-width:90%;font-size:13px;line-height:1.5;color:#111;position:relative;}
-.wa-bubble .wa-meta{font-size:10px;color:#999;text-align:right;margin-top:4px;}
-.wa-bubble .wa-ticks{color:#34B7F1;font-size:11px;}
-.wa-bubble strong{color:#075E54;}
-.wa-bubble.pending{background:#fff;opacity:0.6;}
-@keyframes waBubblePop{from{opacity:0;transform:scale(0.88) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.wa-status-bar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,0.4);}
-.wa-dot{width:9px;height:9px;border-radius:50%;background:#ccc;flex-shrink:0;transition:background 0.4s;}
-.wa-dot.sending{background:#EF9F27;animation:pulse 0.8s infinite;}
-.wa-dot.done{background:#25D366;}
-.wa-status-text{font-size:12px;color:#555;font-weight:500;}
-.wa-actions{display:flex;gap:10px;padding:12px 14px 16px;}
-.wa-btn-close{flex:1;padding:11px;border:2px solid #075E54;background:transparent;color:#075E54;border-radius:10px;font-weight:700;font-size:14px;font-family:'Poppins',sans-serif;cursor:pointer;transition:all 0.2s;}
-.wa-btn-close:hover{background:rgba(7,94,84,0.08);}
-.wa-btn-open{flex:2;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:700;font-size:14px;font-family:'Poppins',sans-serif;cursor:pointer;transition:background 0.2s;}
-.wa-btn-open:hover{background:#20bd5a;}
-.wa-btn-open svg{width:18px;height:18px;fill:white;}
-.wa-booking-card{background:white;border-radius:10px;padding:10px 12px;margin:0 14px 10px;border-left:4px solid #25D366;font-size:12px;line-height:1.7;color:#333;}
-.wa-booking-card b{color:#075E54;}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:1024px){
-  .hero-content{grid-template-columns:1fr;text-align:center;}
-  .hero-btns{justify-content:center;}
-  .booking-box{max-width:500px;margin:0 auto;}
-  .about-grid{grid-template-columns:1fr;}
-  .about-badge{bottom:10px;right:10px;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
-  .why-grid{grid-template-columns:repeat(2,1fr);}
-  .footer-grid{grid-template-columns:1fr 1fr;}
-  .summary-grid,.payment-grid{grid-template-columns:1fr;}
-  .billing-panel,.pay-summary-panel{position:static;}
-}
-@media(max-width:768px){
-  nav{padding:14px 20px;}
-  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;padding:20px;box-shadow:var(--shadow);flex-direction:column;}
-  .nav-links.open{display:flex;}
-  .hamburger{display:block;}
-  .hero-content{padding:40px 20px;}
-  .container{padding:0 20px;}
-  section{padding:60px 0;}
-  .form-row{grid-template-columns:1fr;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);gap:24px;}
-  .why-grid{grid-template-columns:1fr;}
-  .footer-grid{grid-template-columns:1fr;}
-  .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
-  .header-top{display:none;}
-  .summary-page,.payment-page{padding:20px;}
-  .pay-header{padding:14px 20px;}
-  .summ-vehicle{flex-direction:column;}
-  .summ-vehicle-img{width:100%;}
-  .qr-block{flex-direction:column;}
-  .netbanking-grid{grid-template-columns:repeat(2,1fr);}
-}
-
-/* ═════════ SPLASH SCREEN ═════════ */
-.splash-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#07213f 0%,#0a2d56 50%,#0C447C 100%);display:flex;align-items:center;justify-content:center;z-index:9999;animation:fadeInSplash 1s ease-in-out;}
-.splash-container{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;animation:fadeIn 1s ease-in-out;}
-.logo-wrapper{animation:slideDown 1.2s cubic-bezier(0.34,1.56,0.64,1);}
-.logo-image{width:280px;height:auto;max-height:140px;animation:logoPulseAnim 2s ease-in-out infinite;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.2));}
-.transaction-flow{display:flex;gap:20px;align-items:center;animation:fadeInUp 1.5s ease-in-out 0.3s both;}
-.transaction-step{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(24,95,165,0.8);display:flex;align-items:center;justify-content:center;color:#378ADD;font-size:24px;font-weight:600;}
-.transaction-step:nth-child(1){animation:stepBounce 0.8s ease-in-out 0.5s infinite;}
-.transaction-step:nth-child(2){animation:stepBounce 0.8s ease-in-out 0.7s infinite;}
-.transaction-step:nth-child(3){animation:stepBounce 0.8s ease-in-out 0.9s infinite;}
-.step-connector{width:30px;height:3px;background:linear-gradient(90deg,transparent,#378ADD,transparent);animation:connectorGrow 0.8s ease-in-out 1.2s infinite;}
-.splash-text{text-align:center;animation:fadeInUp 1.5s ease-in-out 0.6s both;}
-.splash-text h1{color:#fff;font-size:28px;font-weight:700;margin-bottom:10px;letter-spacing:-0.5px;}
-.splash-text p{color:rgba(255,255,255,0.7);font-size:14px;font-weight:500;}
-.loading-dots{display:flex;gap:6px;animation:fadeInUp 1.5s ease-in-out 0.9s both;}
-.dot{width:8px;height:8px;border-radius:50%;background:#378ADD;animation:dotBounce 1.4s infinite;}
-.dot:nth-child(1){animation-delay:0s;}
-.dot:nth-child(2){animation-delay:0.2s;}
-.dot:nth-child(3){animation-delay:0.4s;}
-@keyframes fadeInSplash{from{opacity:0;}to{opacity:1;}}
-@keyframes logoPulseAnim{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(55,138,221,0.5));} 50%{transform:scale(1.05);filter:drop-shadow(0 0 20px rgba(55,138,221,0.7));}}
-@keyframes stepBounce{0%,100%{transform:scale(1);} 50%{transform:scale(1.15);}}
-@keyframes connectorGrow{0%,100%{opacity:0.3;width:20px;} 50%{opacity:1;width:40px;}}
-@keyframes dotBounce{0%,100%{opacity:0.3;transform:translateY(0);} 50%{opacity:1;transform:translateY(-10px);}}
-.splash-fade-out{animation:fadeOutSplash 0.8s ease-in-out forwards;}
-@keyframes fadeOutSplash{to{opacity:0;transform:scale(0.98);}}
-@media(max-width:768px){.logo-image{width:200px;max-height:100px;}.splash-text h1{font-size:22px;}.transaction-step{width:50px;height:50px;font-size:18px;}}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -488,17 +64,22 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
        <img src="mainlogo2.jpeg" alt="TravoRents company logo with stylized letters and a travel wheel icon representing a Bhubaneswar self drive car and bike rental service" title="TravoRents Logo" style="height:55px;width:auto;object-fit:contain;">
       </a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#about">About Us</a></li>
-      <li><a href="#vehicles">All Cars</a></li>
-      <li><a href="#vehicles">All Bikes</a></li>
-      <li><a href="#blog">Gallery</a></li>
-      <li><a href="#footer">Contact</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="cars.html">All Cars</a></li>
+      <li><a href="bikes.html">All Bikes</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
       <li><a href="tel:+6372465107" class="nav-call"><i class="fas fa-phone-alt"></i> +91 6372465107</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
   </nav>
 </header>
+
+<!-- ══════════════ SHOWCASE ══════════════ -->
+<section class="showcase-section">
+  <img src="images/main images.jpg" alt="Travo Rents - Showcase" class="showcase-image">
+</section>
 
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero" id="home">
@@ -539,19 +120,19 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
       <div class="form-row">
         <div class="form-group">
           <label>Pick-Up Date</label>
-          <input type="date" id="bkPickup">
+          <input type="date" id="bkPickupDate">
         </div>
         <div class="form-group">
           <label>Pick-Up Time</label>
-          <input type="time" id="bkPickup">
+          <input type="time" id="bkPickupTime">
         </div>
         <div class="form-group">
           <label>Return Date</label>
-          <input type="date" id="bkReturn">
+          <input type="date" id="bkReturnDate">
         </div>
         <div class="form-group">
           <label>Return Time</label>
-          <input type="time" id="bkPickup">
+          <input type="time" id="bkReturnTime">
         </div>
       </div>
       <button class="find-btn" onclick="findVehicle()"><i class="fas fa-search"></i> Find Vehicle</button>
@@ -575,12 +156,14 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
     <!-- CARS -->
     <div class="tab-content active vehicles-grid" id="tab-cars">
       <div class="vehicle-card">
-        <div class="card-img">
-             <img src="images/maruti dizaer.jpeg"alt="Swift Dzire"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
-        <div class="card-body"><h3>Swift Dzire New Model</h3>
+          <div class="card-img">
+               <img src="images/maruti dizaer.jpeg"alt="Swift Dzire"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
+          <div class="card-body"><h3>Swift Dzire New Model</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1300</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1600</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(1600)">Book Now ₹1600</button></div></div>
+             <button class="book-btn" onclick="openBookingSummary('Swift Dzire New Model','images/maruti dizaer.jpeg',1600,'Manual','Petrol',5)">Book Now ₹1600</button>
+          </div>
+        </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">            
@@ -588,7 +171,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Maruti Alto</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1020</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1320</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(1320)">Book Now ₹1320</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Maruti Alto','images/alto k10.jpeg',1320,'Manual','Petrol',5)">Book Now ₹1320</button>
+        </div>
+       </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
@@ -596,7 +181,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Suzuki Baleno</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1400</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1700</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(1700)">Book Now ₹1700</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Suzuki Baleno','images/baleno.jpeg',1700,'Manual','Petrol',5)">
+Book Now ₹1700
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
@@ -604,7 +191,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>i20 Sunroof 2025</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹2000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(2000)">Book Now ₹2000</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('i20 Sunroof 2025','images/hundyai.jpeg',2000,'Manual','Petrol',5)">
+Book Now ₹2000
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
@@ -612,7 +201,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Hyundai Venue SX</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1700</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹2300</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(2300)">Book Now ₹2300</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Hyundai Venue SX','images/venue.jpeg',2300,'Manual','Petrol',5)">
+Book Now ₹2300
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
@@ -620,7 +211,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Kia Carens (7 Seater)</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 7</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹2500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹3000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(3000)">Book Now ₹3000</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Kia Carens (7 Seater)','images/Kia Carens.jpeg',3000,'Manual','Petrol',7)">
+Book Now ₹3000
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
@@ -628,7 +221,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Mahindra Thar ROX 2025</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹3500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹4000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(4000)">Book Now ₹4000</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Mahindra Thar ROX 2025','images/thar.jpeg',4000,'Manual','Petrol',5)">
+Book Now ₹4000
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
@@ -636,7 +231,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Baleno Automatic</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1600</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹2000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(2000)">Book Now ₹2000</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Baleno Automatic','images/baleno automatic.jpeg',2000,'Automatic','Petrol',5)">Book Now ₹2000</button>
+        </div>
+      </div>
       </div>
     </div>
 
@@ -648,7 +245,10 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Royal Enfield Bullet 350</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹800</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1100</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(1100)">Book Now ₹1100</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Royal Enfield Bullet 350','images/Royal Enfield.jpeg',1100,'Manual','Petrol',2)">Book Now ₹1100
+          </button>
+          </div>
+        </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
@@ -656,7 +256,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>KTM 200</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1000</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1400</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(1400)">Book Now ₹1400</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('KTM 200','images/ktm duke.jpeg',1400,'Manual','Petrol',2)">
+Book Now ₹1400
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
@@ -664,7 +266,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Yamaha R15 V4</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹1000</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1200</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(1200)">Book Now ₹1200</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Yamaha R15 V4','images/yamaha.jpeg',1200,'Manual','Petrol',2)">
+Book Now ₹1200
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
@@ -672,7 +276,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Honda Activa 6G</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹400</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹500</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(500)">Book Now ₹500</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Honda Activa 6G','images/honda activa.jpeg',500,'Automatic','Petrol',2)">
+Book Now ₹500
+</button></div></div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
@@ -680,7 +286,9 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Hero Pleasure Plus</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹400</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹550</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(550)">Book Now ₹550</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Hero Pleasure Plus','images/Hero Pleasure Plus.jpeg',550,'Automatic','Petrol',2)">Book Now ₹550</button>
+        </div>
+       </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
@@ -688,7 +296,8 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
         <div class="card-body"><h3>Pulsar 150</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
           <div class="card-price"><div class="price-item"><div class="amount">₹500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹700</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="payNow(700)">Book Now ₹700</button></div></div>
+          <button class="book-btn" onclick="openBookingSummary('Pulsar 150','images/pulser 150.jpeg',700,'Manual','Petrol',2)">Book Now ₹700</button>
+</div></div>
       </div>
     </div>
     <div class="view-all-wrap"><a href="#" class="btn-primary"><i class="fas fa-th-large"></i> View All Vehicles</a></div>
@@ -704,6 +313,7 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
           <img src="images/thar.jpeg"alt="Baleno Automatic"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Automatic</span></div>
         <div class="about-badge"><div class="number">10+</div><div class="label">Years Experience</div></div>
       </div>
+      
       <div class="about-text">
         <div class="section-label">About TravoRents</div>
         <h2>Feel the <span>Freedom</span> of Travel!</h2>
@@ -871,7 +481,7 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
                 <i class="fas fa-hard-hat" style="color:var(--primary)"></i>
                 <span>ISI Helmet</span>
                 <select style="border:1px solid #ddd;padding:5px 10px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:13px;outline:none;">
-                  <option>1</option><option>2</option>
+                  <option>0</option><option>1</option><option>2</option>
                 </select>
               </div>
               <div class="summ-extra-item"><i class="fas fa-road" style="color:var(--primary)"></i> <strong id="summKmLimit">200 km</strong> limit</div>
@@ -954,7 +564,7 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
       <label class="modal-agree"><input type="checkbox" id="agreeTerms" onchange="checkAgree()"> I agree to the terms &amp; conditions</label>
     </div>
     <div class="modal-footer">
-      <button class="proceed-btn" id="proceedBtn" disabled onclick="openPayment()">SEND WHATSAPP</button>
+<button class="payment-btn" onclick="makePayment()">💳 Proceed to Payment</button>
     </div>
   </div>
 </div>
@@ -1210,29 +820,40 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
       <div class="wa-datestamp" id="waDateStamp"></div>
     </div>
 
+    <!-- Confirmation Messages Section -->
+    <div id="waConfirmationSection" style="display:none;margin-top:20px;padding:20px;background:#f0f8ff;border-radius:10px;border:1px solid #0C447C;">
+      <h3 style="color:#0C447C;margin-top:0;">✓ Confirmations Sent</h3>
+      <div id="waConfirmationContainer"></div>
+    </div>
+
     <!-- Status indicator -->
     <div class="wa-status-bar">
       <div class="wa-dot" id="waDot"></div>
       <div class="wa-status-text" id="waStatusText">Preparing messages…</div>
     </div>
 
-    <!-- Buttons -->
-    <div class="wa-actions">
-      <button class="wa-btn-close" onclick="closeWAModal()">Close</button>
-      <button class="wa-btn-open" id="waOpenBtn" onclick="openFirstWA()">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.556 4.122 1.528 5.855L0 24l6.337-1.496A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.78 9.78 0 01-4.992-1.368l-.357-.212-3.762.888.952-3.665-.233-.376A9.762 9.762 0 012.182 12C2.182 6.574 6.574 2.182 12 2.182S21.818 6.574 21.818 12 17.426 21.818 12 21.818z"/></svg>
-        Open WhatsApp
+    <!-- Action Buttons -->
+    <div style="display:flex;gap:12px;padding:16px 14px;background:white;border-top:1px solid #ddd;">
+      <button onclick="backToHomeFromWA()" style="flex:1;padding:12px 16px;background:#0C447C;color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;transition:all 0.2s;">
+        <i class="fas fa-home"></i> Back to Home
+      </button>
+      <button onclick="openCustomerWhatsApp()" style="flex:1;padding:12px 16px;background:#25D366;color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;transition:all 0.2s;">
+        <i class="fab fa-whatsapp"></i> Open WhatsApp
       </button>
     </div>
   </div>
 </div>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="app.js"></script>
 <script>
-function payNow(amount){
+function payNow(amount){ window.pendingAmount=amount; document.getElementById('bookingId').innerText='TRV'+Date.now(); document.getElementById('reviewAmount').innerText=amount; document.getElementById('reviewVehicle').innerText=(window.currentVehicle&&currentVehicle.name)?currentVehicle.name:document.querySelector('h3')?.innerText||'Vehicle'; document.getElementById('bookingReviewModal').style.display='flex'; return; }
+function startPayment(){ payNowOriginal(window.pendingAmount);} 
+function closeReviewModal(){document.getElementById('bookingReviewModal').style.display='none';}
+function payNowOriginal(amount){
 
 var options = {
-    key: "rzp_test_Sw1YABUBn3rd3V",
+    key: "rzp_test_T1W6m3eqkFe54D",
     amount: amount * 100,
     currency: "INR",
     name: "TravoRents",
@@ -1243,20 +864,22 @@ var options = {
 
  const bookingId = "TR-" + Date.now();
  const vehicle=(window.currentVehicle&&currentVehicle.name)?currentVehicle.name:"Vehicle Booking";
- const message = encodeURIComponent(`🚗 TravoRents Booking Confirmed
+ 
+ // Store booking data for WhatsApp confirmation
+ const booking = JSON.parse(localStorage.getItem('booking')) || {};
+ booking.paymentId = response.razorpay_payment_id;
+ booking.paymentStatus = 'completed';
+ booking.bookingId = bookingId;
+ localStorage.setItem('booking', JSON.stringify(booking));
 
-Booking ID: ${bookingId}
-
-Vehicle: ${vehicle}
-
-Payment ID: ${response.razorpay_payment_id}
-
-Status: Paid ✅
-
-Customer Support: +91 6372465107`);
-
- alert("Payment Successful!");
- window.location.href = "https://wa.me/918455065107?text=" + message;
+ // Close all overlays and show WhatsApp confirmation modal
+ document.getElementById('paymentOverlay').classList.remove('active');
+ document.getElementById('summaryOverlay').classList.remove('active');
+ document.getElementById('successModal').classList.remove('active');
+ document.body.style.overflow='';
+ 
+ // Show the WhatsApp confirmation modal automatically
+ showWAConfirmation(bookingId);
  },
 
     theme: {
@@ -1278,9 +901,14 @@ document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',
 
 // ── Tabs
 function switchTab(type,btn){
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>{
+    t.classList.remove('active');
+    t.style.cssText='display:none !important;';
+  });
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+type).classList.add('active');
+  const activeTab=document.getElementById('tab-'+type);
+  activeTab.classList.add('active');
+  activeTab.style.cssText='display:grid !important;';
   btn.classList.add('active');
 }
 
@@ -1310,7 +938,29 @@ function fmtDate(d){
   return new Date(d).toLocaleDateString('en-IN',opts);
 }
 
-// ── Open Summary
+// ── Open Booking Summary (Redirect to booking-summary.html)
+function openBookingSummary(vehicleName, vehicleImage, amount, transmission, fuel, seats){
+  // Store vehicle data in localStorage
+  const booking = {
+    vehicleName: vehicleName,
+    vehicleImage: vehicleImage,
+    amount: amount,
+    transmission: transmission,
+    fuel: fuel,
+    seats: seats,
+    pickupDate: document.getElementById('bkPickup')?.value || new Date().toISOString().split('T')[0],
+    returnDate: document.getElementById('bkReturn')?.value || new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    pickupTime: '09:30',
+    returnTime: '09:30',
+    location: document.getElementById('bkLocation')?.value || 'Nayapalli (Main Office)'
+  };
+  
+  // Save to localStorage and redirect
+  localStorage.setItem('booking', JSON.stringify(booking));
+  window.location.href = 'booking-summary.html';
+}
+
+// ── Old OpenSummary (Kept for backward compatibility if needed)
 function openSummary(name,emoji,p12,p24,trans,fuel,seats){
   currentVehicle={name,emoji,p12,p24,trans,fuel,seats};
 
@@ -1620,6 +1270,10 @@ async function showWAConfirmation(bookId) {
     statusTxt.textContent = `✓ Delivered to ${result.sent}/${WA_CONTACTS.length} contacts via WhatsApp API`;
   }
   subtitle.textContent = 'All 3 contacts notified ✓';
+
+  // Show confirmation messages
+  await waDelay(800);
+  waShowConfirmations(bookId);
 }
 
 // ── Append a single chat bubble
@@ -1644,14 +1298,106 @@ function waAppendBubble(container, contact, bookId) {
 
 function waDelay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+// Show individual confirmations for each recipient
+async function waShowConfirmations(bookId) {
+  const confirmSection = document.getElementById('waConfirmationSection');
+  const confirmContainer = document.getElementById('waConfirmationContainer');
+  
+  confirmContainer.innerHTML = ''; // Clear previous confirmations
+  confirmSection.style.display = 'block';
+  
+  // Confirmation messages for each role
+  const confirmMessages = {
+    customer: '📱 Booking confirmation sent to customer',
+    agent: '👨‍💼 Assignment notification sent to TravoRents agent',
+    host: '🚗 Vehicle booking alert sent to vehicle host'
+  };
+  
+  const confirmDetails = {
+    customer: 'Customer will receive booking details and pickup instructions via WhatsApp',
+    agent: 'Agent notified to verify documents and prepare for vehicle pickup',
+    host: 'Host will receive customer details and booking timeline'
+  };
+  
+  // Display each confirmation with animation
+  for (let i = 0; i < WA_CONTACTS.length; i++) {
+    const contact = WA_CONTACTS[i];
+    await waDelay(400);
+    
+    const confirmCard = document.createElement('div');
+    confirmCard.style.cssText = `
+      background: white;
+      border-left: 4px solid #28a745;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      animation: slideInLeft 0.4s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    `;
+    
+    const phone = contact.phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3');
+    confirmCard.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="font-size:18px;">✓</span>
+        <strong style="color:#0C447C;flex:1;">${confirmMessages[contact.role]}</strong>
+        <span style="color:#666;font-size:12px;">+${contact.phone}</span>
+      </div>
+      <div style="color:#666;font-size:13px;margin-left:28px;line-height:1.4;">
+        ${confirmDetails[contact.role]}
+      </div>
+    `;
+    
+    confirmContainer.appendChild(confirmCard);
+  }
+  
+  // Add summary at the end
+  await waDelay(400);
+  const summaryCard = document.createElement('div');
+  summaryCard.style.cssText = `
+    background: #f0f8ff;
+    border: 2px solid #0C447C;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    animation: slideInLeft 0.4s ease 0.2s both;
+    text-align: center;
+  `;
+  summaryCard.innerHTML = `
+    <strong style="color:#0C447C;display:block;margin-bottom:5px;">🎉 All Confirmations Sent Successfully!</strong>
+    <span style="color:#666;font-size:13px;">Booking ID: <strong>${bookId}</strong></span>
+  `;
+  confirmContainer.appendChild(summaryCard);
+}
+
+// Close WhatsApp modal
 function closeWAModal() {
   document.getElementById('waOverlay').classList.remove('active');
 }
 
-function openFirstWA() {
+// Back to Home - Send WhatsApp messages and redirect
+async function backToHomeFromWA() {
+  const bookingId = document.getElementById('bookingId')?.textContent || 'TR-' + Date.now();
+  
+  // Show sending status
+  const statusTxt = document.getElementById('waStatusText');
+  statusTxt.textContent = 'Sending WhatsApp messages...';
+  
+  // Call backend to send WhatsApp messages
+  const result = await waCallBackend(bookingId);
+  
+  // Wait a bit for messages to send
+  await waDelay(500);
+  
+  // Close modal and redirect to home
+  closeWAModal();
+  window.location.href = 'index.html';
+}
+
+// Open WhatsApp with customer contact
+function openCustomerWhatsApp() {
   if (!WA_CONTACTS.length) return;
   const msg = encodeURIComponent(
-    waMessage(document.getElementById('bookingId').textContent, 'customer').replace(/\*/g, '')
+    waMessage(document.getElementById('bookingId')?.textContent || 'TR-BOOKING', 'customer').replace(/\*/g, '')
   );
   window.open(`https://wa.me/${WA_CONTACTS[0].phone}?text=${msg}`, '_blank');
 }
@@ -1661,5 +1407,26 @@ document.getElementById('waOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeWAModal();
 });
 </script>
+
+<div id="bookingReviewModal" class="booking-review-modal">
+<div class="review-card">
+<div class="review-header">
+<img src="mainlogo2.jpeg" class="review-logo">
+<h2>Review & Confirm Booking</h2>
+</div>
+<div class="review-body">
+<div class="review-details">
+<p><strong>Booking ID:</strong> <span id="bookingId"></span></p>
+<p><strong>Vehicle:</strong> <span id="reviewVehicle"></span></p>
+<p><strong>Total Amount:</strong> ₹<span id="reviewAmount"></span></p>
+<div class="review-buttons">
+<button onclick="closeReviewModal()">Edit Booking</button>
+<button onclick="startPayment()">Proceed To Payment</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
 </body>
 </html>
