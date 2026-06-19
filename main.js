@@ -1,3 +1,6 @@
+// Base URL of the TravoRents backend (serves the API + the database).
+const API_BASE = "http://127.0.0.1:3000";
+
 const booking =
 JSON.parse(localStorage.getItem("booking"));
 
@@ -70,6 +73,61 @@ function makePayment(){
   booking.paymentId = "pending";
   localStorage.setItem("booking", JSON.stringify(booking));
 
+  // Create a booking record in the database now, before payment, so we
+  // never lose the booking even if the customer abandons checkout.
+  createBookingInDb(booking).then((saved) => {
+    if (saved && saved.booking_ref) {
+      booking.bookingRef = saved.booking_ref;
+      localStorage.setItem("booking", JSON.stringify(booking));
+    }
+    openRazorpay(booking);
+  });
+}
+
+function createBookingInDb(booking) {
+  return fetch(`${API_BASE}/api/bookings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      vehicleName: booking.vehicleName,
+      vehicleImage: booking.vehicleImage,
+      amount: booking.amount,
+      transmission: booking.transmission,
+      fuel: booking.fuel,
+      seats: booking.seats,
+      pickupDate: booking.pickupDate,
+      pickupTime: booking.pickupTime,
+      returnDate: booking.returnDate,
+      returnTime: booking.returnTime,
+      location: booking.location,
+      customerName: booking.customerName,
+      customerPhone: booking.customerPhone,
+      customerEmail: booking.customerEmail,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => (data.success ? data.booking : null))
+    .catch((err) => {
+      console.error("Could not save booking to database:", err);
+      return null; // fall back to localStorage-only flow
+    });
+}
+
+function updateBookingInDb(bookingRef, fields) {
+  if (!bookingRef) return Promise.resolve(null);
+  return fetch(`${API_BASE}/api/bookings/${bookingRef}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fields),
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error("Could not update booking in database:", err);
+      return null;
+    });
+}
+
+function openRazorpay(booking) {
   var options = {
     key: "rzp_test_T1W6m3eqkFe54D",
     amount: total * 100,
@@ -78,9 +136,9 @@ function makePayment(){
     description: "Vehicle Booking - " + booking.vehicleName,
     image: "mainlogo2.jpeg",
     prefill: {
-      name: customerName,
-      email: customerEmail,
-      contact: customerPhone
+      name: booking.customerName,
+      email: booking.customerEmail,
+      contact: booking.customerPhone
     },
     theme: {
       color: "#f7c948"
@@ -98,7 +156,14 @@ function makePayment(){
       booking.paymentStatus = "completed";
       booking.paymentTime = new Date().toISOString();
       localStorage.setItem("booking", JSON.stringify(booking));
-      
+
+      // Mark the booking as paid in the database
+      updateBookingInDb(booking.bookingRef, {
+        paymentId: booking.paymentId,
+        orderId: booking.orderId,
+        paymentStatus: "completed",
+      });
+
       // Send WhatsApp notification
       sendBookingConfirmation(booking);
       
@@ -108,11 +173,10 @@ function makePayment(){
   };
 
   new Razorpay(options).open();
-
 }
 
 function sendBookingConfirmation(booking) {
-  const backendUrl = "http://127.0.0.1:3000/api/send-whatsapp";
+  const backendUrl = `${API_BASE}/api/send-whatsapp`;
   
   const payload = {
     bookingId: booking.paymentId || "NEW-" + Date.now(),

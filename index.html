@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TravoRents.com – Car & Bike Rental in Bhubaneswar</title>
+<link rel="icon" type="image/png" href="images/favicon.png.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="styles.css">
@@ -54,7 +55,7 @@
 <header id="mainHeader">
   <div class="header-top">
     <i class="fas fa-phone-alt"></i> Call Anytime:
-    <a href="tel:6372465107">+91 6372465107</a> &nbsp;|&nbsp;
+    <a href="tel:8455065107">+91 84550 65107</a> &nbsp;|&nbsp;
     <a href="mailto:travorents.com@gmail.com">travorents.com@gmail.com</a>
   </div>
   <nav>
@@ -70,7 +71,7 @@
       <li><a href="bikes.html">All Bikes</a></li>
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="tel:+6372465107" class="nav-call"><i class="fas fa-phone-alt"></i> +91 6372465107</a></li>
+      <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i>+91 84550 65107</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
   </nav>
@@ -90,7 +91,7 @@
       <p>Premium self-drive car &amp; bike rental in Bhubaneswar. Top vehicles, transparent pricing, 24×7 support — all in one place.</p>
       <div class="hero-btns">
         <a href="#vehicles" class="btn-primary btn-accent"><i class="fas fa-car"></i> View Cars</a>
-        <a href="#vehicles" class="btn-outline"><i class="fas fa-motorcycle"></i> View Bikes</a>
+        <a href="#vehicles" class="btn-outline btn-accent"><i class="fas fa-motorcycle"></i> View Bikes</a>
       </div>
     </div>
     <!-- Booking Form -->
@@ -150,7 +151,7 @@
     </div>
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="switchTab('cars',this)">🚗 Cars</button>
-      <button class="tab-btn" onclick="switchTab('bikes',this)">🏍️ Bikes</button>
+      <button class="tab-btn " onclick="switchTab('bikes',this)">🏍️ Bikes</button>
     </div>
 
     <!-- CARS -->
@@ -158,84 +159,76 @@
       <div class="vehicle-card">
           <div class="card-img">
                <img src="images/maruti dizaer.jpeg"alt="Swift Dzire"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
-          <div class="card-body"><h3>Swift Dzire New Model</h3>
-          <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1300</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1600</div><div class="duration">/24 hr</div></div>
-             <button class="book-btn" onclick="openBookingSummary('Swift Dzire New Model','images/maruti dizaer.jpeg',1600,'Manual','Petrol',5)">Book Now ₹1600</button>
-          </div>
-        </div>
+        <div class="card-body"><h3>Swift Dzire New Model</h3>
+        <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
+         <button class="book-btn" onclick="openBookingSummary('Swift Dzire New Model','images/maruti dizaer.jpeg',100,'Manual','Petrol',5)">Book Now ₹100(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Swift Dzire New Model','images/maruti dizaer.jpeg',1600,'Manual','Petrol',5)">Book Now ₹1600(24 hr)</button>
+         </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">            
            <img src="images/alto k10.jpeg"alt="Alto k10"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Maruti Alto</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1020</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1320</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Maruti Alto','images/alto k10.jpeg',1320,'Manual','Petrol',5)">Book Now ₹1320</button>
+         <button class="book-btn" onclick="openBookingSummary('Maruti Alto','images/alto k10.jpeg',200,'Manual','Petrol',5)">Book Now ₹200(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Maruti Alto','images/alto k10.jpeg',1320,'Manual','Petrol',5)">Book Now ₹1320(24 hr)</button>
         </div>
        </div>
-      </div>
       <div class="vehicle-card">
         <div class="card-img">             
           <img src="images/baleno.jpeg"alt="baleno"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Suzuki Baleno</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1400</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1700</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Suzuki Baleno','images/baleno.jpeg',1700,'Manual','Petrol',5)">
-Book Now ₹1700
-</button></div></div>
+         <button class="book-btn" onclick="openBookingSummary('Suzuki Baleno','images/baleno.jpeg',200,'Manual','Petrol',5)">Book Now ₹200(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Suzuki Baleno','images/baleno.jpeg',1700,'Manual','Petrol',5)">Book Now ₹1700(24 hr)</button>
+        </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
           <img src="images/hundyai.jpeg"alt="i20 Sunroof 2025"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>i20 Sunroof 2025</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹2000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('i20 Sunroof 2025','images/hundyai.jpeg',2000,'Manual','Petrol',5)">
-Book Now ₹2000
-</button></div></div>
-      </div>
+         <button class="book-btn" onclick="openBookingSummary('i20 Sunroof 2025','images/hundyai.jpeg',400,'Manual','Petrol',5)">Book Now ₹400(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('i20 Sunroof 2025','images/hundyai.jpeg',2000,'Manual','Petrol',5)">Book Now ₹2000(24 hr)</button>
+         </div>
+       </div>
       <div class="vehicle-card">
         <div class="card-img">             
           <img src="images/venue.jpeg"alt="Hyundai Venue SX"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Hyundai Venue SX</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1700</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹2300</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Hyundai Venue SX','images/venue.jpeg',2300,'Manual','Petrol',5)">
-Book Now ₹2300
-</button></div></div>
-      </div>
+         <button class="book-btn" onclick="openBookingSummary('Hyundai Venue SX','images/venue.jpeg',300,'Manual','Petrol',5)">Book Now ₹300(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Hyundai Venue SX','images/venue.jpeg',2300,'Manual','Petrol',5)">Book Now ₹2300(24 hr)</button>
+         </div>
+       </div>
       <div class="vehicle-card">
         <div class="card-img">             
           <img src="images/Kia Carens.jpeg"alt="Kia Carens (7 Seater)"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Kia Carens (7 Seater)</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 7</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹2500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹3000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Kia Carens (7 Seater)','images/Kia Carens.jpeg',3000,'Manual','Petrol',7)">
-Book Now ₹3000
-</button></div></div>
+         <button class="book-btn" onclick="openBookingSummary('Kia Carens (7 Seater)','images/Kia Carens.jpeg',500,'Manual','Petrol',5)">Book Now ₹500(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Kia Carens (7 Seater)','images/Kia Carens.jpeg',3000,'Manual','Petrol',7)">Book Now ₹3000(24 hr)</button>
+        </div> 
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
           <img src="images/thar.jpeg"alt="Mahindra Thar ROX 2025"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Mahindra Thar ROX 2025</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹3500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹4000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Mahindra Thar ROX 2025','images/thar.jpeg',4000,'Manual','Petrol',5)">
-Book Now ₹4000
-</button></div></div>
+         <button class="book-btn" onclick="openBookingSummary('Mahindra Thar ROX 2025','images/thar.jpeg',600,'Manual','Petrol',5)">Book Now ₹600(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Mahindra Thar ROX 2025','images/thar.jpeg',4000,'Manual','Petrol',5)">Book Now ₹4000(24 hr)</button>
+        </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">             
           <img src="images/baleno automatic.jpeg"alt="Baleno Automatic"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Automatic</span></div>
         <div class="card-body"><h3>Baleno Automatic</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-users"></i> 5</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1600</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹2000</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Baleno Automatic','images/baleno automatic.jpeg',2000,'Automatic','Petrol',5)">Book Now ₹2000</button>
-        </div>
+         <button class="book-btn" onclick="openBookingSummary('Baleno Automatic','images/baleno automatic.jpeg',400,'Automatic','Petrol',5)">Book Now ₹400(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Baleno Automatic','images/baleno automatic.jpeg',2000,'Automatic','Petrol',5)">Book Now ₹2000(24 hr)</button>
+       </div>
       </div>
-      </div>
-    </div>
+  </div><!-- End Cars Tab -->
 
     <!-- BIKES -->
     <div class="tab-content vehicles-grid" id="tab-bikes">
@@ -244,61 +237,56 @@ Book Now ₹4000
           <img src="images/Royal Enfield.jpeg"alt="Royal Enfield Bullet 350"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Royal Enfield Bullet 350</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹800</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1100</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Royal Enfield Bullet 350','images/Royal Enfield.jpeg',1100,'Manual','Petrol',2)">Book Now ₹1100
-          </button>
+         <button class="book-btn" onclick="openBookingSummary('Royal Enfield Bullet 350','images/Royal Enfield.jpeg',100,'Manual','Petrol',2)">Book Now ₹100(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Royal Enfield Bullet 350','images/Royal Enfield.jpeg',1100,'Manual','Petrol',2)">Book Now ₹1100(24 hr)</button>
           </div>
         </div>
-      </div>
       <div class="vehicle-card">
         <div class="card-img">          
           <img src="images/ktm duke.jpeg"alt="KTM 200"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>KTM 200</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1000</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1400</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('KTM 200','images/ktm duke.jpeg',1400,'Manual','Petrol',2)">
-Book Now ₹1400
-</button></div></div>
+         <button class="book-btn" onclick="openBookingSummary('KTM 200','images/ktm duke.jpeg',100,'Manual','Petrol',2)">Book Now ₹100(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('KTM 200','images/ktm duke.jpeg',1400,'Manual','Petrol',2)">Book Now ₹1400(24 hr)</button>
+         </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
           <img src="images/yamaha.jpeg"alt="Yamaha R15 V4"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Yamaha R15 V4</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹1000</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹1200</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Yamaha R15 V4','images/yamaha.jpeg',1200,'Manual','Petrol',2)">
-Book Now ₹1200
-</button></div></div>
+         <button class="book-btn" onclick="openBookingSummary('Yamaha R15 V4','images/yamaha.jpeg',100,'Manual','Petrol',2)">Book Now ₹100(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Yamaha R15 V4','images/yamaha.jpeg',1200,'Manual','Petrol',2)">Book Now ₹1200(24 hr)</button>
+        </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
           <img src="images/honda activa.jpeg"alt="Honda Activa 6G"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Automatic</span></div>
         <div class="card-body"><h3>Honda Activa 6G</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹400</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹500</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Honda Activa 6G','images/honda activa.jpeg',500,'Automatic','Petrol',2)">
-Book Now ₹500
-</button></div></div>
+         <button class="book-btn" onclick="openBookingSummary('Honda Activa 6G','images/honda activa.jpeg',100,'Automatic','Petrol',2)">Book Now ₹100(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Honda Activa 6G','images/honda activa.jpeg',500,'Automatic','Petrol',2)">Book Now ₹500(24 hr)</button>
+       </div>
       </div>
       <div class="vehicle-card">
         <div class="card-img">          
           <img src="images/Hero Pleasure Plus.jpeg"alt="Hero Pleasure Plus"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Automatic</span></div>
         <div class="card-body"><h3>Hero Pleasure Plus</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹400</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹550</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Hero Pleasure Plus','images/Hero Pleasure Plus.jpeg',550,'Automatic','Petrol',2)">Book Now ₹550</button>
+         <button class="book-btn" onclick="openBookingSummary('Hero Pleasure Plus','images/Hero Pleasure Plus.jpeg',100,'Automatic','Petrol',2)">Book Now ₹100(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Hero Pleasure Plus','images/Hero Pleasure Plus.jpeg',550,'Automatic','Petrol',2)">Book Now ₹550(24 hr)</button>
         </div>
        </div>
-      </div>
       <div class="vehicle-card">
         <div class="card-img">          
           <img src="images/pulser 150.jpeg"alt="Pulsar 150"style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Manual</span></div>
         <div class="card-body"><h3>Pulsar 150</h3>
           <div class="card-specs"><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span><span class="spec-tag"><i class="fas fa-cog"></i> Manual</span><span class="spec-tag"><i class="fas fa-users"></i> 2</span></div>
-          <div class="card-price"><div class="price-item"><div class="amount">₹500</div><div class="duration">/12 hr</div></div><div class="price-item"><div class="amount">₹700</div><div class="duration">/24 hr</div></div>
-          <button class="book-btn" onclick="openBookingSummary('Pulsar 150','images/pulser 150.jpeg',700,'Manual','Petrol',2)">Book Now ₹700</button>
-</div></div>
+         <button class="book-btn" onclick="openBookingSummary('Pulsar 150','images/pulser 150.jpeg',300,'Manual','Petrol',2)">Book Now ₹300(1 hr)</button>
+          <button class="book-btn" onclick="openBookingSummary('Pulsar 150','images/pulser 150.jpeg',700,'Manual','Petrol',2)">Book Now ₹700(24 hr)</button>
+        </div>
       </div>
+    </div>
     </div>
     <div class="view-all-wrap"><a href="#" class="btn-primary"><i class="fas fa-th-large"></i> View All Vehicles</a></div>
   </div>
@@ -326,7 +314,7 @@ Book Now ₹500
           <li><i class="fas fa-check-circle"></i> Multiple pickup locations in Bhubaneswar</li>
           <li><i class="fas fa-check-circle"></i> No vehicle over 12 months old</li>
         </ul>
-        <a href="tel:+6372465107" class="btn-primary"><i class="fas fa-phone-alt"></i> +91 6372465107</a>
+        <a href="tel:+6372465107" class="btn-primary"><i class="fas fa-phone-alt"></i>+91 84550 65107</a>
       </div>
     </div>
   </div>
@@ -1196,7 +1184,7 @@ function waMessage(bookId, role) {
     `📅 From: *${pDate}*  →  *${rDate}*`,
     `💰 Amount Paid: *₹${totalDue.toFixed(2)}*`,
     '',
-    'Thank you for choosing TravoRents! 📞 +91 6372465107',
+    'Thank you for choosing TravoRents! 📞+91 84550 65107',
   ].join('\n');
 }
 

@@ -27,7 +27,10 @@ section{padding:90px 0;padding-top:120px;}
 .section-label::before,.section-label::after{content:'';width:28px;height:2px;background:currentColor;flex-shrink:0;}
 .section-header h2{font-family:'Montserrat',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;color:var(--dark);}
 .section-header p{color:var(--gray);max-width:550px;margin:14px auto 0;font-size:15px;line-height:1.75;}
-.vehicles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
+.vehicles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+@media (max-width:1200px){.vehicles-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:900px){.vehicles-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:600px){.vehicles-grid{grid-template-columns:1fr;}}
 .vehicle-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);}
 .vehicle-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
 .card-img{height:180px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
@@ -201,7 +204,7 @@ footer ul li a:hover{color:var(--primary-light);}
       </div>
       <div>
         <h4>Contact</h4>
-        <p>📞 +91 6372465107</p>
+        <p>📞+91 84550 65107</p>
         <p>📧 travorents.com@gmail.com</p>
       </div>
     </div>
