@@ -214,7 +214,7 @@ app.get('/api/bookings/:ref', (req, res) => {
 
 // Update a booking after payment completes (or fails)
 app.patch('/api/bookings/:ref', (req, res) => {
-  const { paymentId, orderId, paymentStatus } = req.body || {};
+  const { paymentId, orderId, place, paymentStatus } = req.body || {};
 
   try {
     const existing = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(req.params.ref);
@@ -226,10 +226,11 @@ app.patch('/api/bookings/:ref', (req, res) => {
       UPDATE bookings SET
         payment_id = COALESCE(?, payment_id),
         order_id = COALESCE(?, order_id),
+        place = COALESCE(?, place),
         payment_status = COALESCE(?, payment_status),
         updated_at = datetime('now')
       WHERE booking_ref = ?
-    `).run(paymentId ?? null, orderId ?? null, paymentStatus ?? null, req.params.ref);
+    `).run(paymentId ?? null, orderId ?? null, place ?? null, paymentStatus ?? null, req.params.ref);
 
     const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(req.params.ref);
     res.json({ success: true, booking });
@@ -290,28 +291,30 @@ app.post('/api/send-whatsapp', async (req, res) => {
   }
 
   // Build WhatsApp message
-  const message = `🚗 *TravoRents Booking Confirmed* 🎉
+  const message = `
+🚗 TravoRents Booking Request
 
-✅ Your booking has been confirmed!
+📋 Booking ID: ${bookingId}
 
-📋 *Booking Details:*
-• ID: ${bookingId}
-• Vehicle: ${vehicle}
-• Amount Paid: ₹${amount}
+🚘 Vehicle: ${vehicle}
 
-🗓️ *Schedule:*
-• Pickup: ${pickupDate} at ${pickupTime}
-• Return: ${returnDate} at ${returnTime}
-• Location: ${location}
+📍 Pick-up: ${location}
 
-👤 *Customer:* ${customerName}
+📅 From: ${pickupDate} at ${pickupTime}
 
-📞 *Need help?*
-Call us: +91 6372465107
+📅 To: ${returnDate} at ${returnTime}
 
-Thank you for choosing TravoRents! 🙏
-Enjoy your ride! 🚗💨`;
+💰 Estimated Total: ₹${amount}
 
+Please confirm availability and the next steps.
+
+━━━━━━━━━━━━━━━
+
+📞 Support: +91 84550 65107
+📧 travorents.com@gmail.com
+
+Thank you for choosing TravoRents 🚗
+`;
   try {
     // Send to customer
     const phoneToContact = customerPhone || CUSTOMER_PHONE;
@@ -321,28 +324,29 @@ Enjoy your ride! 🚗💨`;
     console.log('[WhatsApp Backend] Vehicle:', vehicle);
     console.log('[WhatsApp Backend] Sent to:', phoneToContact);
 
-    return res.json({
-      success: result.success || true,
-      sent: result.success ? 1 : 0,
-      backend: 'online',
-      bookingId,
-      vehicle,
-      amount,
-      customer: phoneToContact,
-      deliveredAt: new Date().toISOString(),
-      simulated: result.simulated || false,
-      message: result.message || 'WhatsApp message sent successfully'
-    });
+   return res.json({
+  success: result.success || true,
+  sent: result.success ? 1 : 0,
+  backend: 'online',
+  bookingId,
+  vehicle,
+  amount,
+  customer: phoneToContact,
+  deliveredAt: new Date().toISOString(),
+  simulated: result.simulated || false,
+  message: result.message || 'WhatsApp message sent successfully'
+});
   } catch (error) {
-    console.error('[WhatsApp Backend Error]:', error);
-    return res.json({
-      success: true, // Return success even if error (frontend doesn't block)
-      sent: 1,
-      backend: 'online',
-      bookingId,
-      message: 'Message queued for delivery'
-    });
-  }
+  console.error('[WhatsApp Backend Error]:', error);
+
+  return res.json({
+    success: true,
+    sent: 1,
+    backend: 'online',
+    bookingId,
+    message: 'Message queued for delivery'
+  });
+}
 });
 
 app.listen(PORT, () => {
