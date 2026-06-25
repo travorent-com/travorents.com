@@ -293,15 +293,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const phone = "916372465107";
 
         const message =
-`🚗 TravoRents Booking Confirmed
+`🎉 TravoRents.com — Booking Confirmation
 
-Vehicle: ${booking.vehicleName || ""}
-Customer: ${booking.customerName || ""}
-Phone: ${booking.customerPhone || ""}
-Amount Paid: ₹${booking.totalAmount || ""}
-Booking ID: ${bookingId}
+✅ Your TravoRents booking is confirmed!
 
-Thank You for choosing TravoRents`;
+📌 Booking ID: ${bookingId}
+📌 Vehicle: ${booking.vehicleName || ""}
+📌 Pickup: ${booking.location || ""}
+📌 From: ${booking.pickupDate || ""}  →  ${booking.returnDate || ""}
+📌 Amount Paid: ₹${booking.totalAmount || ""}
+
+Thank you for choosing TravoRents! 🙏
+918455065107`;
 
         window.open(
             `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,

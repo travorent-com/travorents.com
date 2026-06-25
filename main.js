@@ -129,7 +129,7 @@ function updateBookingInDb(bookingRef, fields) {
 
 function openRazorpay(booking) {
   var options = {
-    key: "rzp_test_T1W6m3eqkFe54D",
+    key: "rzp_test_T5X9hFgwLNRiar",
     amount: total * 100,
     currency: "INR",
     name: "TravoRents",
@@ -179,18 +179,19 @@ function sendBookingConfirmation(booking) {
   const backendUrl = `${API_BASE}/api/send-whatsapp`;
   
   const payload = {
-    bookingId: booking.paymentId || "NEW-" + Date.now(),
-    vehicle: booking.vehicleName,
-    amount: booking.amount,
-    customerName: booking.customerName,
-    customerPhone: booking.customerPhone,
-    pickupDate: booking.pickupDate,
-    pickupTime: booking.pickupTime,
-    returnDate: booking.returnDate,
-    returnTime: booking.returnTime,
-    location: booking.location,
-    contacts: [booking.customerPhone]
-  };
+  bookingId: booking.bookingRef || ("TR-" + Date.now()),
+  vehicle: booking.vehicleName,
+  amount: document.getElementById("totalPrice").innerText,
+  customerName: booking.customerName,
+  customerPhone: booking.customerPhone,
+  pickupDate: booking.pickupDate,
+  pickupTime: booking.pickupTime,
+  returnDate: booking.returnDate,
+  returnTime: booking.returnTime,
+  location: booking.location,
+  contacts: [booking.customerPhone]
+};
+
 
   fetch(backendUrl, {
     method: "POST",
@@ -323,4 +324,94 @@ document.getElementById("billingTotal")
 .innerText =
 "₹"+total;
 
+}
+
+
+function updateHelmetCharge() {
+    const helmetQty = parseInt(document.getElementById("helmetCount").value) || 0;
+
+    let helmetCharge = 0;
+
+    // First helmet free
+    if (helmetQty > 1) {
+        helmetCharge = (helmetQty - 1) * 50;
+    }
+
+    const vehicleAmount = currentVehiclePrice; // your base rental amount
+    const gst = Math.round(vehicleAmount * 0.18);
+
+    const total = vehicleAmount + gst + helmetCharge;
+
+    document.getElementById("helmetCharge").innerText = `₹${helmetCharge}`;
+    document.getElementById("billingTotal").innerText = `₹${total}`;
+}
+function updateHelmetCharges() {
+
+    const helmetCount =
+        parseInt(document.getElementById("helmetCount").value) || 0;
+
+    let helmetCharge = 0;
+
+    // First helmet free
+    if (helmetCount > 1) {
+        helmetCharge = (helmetCount - 1) * 50;
+    }
+
+    // Read current values
+    const rentalCharge = parseFloat(
+        document.getElementById("rentalCharge").innerText.replace(/[^\d.]/g, '')
+    ) || 0;
+
+    const gst = parseFloat(
+        document.getElementById("gstAmount").innerText.replace(/[^\d.]/g, '')
+    ) || 0;
+
+    const total =
+        rentalCharge +
+        gst +
+        helmetCharge;
+
+    // Update right side billing
+    document.getElementById("helmetChargeAmount").innerText =
+        "₹" + helmetCharge;
+
+    document.getElementById("totalDueAmount").innerText =
+        "₹" + total;
+}
+function updateHelmetCharge() {
+
+    const helmetCount =
+        parseInt(document.getElementById("helmetCount").value);
+
+    let helmetCharge = 0;
+
+    // First helmet free
+    if (helmetCount > 1) {
+        helmetCharge = (helmetCount - 1) * 50;
+    }
+
+    // Update Helmet Charges row
+    document.getElementById("helmetCharge").textContent =
+        helmetCharge;
+
+    // Get rental price
+    const rentPrice =
+        parseFloat(
+            document.getElementById("rentPrice").textContent
+        ) || 0;
+
+    // Get GST
+    const gstPrice =
+        parseFloat(
+            document.getElementById("gstPrice").textContent
+        ) || 0;
+
+    // Calculate Total
+    const total =
+        rentPrice +
+        gstPrice +
+        helmetCharge;
+
+    document.getElementById("totalPrice").textContent =
+        total.toFixed(0);
 }

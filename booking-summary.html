@@ -74,11 +74,15 @@
 <div class="extra-info">
 
 <div>
-<span>Helmet</span>
-<select id="helmetQty">
-<option>0</option>
-<option>1</option>
-<option>2</option>
+<div>
+    <span>Helmet Selection</span>
+</div>
+<select id="helmetCount" onchange="updateHelmetCharge()">
+    <option value="0">0</option>
+    <option value="1">1 (Free)</option>
+    <option value="2">2 (+₹50)</option>
+    <option value="3">3 (+₹100)</option>
+    <option value="4">4 (+₹150)</option>
 </select>
 </div>
 
@@ -104,7 +108,7 @@
 
 <h2>Billing Details</h2>
 
-<div class="reward-box">
+<!--<div class="reward-box">
 <input type="checkbox">
 <span>Travo Reward Points</span>
 <b>₹20</b>
@@ -113,7 +117,7 @@
 <div class="coupon-box">
 <input type="text" placeholder="Coupon Code">
 <button>APPLY</button>
-</div>
+</div>-->
 
 <div class="price-row">
 <span>Vehicle Rental Charges</span>
@@ -128,6 +132,11 @@
 <div class="price-row">
 <span>Refundable Deposit</span>
 <span>₹0</span>
+</div>
+
+<div class="price-row">
+    <span>Helmet Charges</span>
+    <span>₹<span id="helmetCharge">0</span></span>
 </div>
 
 <hr>

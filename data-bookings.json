@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": 1,
+    "bookingRef": "TR-MQSI1K48-NMEV",
+    "vehicleId": null,
+    "vehicleName": "Honda Activa 6G",
+    "vehicleImage": "images/honda activa.jpeg",
+    "amount": 100,
+    "gst": 18,
+    "totalAmount": 118,
+    "transmission": "Automatic",
+    "fuel": "Petrol",
+    "seats": 2,
+    "pickupDate": "2026-06-24",
+    "pickupTime": "09:30",
+    "returnDate": "2026-06-25",
+    "returnTime": "09:30",
+    "location": "Airport",
+    "customerName": "sam j",
+    "customerPhone": "8984330609",
+    "customerEmail": "sanmitjena6@gmail.com"
+  }
+]

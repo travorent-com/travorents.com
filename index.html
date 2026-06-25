@@ -292,7 +292,7 @@
   </div>
 </section>
 
-<!-- ══════════════ ABOUT ══════════════ -->
+<!-- ══════════════ ABOUT ══════════════ --
 <section class="about-section" id="about">
   <div class="container">
     <div class="about-grid">
@@ -314,12 +314,35 @@
           <li><i class="fas fa-check-circle"></i> Multiple pickup locations in Bhubaneswar</li>
           <li><i class="fas fa-check-circle"></i> No vehicle over 12 months old</li>
         </ul>
-        <a href="tel:+6372465107" class="btn-primary"><i class="fas fa-phone-alt"></i>+91 84550 65107</a>
+        <a href="tel:++91 84550 65107" class="btn-primary"><i class="fas fa-phone-alt"></i>+91 84550 65107</a>
+      </div>
+    </div>
+  </div>
+</section>-->
+<!-- ══════════════ CUSTOMER REVIEWS ══════════════ -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap">
+        <div class="about-img">          
+          <img src="images/Customer Reviews.jpg" alt="Customer Reviews" style="width:98%;height:98%;object-fit:cover;">
+        </div>
+      </div>
+      
+      <div class="about-text">
+        <div class="section-label">Customer Reviews</div>
+        <h2>What Our Customers Say</h2>
+        <p>We value our customers and their feedback. Here's what some of them have to say about their experience with TravoRents.</p>
+        <ul class="about-features">
+          <li><i class="fas fa-check-circle"></i> "Excellent bike rental service in Bhubaneswar." - Rahul S. ★★★★★</li>
+          <li><i class="fas fa-check-circle"></i> "Easy booking and affordable pricing." - Priya K. ★★★★★</li>
+          <li><i class="fas fa-check-circle"></i> "Reliable vehicles and great support." - Ankit R. ★★★★★</li>
+        </ul>
+        <a href="#reviews" class="btn-primary"><i class="fas fa-star"></i> Read More Reviews</a>
       </div>
     </div>
   </div>
 </section>
-
 <!-- ══════════════ SERVICES ══════════════ -->
 <section class="services-section">
   <div class="container">
@@ -363,6 +386,9 @@
       <div class="why-card"><div class="why-icon">⭐</div><h4>Great Service</h4><p>Fast, accurate, and efficient — we never compromise on quality customer care.</p></div>
       <div class="why-card"><div class="why-icon">👥</div><h4>Knowledgeable Staff</h4><p>Local experts with years of experience, ready to answer all your questions.</p></div>
       <div class="why-card"><div class="why-icon">🚙</div><h4>New Fleet Always</h4><p>All vehicles are under 12 months old — clean, reliable and feature-packed.</p></div>
+      <div class="why-card"><div class="why-icon">✅</div><h4>Verified Vehicles</h4><p>All vehicles are under 12 months old — clean, reliable and feature-packed.</p></div>
+      <div class="why-card"><div class="why-icon">🔒</div><h4>Secure Booking</h4><p>All bookings are secure and protected with the latest encryption technology.</p></div>
+      <div class="why-card"><div class="why-icon">📞</div><h4>24-Hour Assistance</h4><p>Call anytime for breakdown recovery. Immediate free transfer service available.</p></div>
     </div>
   </div>
 </section>
@@ -391,7 +417,7 @@
         <span class="footer-logo-name">Travo<span>Rents</span>.com</span>
         <p>Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
         <p><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
-        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+6372465107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 6372465107</a></p>
+        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:++91 84550 65107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 +91 84550 65107</a></p>
         <p><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:info@travorents.com" style="color:rgba(255,255,255,0.6);text-decoration:none">travorents.com@gmail.com</a></p>
         <div class="social-links">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -429,7 +455,7 @@
   </div>
 </footer>
 
-<a href="tel:6372465107" class="float-call"><i class="fas fa-phone-alt"></i></a>
+<a href="tel:+91 84550 65107" class="float-call"><i class="fas fa-phone-alt"></i></a>
 
 <!-- ══════════════════════════════════════
      BOOKING SUMMARY OVERLAY
@@ -841,7 +867,7 @@ function closeReviewModal(){document.getElementById('bookingReviewModal').style.
 function payNowOriginal(amount){
 
 var options = {
-    key: "rzp_test_T1W6m3eqkFe54D",
+    key: "rzp_test_T5X9hFgwLNRiar",
     amount: amount * 100,
     currency: "INR",
     name: "TravoRents",
@@ -947,6 +973,46 @@ function openBookingSummary(vehicleName, vehicleImage, amount, transmission, fue
   localStorage.setItem('booking', JSON.stringify(booking));
   window.location.href = 'booking-summary.html';
 }
+
+function findVehicle() {
+
+    const vehicleType =
+        document.getElementById("bkVehicleType").value;
+
+    if (!vehicleType) {
+        alert("Please select a vehicle type");
+        return;
+    }
+
+    // Open Cars
+    if (vehicleType === "car" || vehicleType === "automatic") {
+
+        switchTab(
+            "cars",
+            document.querySelector(".tab-btn")
+        );
+
+        document.getElementById("vehicles")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+    // Open Bikes
+    if (vehicleType === "bike") {
+
+        switchTab(
+            "bikes",
+            document.querySelectorAll(".tab-btn")[1]
+        );
+
+        document.getElementById("vehicles")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+}
+
 
 // ── Old OpenSummary (Kept for backward compatibility if needed)
 function openSummary(name,emoji,p12,p24,trans,fuel,seats){
@@ -1154,7 +1220,7 @@ document.getElementById('successModal').addEventListener('click',function(e){if(
 // ── CONFIG: set your 3 WhatsApp numbers here (country code + number, no +)
 const WA_CONTACTS = [
   { label: 'Customer',         phone: '7609831901', role: 'customer'  },
-  { label: 'TravoRents Agent', phone: '6372465107', role: 'agent'     },
+  { label: 'TravoRents Agent', phone: '+91 84550 65107', role: 'agent'     },
   { label: 'Vehicle Host',     phone: '8984330609', role: 'host'      },
 ];
 

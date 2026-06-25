@@ -1,0 +1,8 @@
+node_modules/
+travorents.db
+travorents.db-shm
+travorents.db-wal
+.env
+data-vehicles.json
+data-bookings.json
+package-lock.json

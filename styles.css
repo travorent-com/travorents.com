@@ -87,7 +87,23 @@ section{padding:90px 0;}
 .tab-content.active.vehicles-grid{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:24px !important;width:100% !important;}
 .tab-content.vehicles-grid:not(.active){display:none !important;}
 .vehicles-grid{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:24px !important;width:100% !important;margin:0;padding:0;}
+.book-btn{
+    width:100%;
+    background:#0d4d92;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    margin-top:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+}
 
+/* Space between the two blue buttons */
+.book-btn + .book-btn{
+    margin-top:12px;
+}
 /* Responsive grid */
 @media (max-width:1200px){.vehicles-grid{grid-template-columns:repeat(3,1fr) !important;}.tab-content.active.vehicles-grid{grid-template-columns:repeat(3,1fr) !important;}}
 @media (max-width:900px){.vehicles-grid{grid-template-columns:repeat(2,1fr) !important;}.tab-content.active.vehicles-grid{grid-template-columns:repeat(2,1fr) !important;}}
