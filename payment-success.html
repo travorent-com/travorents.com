@@ -257,7 +257,7 @@
       <a href="index.html" class="btn btn-secondary">
         <i class="fas fa-home"></i> Back to Home
       </a>
-      <a href="tel:+6372465107" class="btn btn-secondary">
+      <a href="tel:+918455065107" class="btn btn-secondary">
         <i class="fas fa-phone-alt"></i> Call Us
       </a>
     </div>
@@ -270,38 +270,80 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
 
-    const booking = JSON.parse(localStorage.getItem('booking')) || {};
+    let booking = JSON.parse(localStorage.getItem('booking')) || {};
     const bookingIdElement = document.getElementById('bookingId');
 
-    let bookingId =
-        booking.paymentId ||
-        'TR-' + Math.floor(100000 + Math.random() * 900000);
+    function updateUI(b) {
+        booking = b;
+        const bId = b.booking_ref || b.bookingRef || 'TR-UNKNOWN';
+        bookingIdElement.textContent = bId;
+        localStorage.setItem('lastBookingId', bId);
 
-    if (bookingId === 'pending') {
-        bookingId =
-            'TR-' + Math.floor(100000 + Math.random() * 900000);
+        const isQR = params.get('qr') === '1' || b.payment_status === 'qr_pending';
+        if (isQR) {
+            // Update Indicator Banner
+            const banner = document.querySelector('body > div');
+            if (banner) banner.innerHTML = "✅ Step 5 Complete: Booking Registered → Pending QR Verification";
+
+            // Update Card Title & Desc
+            const title = document.querySelector('.success-card h1');
+            if (title) title.innerText = "Booking Registered! 🎉";
+            const desc = document.querySelector('.success-card p');
+            if (desc) desc.innerText = "Your booking request has been received and is pending payment verification.";
+
+            // Update Next Steps
+            const steps = document.querySelectorAll('.next-steps li');
+            if (steps.length > 1) {
+                steps[1].innerHTML = "Our team will verify your QR payment transaction";
+            }
+        }
     }
 
-    bookingIdElement.textContent = bookingId;
-
-    localStorage.setItem('lastBookingId', bookingId);
+    if (ref) {
+        // Fetch real-time details from backend
+        fetch(`/api/bookings/${ref}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.booking) {
+                    updateUI(data.booking);
+                } else {
+                    updateUI(booking);
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching booking details:", err);
+                updateUI(booking);
+            });
+    } else {
+        updateUI(booking);
+    }
 
     // WhatsApp Button
     document.getElementById("whatsappBtn").addEventListener("click", () => {
+        const phone = "918455065107";
+        const bId = booking.booking_ref || booking.bookingRef || 'TR-UNKNOWN';
+        const vName = booking.vehicle_name || booking.vehicleName || "";
+        const loc = booking.location || "";
+        const pDate = booking.pickup_date || booking.pickupDate || "";
+        const rDate = booking.return_date || booking.returnDate || "";
+        const amt = booking.total_amount || booking.totalAmount || booking.amount || "";
 
-        const phone = "916372465107";
+        const isQR = params.get('qr') === '1' || booking.payment_status === 'qr_pending';
+        const paymentLabel = isQR ? `Amount Paid: ₹${amt} (via QR - Pending Verification)` : `Amount Paid: ₹${amt}`;
 
         const message =
 `🎉 TravoRents.com — Booking Confirmation
 
-✅ Your TravoRents booking is confirmed!
+${isQR ? '✅ Your TravoRents booking is registered!' : '✅ Your TravoRents booking is confirmed!'}
 
-📌 Booking ID: ${bookingId}
-📌 Vehicle: ${booking.vehicleName || ""}
-📌 Pickup: ${booking.location || ""}
-📌 From: ${booking.pickupDate || ""}  →  ${booking.returnDate || ""}
-📌 Amount Paid: ₹${booking.totalAmount || ""}
+📌 Booking ID: ${bId}
+📌 Vehicle: ${vName}
+📌 Pickup: ${loc}
+📌 From: ${pDate}  →  ${rDate}
+📌 ${paymentLabel}
 
 Thank you for choosing TravoRents! 🙏
 918455065107`;
@@ -311,10 +353,11 @@ Thank you for choosing TravoRents! 🙏
             "_blank"
         );
     });
-
 });
 </script>
 
 
 </body>
 </html>
+
+

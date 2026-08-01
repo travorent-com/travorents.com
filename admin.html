@@ -191,23 +191,33 @@ async function loadBookings(){
       <table>
         <thead><tr>
           <th>Ref</th><th>Vehicle</th><th>Customer</th><th>Pickup → Return</th>
-          <th>Amount</th><th>Status</th><th>Created</th>
+          <th>Amount</th><th>Status</th><th>Created</th><th>Actions</th>
         </tr></thead>
         <tbody>
-          ${bookings.map(b => `
-            <tr>
-              <td class="ref">${escapeHtml(b.booking_ref)}</td>
-              <td>${escapeHtml(b.vehicle_name)}</td>
-              <td>
-                ${escapeHtml(b.customer_name || '—')}<br>
-                <span style="color:var(--gray);font-size:12px">${escapeHtml(b.customer_phone || '')}</span>
-              </td>
-              <td>${escapeHtml(b.pickup_date)} ${escapeHtml(b.pickup_time||'')}<br>→ ${escapeHtml(b.return_date)} ${escapeHtml(b.return_time||'')}</td>
-              <td>${fmtMoney(b.total_amount)}</td>
-              <td><span class="badge ${escapeHtml(b.payment_status)}">${escapeHtml(b.payment_status)}</span></td>
-              <td>${fmtDateTime(b.created_at)}</td>
-            </tr>
-          `).join('')}
+          ${bookings.map(b => {
+            const status = b.payment_status || b.paymentStatus || 'pending';
+            let actionBtn = '—';
+            if (status === 'qr_pending') {
+              actionBtn = `<button class="toggle-btn" onclick="approveQRBooking('${b.booking_ref}')" style="background:var(--success-bg); color:var(--success); border: 1px solid var(--success); padding:6px 12px; border-radius:5px; cursor:pointer; font-weight: 600;">Approve Payment</button>`;
+            } else if (status === 'completed') {
+              actionBtn = `<span style="color:var(--success); font-weight: 600;">✓ Approved</span>`;
+            }
+            return `
+              <tr>
+                <td class="ref">${escapeHtml(b.booking_ref)}</td>
+                <td>${escapeHtml(b.vehicle_name)}</td>
+                <td>
+                  ${escapeHtml(b.customer_name || '—')}<br>
+                  <span style="color:var(--gray);font-size:12px">${escapeHtml(b.customer_phone || '')}</span>
+                </td>
+                <td>${escapeHtml(b.pickup_date)} ${escapeHtml(b.pickup_time||'')}<br>→ ${escapeHtml(b.return_date)} ${escapeHtml(b.return_time||'')}</td>
+                <td>${fmtMoney(b.total_amount)}</td>
+                <td><span class="badge ${escapeHtml(status)}">${escapeHtml(status)}</span></td>
+                <td>${fmtDateTime(b.created_at)}</td>
+                <td>${actionBtn}</td>
+              </tr>
+            `;
+          }).join('')}
         </tbody>
       </table>
     `;
@@ -302,9 +312,33 @@ async function handleAddVehicle(e){
   }
 }
 
+async function approveQRBooking(bookingRef) {
+  if (!confirm(`Are you sure you want to approve booking ${bookingRef} and send the confirmation WhatsApp message?`)) return;
+  
+  try {
+    const res = await fetch(`${API_BASE}/api/approve-qr-booking`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingRef })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message || 'Payment approved successfully!');
+      loadBookings();
+    } else {
+      alert('Approval failed: ' + data.message);
+    }
+  } catch (err) {
+    alert('Could not approve payment.');
+    console.error(err);
+  }
+}
+
 // Initial load
 loadVehicles().then(loadBookings);
 </script>
 
 </body>
 </html>
+
+

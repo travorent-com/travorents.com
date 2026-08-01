@@ -9,26 +9,37 @@ alert("No booking found");
 window.location.href="index.html";
 }
 
-document.getElementById("vehicleName").innerText =
-booking.vehicleName;
+if (document.getElementById("vehicleName")) {
+  document.getElementById("vehicleName").innerText = booking.vehicleName;
+}
+if (document.getElementById("vehicleImage")) {
+  document.getElementById("vehicleImage").src = booking.vehicleImage;
+}
+if (document.getElementById("vehicleTransmission")) {
+  document.getElementById("vehicleTransmission").innerText = booking.transmission || "Manual";
+}
+if (document.getElementById("vehicleFuel")) {
+  document.getElementById("vehicleFuel").innerText = booking.fuel || "Petrol";
+}
+if (document.getElementById("vehicleSeats")) {
+  document.getElementById("vehicleSeats").innerText = booking.seats || "2";
+}
 
-document.getElementById("vehicleImage").src =
-booking.vehicleImage;
+// Populate Pickup Location
+if (document.getElementById("pickupLocation")) {
+  document.getElementById("pickupLocation").innerText = booking.location;
+}
 
-document.getElementById("pickupDate").innerText =
-booking.pickupDate;
+// Populate Booking Dates nicely
+if (document.getElementById("bookingDates")) {
+  document.getElementById("bookingDates").innerText = `${booking.pickupDate} (${booking.pickupTime}) to ${booking.returnDate} (${booking.returnTime})`;
+}
 
-document.getElementById("returnDate").innerText =
-booking.returnDate;
-
-document.getElementById("pickupTime").innerText =
-booking.pickupTime;
-
-document.getElementById("returnTime").innerText =
-booking.returnTime;
-
-document.getElementById("pickupLocation").innerText =
-booking.location;
+// Legacy elements backup (if they exist)
+if (document.getElementById("pickupDate")) document.getElementById("pickupDate").innerText = booking.pickupDate;
+if (document.getElementById("returnDate")) document.getElementById("returnDate").innerText = booking.returnDate;
+if (document.getElementById("pickupTime")) document.getElementById("pickupTime").innerText = booking.pickupTime;
+if (document.getElementById("returnTime")) document.getElementById("returnTime").innerText = booking.returnTime;
 
 const rent =
 Number(booking.amount);
@@ -48,12 +59,38 @@ gst;
 document.getElementById("totalPrice").innerText =
 total;
 
+// Initialize payment method
+let paymentMethod = "online";
+if (document.getElementById("qrTotalAmount")) {
+  document.getElementById("qrTotalAmount").innerText = total;
+}
+
+function setPaymentMethod(method) {
+  paymentMethod = method;
+  const tabOnline = document.getElementById("tabOnline");
+  const tabQR = document.getElementById("tabQR");
+  const qrArea = document.getElementById("qrPaymentArea");
+  const payBtn = document.querySelector(".payment-btn");
+
+  if (method === "online") {
+    if (tabOnline) tabOnline.classList.add("active");
+    if (tabQR) tabQR.classList.remove("active");
+    if (qrArea) qrArea.style.display = "none";
+    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Pay via PhonePe</span>';
+  } else {
+    if (tabQR) tabQR.classList.add("active");
+    if (tabOnline) tabOnline.classList.remove("active");
+    if (qrArea) qrArea.style.display = "block";
+    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm & Send WhatsApp</span>';
+  }
+}
+
 function makePayment(){
   // Get customer details from booking
   const customerName = document.getElementById("customerName")?.value || "Guest";
   const customerPhone = document.getElementById("customerPhone")?.value || "";
   const customerEmail = document.getElementById("customerEmail")?.value || "";
-  const termsAccepted = document.getElementById("termsCheckbox")?.checked || false;
+  const termsAccepted = (document.getElementById("checkDocs")?.checked && document.getElementById("checkRules")?.checked) || document.getElementById("termsCheckbox")?.checked || false;
 
   if (!termsAccepted) {
     alert("Please accept Terms & Conditions to proceed");
@@ -70,7 +107,7 @@ function makePayment(){
   booking.customerName = customerName;
   booking.customerPhone = customerPhone;
   booking.customerEmail = customerEmail;
-  booking.paymentId = "pending";
+  booking.paymentId = paymentMethod === "online" ? "pending" : "QR_PAYMENT";
   localStorage.setItem("booking", JSON.stringify(booking));
 
   // Create a booking record in the database now, before payment, so we
@@ -80,7 +117,12 @@ function makePayment(){
       booking.bookingRef = saved.booking_ref;
       localStorage.setItem("booking", JSON.stringify(booking));
     }
-    openRazorpay(booking);
+    
+    if (paymentMethod === "online") {
+      openPhonePe(booking);
+    } else {
+      confirmQRBooking(booking);
+    }
   });
 }
 
@@ -127,52 +169,54 @@ function updateBookingInDb(bookingRef, fields) {
     });
 }
 
-function openRazorpay(booking) {
-  var options = {
-    key: "rzp_test_T5X9hFgwLNRiar",
-    amount: total * 100,
-    currency: "INR",
-    name: "TravoRents",
-    description: "Vehicle Booking - " + booking.vehicleName,
-    image: "mainlogo2.jpeg",
-    prefill: {
-      name: booking.customerName,
-      email: booking.customerEmail,
-      contact: booking.customerPhone
-    },
-    theme: {
-      color: "#f7c948"
-    },
-    modal: {
-      ondismiss: function() {
-        alert("Payment cancelled");
-      }
-    },
-    handler: function(response) {
-      // Payment successful
-      booking.paymentId = response.razorpay_payment_id;
-      booking.orderId = response.razorpay_order_id || "manual";
-      booking.signature = response.razorpay_signature || "";
-      booking.paymentStatus = "completed";
-      booking.paymentTime = new Date().toISOString();
-      localStorage.setItem("booking", JSON.stringify(booking));
+function openPhonePe(booking) {
+  const totalAmount = document.getElementById("totalPrice").innerText;
 
-      // Mark the booking as paid in the database
-      updateBookingInDb(booking.bookingRef, {
-        paymentId: booking.paymentId,
-        orderId: booking.orderId,
-        paymentStatus: "completed",
-      });
-
-      // Send WhatsApp notification
-      sendBookingConfirmation(booking);
-      
-      // Redirect to success page
-      window.location.href = "payment-success.html";
+  fetch(`${API_BASE}/api/initiate-payment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bookingRef: booking.bookingRef,
+      amount: totalAmount,
+      customerPhone: booking.customerPhone
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success && data.paymentUrl) {
+      // Redirect to PhonePe payment URL
+      window.location.href = data.paymentUrl;
+    } else {
+      alert("Payment initiation failed: " + (data.message || "Unknown error"));
     }
-  };
+  })
+  .catch(err => {
+    console.error("PhonePe Error:", err);
+    alert("Could not start payment. Please try again.");
+  });
+}
 
-  new Razorpay(options).open();
+function confirmQRBooking(booking) {
+  fetch(`${API_BASE}/api/confirm-qr-booking`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bookingRef: booking.bookingRef
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      // Redirect to payment success page
+      window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
+    } else {
+      alert("Failed to record QR booking. Please contact support.");
+    }
+  })
+  .catch(err => {
+    console.error("QR Confirm Error:", err);
+    alert("An error occurred. Please try again.");
+  });
 }
 
 function sendBookingConfirmation(booking) {
@@ -415,3 +459,4 @@ function updateHelmetCharge() {
     document.getElementById("totalPrice").textContent =
         total.toFixed(0);
 }
+

@@ -76,7 +76,7 @@ module.exports = {
           return vehicles.find(v => v.id === param || v.id === parseInt(param));
         }
         const bookings = getBookings();
-        return bookings.find(b => b.id === param || b.booking_ref === param);
+        return bookings.find(b => b.id === param || b.booking_ref === param || b.bookingRef === param);
       },
       run: function(...args) {
         if (query.includes('INSERT INTO vehicles')) {
@@ -88,7 +88,13 @@ module.exports = {
         }
         if (query.includes('INSERT INTO bookings')) {
           const bookings = getBookings();
-          const newBooking = { id: bookings.length + 1, ...args[0] };
+          const newBooking = { 
+            id: bookings.length + 1, 
+            payment_status: 'pending',
+            paymentStatus: 'pending',
+            booking_ref: args[0].bookingRef,
+            ...args[0] 
+          };
           bookings.push(newBooking);
           saveBookings(bookings);
           return { lastInsertRowid: newBooking.id };
@@ -101,9 +107,30 @@ module.exports = {
         }
         if (query.includes('UPDATE bookings')) {
           const bookings = getBookings();
-          const idx = bookings.findIndex(b => b.booking_ref === args[1]);
+          const ref = args[args.length - 1];
+          const idx = bookings.findIndex(b => b.booking_ref === ref || b.bookingRef === ref);
           if (idx >= 0) {
-            bookings[idx].payment_status = args[0];
+            if (args.length === 5) {
+              if (args[0] !== null) {
+                bookings[idx].payment_id = args[0];
+                bookings[idx].paymentId = args[0];
+              }
+              if (args[1] !== null) {
+                bookings[idx].order_id = args[1];
+                bookings[idx].orderId = args[1];
+              }
+              if (args[2] !== null) bookings[idx].place = args[2];
+              if (args[3] !== null) {
+                bookings[idx].payment_status = args[3];
+                bookings[idx].paymentStatus = args[3];
+              }
+            } else if (args.length === 3) {
+              bookings[idx].payment_status = args[0];
+              bookings[idx].paymentStatus = args[0];
+              bookings[idx].order_id = args[1];
+              bookings[idx].orderId = args[1];
+            }
+            bookings[idx].updated_at = new Date().toISOString();
           }
           saveBookings(bookings);
         }
@@ -113,3 +140,5 @@ module.exports = {
   },
   exec: function() {}
 };
+
+
