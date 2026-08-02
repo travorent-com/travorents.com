@@ -1226,7 +1226,9 @@ const WA_CONTACTS = [
 ];
 
 // ── Backend endpoint (Node.js server — see whatsapp-backend.js)
-const WA_BACKEND = 'http://localhost:3000/api/send-whatsapp';
+const WA_BACKEND = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://127.0.0.1:3000/api/send-whatsapp'
+  : 'https://75wl7kbyfr.c38.paasapps.net/api/send-whatsapp';
 
 // ── Build message text per role
 function waMessage(bookId, role) {

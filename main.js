@@ -1,7 +1,7 @@
-// Base URL of the TravoRents backend (serves the API + the database).
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://127.0.0.1:3000'
-  : window.location.origin;
+  : 'https://75wl7kbyfr.c38.paasapps.net';
+
 
 const booking =
 JSON.parse(localStorage.getItem("booking"));
