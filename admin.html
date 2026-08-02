@@ -70,9 +70,120 @@
 
   .hidden{display:none;}
   @media (max-width:700px){ header{padding:14px 16px;} table{font-size:12.5px;} th,td{padding:9px 10px;} }
+
+  /* ─── Login Overlay ─── */
+  .login-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #0C447C;
+    z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .login-card {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%; max-width: 400px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .login-card h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px; font-weight: 800; color: #0C447C;
+    margin: 0 0 10px;
+  }
+  .login-card p {
+    font-size: 13.5px; color: #6c757d;
+    margin: 0 0 25px;
+  }
+  .login-group {
+    text-align: left; margin-bottom: 18px;
+  }
+  .login-group label {
+    display: block; font-size: 12px; font-weight: 600; color: #6c757d;
+    margin-bottom: 6px;
+  }
+  .login-group input {
+    width: 100%; padding: 11px 13px; border: 1px solid #e6e9ee;
+    border-radius: 8px; font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .login-group input:focus {
+    border-color: #0C447C;
+  }
+  .login-btn {
+    width: 100%; background: #EF9F27; color: #fff; border: none;
+    border-radius: 8px; padding: 12px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: inherit; margin-top: 10px;
+    transition: background 0.2s;
+  }
+  .login-btn:hover {
+    background: #BA7517;
+  }
+  .login-error {
+    color: #c0392b; font-size: 12.5px; font-weight: 600; margin-top: 15px;
+    display: none;
+  }
 </style>
 </head>
 <body>
+
+<!-- Protection Logic -->
+<script>
+  (function() {
+    const session = sessionStorage.getItem("admin_session");
+    if (session === "logged_in") {
+      document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.getElementById("loginOverlay");
+        if (overlay) overlay.style.display = "none";
+      });
+    } else {
+      document.write('<style id="protectionStyles">header, main { display: none !important; }</style>');
+    }
+  })();
+</script>
+
+<!-- Login Card Overlay -->
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-card">
+    <h2>TravoRents Admin</h2>
+    <p>Sign in to access the administrator panel</p>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="login-group">
+        <label for="adminUser">Username</label>
+        <input type="text" id="adminUser" placeholder="Enter username" required autocomplete="username">
+      </div>
+      <div class="login-group">
+        <label for="adminPass">Password</label>
+        <input type="password" id="adminPass" placeholder="Enter password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn">LOG IN</button>
+      <div id="loginError" class="login-error">Invalid username or password!</div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function handleLogin(event) {
+    event.preventDefault();
+    const user = document.getElementById("adminUser").value;
+    const pass = document.getElementById("adminPass").value;
+    const errorDiv = document.getElementById("loginError");
+
+    if (user === "Travorents" && pass === "Travorents@1234") {
+      sessionStorage.setItem("admin_session", "logged_in");
+      
+      // Remove protection stylesheet
+      const protStyles = document.getElementById("protectionStyles");
+      if (protStyles) protStyles.remove();
+      
+      // Hide overlay
+      document.getElementById("loginOverlay").style.display = "none";
+    } else {
+      errorDiv.style.display = "block";
+    }
+  }
+</script>
 
 <header>
   <h1>TravoRents <span>Admin</span></h1>

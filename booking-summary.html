@@ -218,10 +218,16 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       transition: all 0.2s ease;
+      cursor: pointer;
     }
     .online-opt-item:hover {
       border-color: var(--primary-hover);
       box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .online-opt-item.active {
+      border-color: var(--primary-hover);
+      background: rgba(250, 191, 44, 0.05);
+      box-shadow: 0 4px 12px rgba(250, 191, 44, 0.1);
     }
     .opt-left {
       display: flex;
@@ -424,8 +430,7 @@
   <!-- Header -->
   <header>
     <a href="index.html" class="logo">
-      <div class="logo-icon"><i class="fa-solid fa-motorcycle"></i></div>
-      <div class="logo-text">Travo<span>Rents</span></div>
+      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height: 48px; width: auto; object-fit: contain;">
     </a>
     <div class="booking-flow">
       <div class="flow-step"><span class="step-num">1</span> Select Details</div>
@@ -498,10 +503,10 @@
           <div class="form-group full">
             <label for="helmetCount">Extra Helmets</label>
             <select id="helmetCount" onchange="updateHelmetCharge()">
-              <option value="1">1 Helmet (Included Free)</option>
-              <option value="2">2 Helmets (+₹50)</option>
-              <option value="3">3 Helmets (+₹100)</option>
-              <option value="4">4 Helmets (+₹150)</option>
+              <option value="1">0 Helmet (Included Free)</option>
+              <option value="2">1 Helmets (+₹50)</option>
+              <option value="3">2 Helmets (+₹100)</option>
+              <option value="4">3 Helmets (+₹150)</option>
             </select>
           </div>
         </div>
@@ -515,10 +520,10 @@
         
         <div class="payment-tabs">
           <div id="tabOnline" class="payment-tab active" onclick="setPaymentMethod('online')">
-            <i class="fa-solid fa-globe"></i>
+            <i class="fa-solid fa-hand-holding-dollar"></i>
             <div>
-              <p>Online Payment</p>
-              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Pay via PhonePe Payment Gateway</span>
+              <p>Cash on Visit</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Pay cash or UPI at pickup</span>
             </div>
           </div>
           <div id="tabQR" class="payment-tab" onclick="setPaymentMethod('qr')">
@@ -532,58 +537,11 @@
 
         <div class="payment-content">
           <!-- Option A message -->
-          <div id="onlinePaymentDesc" style="font-size: 0.9rem; color: var(--text-muted);">
-            <p style="margin-bottom: 1.2rem; font-weight: 500;"><i class="fa-solid fa-shield-halved" style="color: var(--success); margin-right: 5px;"></i> Redirect to PhonePe's secure portal to pay via any of the options below:</p>
-            
-            <div class="online-options-list">
-              <!-- UPI Option -->
-              <div class="online-opt-item">
-                <div class="opt-left">
-                  <i class="fa-solid fa-mobile-screen-button"></i>
-                  <div>
-                    <strong>UPI (Google Pay, PhonePe, Paytm)</strong>
-                    <span>Direct transfer using UPI ID or app checkout</span>
-                  </div>
-                </div>
-                <span class="pay-badge">Instant</span>
-              </div>
-              
-              <!-- Cards Option -->
-              <div class="online-opt-item">
-                <div class="opt-left">
-                  <i class="fa-solid fa-credit-card"></i>
-                  <div>
-                    <strong>Credit / Debit Cards</strong>
-                    <span>Visa, Mastercard, RuPay, Maestro</span>
-                  </div>
-                </div>
-                <span class="pay-badge">Secure</span>
-              </div>
-
-              <!-- Net Banking Option -->
-              <div class="online-opt-item">
-                <div class="opt-left">
-                  <i class="fa-solid fa-building-columns"></i>
-                  <div>
-                    <strong>Net Banking</strong>
-                    <span>All major Indian commercial banks supported</span>
-                  </div>
-                </div>
-                <span class="pay-badge">Popular</span>
-              </div>
-
-              <!-- Pay Later Option -->
-              <div class="online-opt-item">
-                <div class="opt-left">
-                  <i class="fa-solid fa-clock-rotate-left"></i>
-                  <div>
-                    <strong>Pay Later & EMI Options</strong>
-                    <span>LazyPay, Simpl, Credit Card EMI</span>
-                  </div>
-                </div>
-                <span class="pay-badge">Flexible</span>
-              </div>
-            </div>
+          <div id="onlinePaymentDesc" style="font-size: 0.95rem; color: var(--text-muted); text-align: center; padding: 1rem 0;">
+            <i class="fa-solid fa-hand-holding-dollar" style="font-size: 3rem; color: var(--primary-hover); margin-bottom: 1rem; display: block;"></i>
+            <h3 style="color: var(--text); margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Cash on Visit (Pay at Pickup)</h3>
+            <p style="margin-bottom: 0.5rem; font-weight: 500;">You can pay via Cash or any UPI App (GPay, PhonePe, Paytm) when you pick up your vehicle.</p>
+            <span style="font-size: 0.85rem; color: var(--success); font-weight: 600;">⚠️ No advance online payment is required!</span>
           </div>
           
           <!-- Option B Box -->
@@ -592,7 +550,7 @@
               Scan this QR using **GPay, PhonePe, Paytm, or BHIM** to pay.
             </p>
             <div class="qr-image-wrapper">
-              <img src="phonepe-qr.png" alt="PhonePe Merchant QR">
+              <img id="qrCodeImage" src="phonepe-qr.png" alt="PhonePe Merchant QR">
             </div>
             <p style="font-size: 0.85rem; color: var(--primary-hover); font-weight: 600; margin-top: 0.5rem;">
               ⚠️ Pay exactly <strong style="color: var(--text);">₹<span id="qrTotalAmount">0</span></strong> before completing the booking!
@@ -613,7 +571,7 @@
             <circle class="bg-circle" cx="30" cy="30" r="28"></circle>
             <circle class="progress-circle" id="timerProgress" cx="30" cy="30" r="28"></circle>
           </svg>
-          <div class="timer-text" id="timerText">05:00</div>
+          <div class="timer-text" id="timerText">02:00</div>
         </div>
         <div class="timer-info">
           <p>Complete payment before</p>
@@ -650,7 +608,7 @@
         </ul>
 
         <button class="payment-btn" onclick="triggerTermsModal()">
-          <i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Pay via PhonePe</span>
+          <i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm Booking</span>
         </button>
       </div>
 

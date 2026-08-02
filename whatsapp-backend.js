@@ -486,6 +486,34 @@ app.post('/api/confirm-qr-booking', async (req, res) => {
 });
 
 // ════════════════════════════════════════
+// CONFIRM CASH ON VISIT BOOKING
+// ════════════════════════════════════════
+app.post('/api/confirm-cash-booking', async (req, res) => {
+  const { bookingRef } = req.body || {};
+  if (!bookingRef) return res.status(400).json({ success: false, message: 'bookingRef is required' });
+
+  try {
+    // Update booking in DB
+    db.prepare(`UPDATE bookings SET payment_status = ?, order_id = ? WHERE booking_ref = ?`)
+      .run('cash_on_visit', 'CASH_ON_VISIT', bookingRef);
+
+    const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
+    if (booking) {
+      // Send WhatsApp notifications to both customer and owner
+      await Promise.all([
+        sendWhatsAppToCustomerCash(booking),
+        sendWhatsAppToOwnerCash(booking)
+      ]);
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('[Cash Confirm Error]:', error.message);
+    res.status(500).json({ success: false, message: 'Failed to process Cash on Visit confirmation' });
+  }
+});
+
+// ════════════════════════════════════════
 // APPROVE QR PAYMENT (ADMIN ONLY)
 // ════════════════════════════════════════
 app.post('/api/approve-qr-booking', async (req, res) => {
@@ -541,6 +569,38 @@ async function sendWhatsAppToOwnerQR(booking) {
     `📍 *Pickup:* ${booking.location || '—'}\n` +
     `📅 *Dates:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
     `💰 *Amount:* ₹${booking.total_amount} ⚠️ *PAID VIA QR - CHECK PHONEPE APP*`;
+
+  return sendWhatsAppMessage(OWNER_PHONE, msg);
+}
+
+async function sendWhatsAppToCustomerCash(booking) {
+  const phone = (booking.customer_phone || '').replace(/\D/g, '');
+  if (!phone) return;
+  const to = phone.startsWith('91') ? phone : `91${phone}`;
+
+  const msg =
+    `🎉 *TravoRents.com — Booking Confirmed!*\n\n` +
+    `✅ Your TravoRents booking is confirmed!\n\n` +
+    `📋 *Booking ID:* ${booking.booking_ref}\n` +
+    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
+    `📍 *Pickup:* ${booking.location || '—'}\n` +
+    `📅 *From:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
+    `💰 *Amount to Pay (on Visit):* ₹${booking.total_amount}\n\n` +
+    `Please pay cash or UPI at the time of pickup. Thank you for choosing TravoRents! 🙏`;
+
+  return sendWhatsAppMessage(to, msg);
+}
+
+async function sendWhatsAppToOwnerCash(booking) {
+  const msg =
+    `🔔 *New Cash Booking — TravoRents (Pay on Visit)*\n\n` +
+    `📋 *Booking ID:* ${booking.booking_ref}\n` +
+    `👤 *Customer:* ${booking.customer_name || '—'}\n` +
+    `📞 *Phone:* +${(booking.customer_phone || '').replace(/\D/g, '')}\n` +
+    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
+    `📍 *Pickup:* ${booking.location || '—'}\n` +
+    `📅 *Dates:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
+    `💰 *Amount:* ₹${booking.total_amount} (Pay on Visit)`;
 
   return sendWhatsAppMessage(OWNER_PHONE, msg);
 }

@@ -58,30 +58,44 @@ rent;
 document.getElementById("gstPrice").innerText =
 gst;
 
-document.getElementById("totalPrice").innerText =
-total;
-
 // Initialize payment method
 let paymentMethod = "online";
-if (document.getElementById("qrTotalAmount")) {
-  document.getElementById("qrTotalAmount").innerText = total;
+
+function updateQRAndTotal(newTotal) {
+  if (document.getElementById("totalPrice")) {
+    document.getElementById("totalPrice").innerText = newTotal;
+  }
+  if (document.getElementById("qrTotalAmount")) {
+    document.getElementById("qrTotalAmount").innerText = newTotal;
+  }
+  const qrImg = document.getElementById("qrCodeImage");
+  if (qrImg) {
+    const upiLink = "upi://pay?pa=8984330609@jupiteraxis&pn=TravoRents&am=" + newTotal + "&cu=INR&tn=TravoRents";
+    qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(upiLink);
+  }
 }
+
+// Initial update
+updateQRAndTotal(total);
 
 function setPaymentMethod(method) {
   paymentMethod = method;
   const tabOnline = document.getElementById("tabOnline");
   const tabQR = document.getElementById("tabQR");
   const qrArea = document.getElementById("qrPaymentArea");
+  const onlineDesc = document.getElementById("onlinePaymentDesc");
   const payBtn = document.querySelector(".payment-btn");
 
   if (method === "online") {
     if (tabOnline) tabOnline.classList.add("active");
     if (tabQR) tabQR.classList.remove("active");
+    if (onlineDesc) onlineDesc.style.display = "block";
     if (qrArea) qrArea.style.display = "none";
-    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Pay via PhonePe</span>';
+    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm Booking (Pay on Visit)</span>';
   } else {
     if (tabQR) tabQR.classList.add("active");
     if (tabOnline) tabOnline.classList.remove("active");
+    if (onlineDesc) onlineDesc.style.display = "none";
     if (qrArea) qrArea.style.display = "block";
     if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm & Send WhatsApp</span>';
   }
@@ -109,7 +123,7 @@ function makePayment(){
   booking.customerName = customerName;
   booking.customerPhone = customerPhone;
   booking.customerEmail = customerEmail;
-  booking.paymentId = paymentMethod === "online" ? "pending" : "QR_PAYMENT";
+  booking.paymentId = paymentMethod === "online" ? "CASH_ON_VISIT" : "QR_PAYMENT";
   localStorage.setItem("booking", JSON.stringify(booking));
 
   // Create a booking record in the database now, before payment, so we
@@ -121,7 +135,7 @@ function makePayment(){
     }
     
     if (paymentMethod === "online") {
-      openPhonePe(booking);
+      confirmCashBooking(booking);
     } else {
       confirmQRBooking(booking);
     }
@@ -217,6 +231,29 @@ function confirmQRBooking(booking) {
   })
   .catch(err => {
     console.error("QR Confirm Error:", err);
+    alert("An error occurred. Please try again.");
+  });
+}
+
+function confirmCashBooking(booking) {
+  fetch(`${API_BASE}/api/confirm-cash-booking`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      bookingRef: booking.bookingRef
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      // Redirect to payment success page
+      window.location.href = `payment-success.html?ref=${booking.bookingRef}&cash=1`;
+    } else {
+      alert("Failed to confirm booking. Please contact support.");
+    }
+  })
+  .catch(err => {
+    console.error("Cash Confirm Error:", err);
     alert("An error occurred. Please try again.");
   });
 }
@@ -458,7 +495,6 @@ function updateHelmetCharge() {
         gstPrice +
         helmetCharge;
 
-    document.getElementById("totalPrice").textContent =
-        total.toFixed(0);
+    updateQRAndTotal(total.toFixed(0));
 }
 
