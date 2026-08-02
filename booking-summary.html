@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirm Booking | TravoRents</title>
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      alert("JS Error: " + message + " on line " + lineno);
+      return false;
+    };
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -196,6 +202,61 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.5rem;
+    }
+    .online-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .online-opt-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+    .online-opt-item:hover {
+      border-color: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .opt-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .opt-left i {
+      font-size: 1.2rem;
+      color: var(--primary-hover);
+      background: rgba(250, 191, 44, 0.1);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .opt-left strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .opt-left span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+    .pay-badge {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      background: #F1F3F5;
+      color: var(--text-muted);
+      border-radius: 50px;
+      font-weight: 600;
     }
     .qr-payment-box {
       text-align: center; display: none;
@@ -472,7 +533,57 @@
         <div class="payment-content">
           <!-- Option A message -->
           <div id="onlinePaymentDesc" style="font-size: 0.9rem; color: var(--text-muted);">
-            <p><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> You will be redirected to the secure **PhonePe gateway** to pay via UPI, Credit Card, Debit Card, or NetBanking.</p>
+            <p style="margin-bottom: 1.2rem; font-weight: 500;"><i class="fa-solid fa-shield-halved" style="color: var(--success); margin-right: 5px;"></i> Redirect to PhonePe's secure portal to pay via any of the options below:</p>
+            
+            <div class="online-options-list">
+              <!-- UPI Option -->
+              <div class="online-opt-item">
+                <div class="opt-left">
+                  <i class="fa-solid fa-mobile-screen-button"></i>
+                  <div>
+                    <strong>UPI (Google Pay, PhonePe, Paytm)</strong>
+                    <span>Direct transfer using UPI ID or app checkout</span>
+                  </div>
+                </div>
+                <span class="pay-badge">Instant</span>
+              </div>
+              
+              <!-- Cards Option -->
+              <div class="online-opt-item">
+                <div class="opt-left">
+                  <i class="fa-solid fa-credit-card"></i>
+                  <div>
+                    <strong>Credit / Debit Cards</strong>
+                    <span>Visa, Mastercard, RuPay, Maestro</span>
+                  </div>
+                </div>
+                <span class="pay-badge">Secure</span>
+              </div>
+
+              <!-- Net Banking Option -->
+              <div class="online-opt-item">
+                <div class="opt-left">
+                  <i class="fa-solid fa-building-columns"></i>
+                  <div>
+                    <strong>Net Banking</strong>
+                    <span>All major Indian commercial banks supported</span>
+                  </div>
+                </div>
+                <span class="pay-badge">Popular</span>
+              </div>
+
+              <!-- Pay Later Option -->
+              <div class="online-opt-item">
+                <div class="opt-left">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <div>
+                    <strong>Pay Later & EMI Options</strong>
+                    <span>LazyPay, Simpl, Credit Card EMI</span>
+                  </div>
+                </div>
+                <span class="pay-badge">Flexible</span>
+              </div>
+            </div>
           </div>
           
           <!-- Option B Box -->
@@ -635,6 +746,9 @@
       closeTermsModal();
       makePayment();
     }
+  </script>
+  <script>
+    alert("Number of cards found: " + document.querySelectorAll('.card').length);
   </script>
 </body>
 </html>
