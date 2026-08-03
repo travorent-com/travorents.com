@@ -650,8 +650,8 @@
 
   <script src="main.js"></script>
   <script>
-    // Circular countdown timer logic (5 minutes)
-    let timeLeft = 300; // 2 minutes in seconds
+    // Circular countdown timer logic (2 minutes)
+    let timeLeft = 120; // 2 minutes in seconds
     const timerText = document.getElementById("timerText");
     const progressCircle = document.getElementById("timerProgress");
 
@@ -670,7 +670,7 @@
       timerText.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
       // Progress bar animation (stroke-dashoffset from 0 to 176)
-      const pct = timeLeft / 300;
+      const pct = timeLeft / 120;
       const offset = 176 - (pct * 176);
       progressCircle.style.strokeDashoffset = offset;
     }, 1000);
