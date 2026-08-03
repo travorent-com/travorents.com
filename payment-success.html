@@ -347,6 +347,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("whatsappBtn").addEventListener("click", () => {
         const phone = "918455065107";
         const bId = booking.booking_ref || booking.bookingRef || 'TR-UNKNOWN';
+        const cName = booking.customer_name || booking.customerName || "Guest";
+        const cPhone = booking.customer_phone || booking.customerPhone || "";
         const vName = booking.vehicle_name || booking.vehicleName || "";
         const loc = booking.location || "";
         const pDate = booking.pickup_date || booking.pickupDate || "";
@@ -372,6 +374,8 @@ document.addEventListener('DOMContentLoaded', function () {
 ${statusMsg}
 
 📌 Booking ID: ${bId}
+📌 Customer Name: ${cName}
+📌 Customer Phone: ${cPhone}
 📌 Vehicle: ${vName}
 📌 Pickup: ${loc}
 📌 From: ${pDate}  →  ${rDate}
