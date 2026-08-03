@@ -1,3 +1,4 @@
+const originalPort = process.env.PORT;
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -7,7 +8,7 @@ const path = require('path');
 const db = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = originalPort || process.env.PORT || 3000;
 
 // ════════════════════════════════════════
 // PHONEPE CONFIGURATION
@@ -35,9 +36,7 @@ const OWNER_PHONE   = process.env.OWNER_WHATSAPP_NUMBER     || '918455065107';
 const APP_BASE_URL = process.env.APP_BASE_URL || `http://localhost:${PORT}`;
 
 app.use(cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500',
-           'http://localhost:8000', 'http://127.0.0.1:8000',
-           'http://localhost:3000', 'http://127.0.0.1:3000', 'null'],
+  origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));

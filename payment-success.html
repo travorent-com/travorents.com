@@ -276,6 +276,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let booking = JSON.parse(localStorage.getItem('booking')) || {};
     const bookingIdElement = document.getElementById('bookingId');
 
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://127.0.0.1:3000'
+        : 'https://api.travorents.com';
+
     function updateUI(b) {
         booking = b;
         const bId = b.booking_ref || b.bookingRef || 'TR-UNKNOWN';
@@ -322,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (ref) {
         // Fetch real-time details from backend
-        fetch(`/api/bookings/${ref}`)
+        fetch(`${API_BASE}/api/bookings/${ref}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.booking) {
