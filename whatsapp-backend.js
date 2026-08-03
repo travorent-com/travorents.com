@@ -35,6 +35,17 @@ const OWNER_PHONE   = process.env.OWNER_WHATSAPP_NUMBER     || '918455065107';
 // ════════════════════════════════════════
 const APP_BASE_URL = process.env.APP_BASE_URL || `http://localhost:${PORT}`;
 
+// Manual CORS middleware to ensure headers are set on all requests
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+});
+
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],

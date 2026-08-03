@@ -688,5 +688,29 @@
     "customerName": "Test User",
     "customerPhone": "918455065107",
     "customerEmail": "test@example.com"
+  },
+  {
+    "id": 32,
+    "payment_status": "pending",
+    "paymentStatus": "pending",
+    "booking_ref": "TR-MSDDFVKQ-XJQY",
+    "bookingRef": "TR-MSDDFVKQ-XJQY",
+    "vehicleId": null,
+    "vehicleName": "Honda Activa 6G",
+    "vehicleImage": null,
+    "amount": 100,
+    "gst": 18,
+    "totalAmount": 118,
+    "transmission": null,
+    "fuel": null,
+    "seats": null,
+    "pickupDate": null,
+    "pickupTime": null,
+    "returnDate": null,
+    "returnTime": null,
+    "location": null,
+    "customerName": null,
+    "customerPhone": null,
+    "customerEmail": null
   }
 ]
