@@ -54,6 +54,43 @@ function saveBookings(data) {
   fs.writeFileSync(BOOKINGS_FILE, JSON.stringify(data, null, 2));
 }
 
+// Helper function to normalize bookings between snake_case and camelCase
+function normalizeBooking(b) {
+  if (!b) return b;
+  return {
+    ...b,
+    // Ensure snake_case keys are present
+    booking_ref: b.booking_ref || b.bookingRef,
+    vehicle_id: b.vehicle_id !== undefined ? b.vehicle_id : b.vehicleId,
+    vehicle_name: b.vehicle_name || b.vehicleName,
+    vehicle_image: b.vehicle_image || b.vehicleImage,
+    total_amount: b.total_amount !== undefined ? b.total_amount : b.totalAmount,
+    pickup_date: b.pickup_date || b.pickupDate,
+    pickup_time: b.pickup_time || b.pickupTime,
+    return_date: b.return_date || b.returnDate,
+    return_time: b.return_time || b.returnTime,
+    customer_name: b.customer_name || b.customerName,
+    customer_phone: b.customer_phone || b.customerPhone,
+    customer_email: b.customer_email || b.customerEmail,
+    payment_status: b.payment_status || b.paymentStatus,
+    
+    // Ensure camelCase keys are also present
+    bookingRef: b.bookingRef || b.booking_ref,
+    vehicleId: b.vehicleId !== undefined ? b.vehicleId : b.vehicle_id,
+    vehicleName: b.vehicleName || b.vehicle_name,
+    vehicleImage: b.vehicleImage || b.vehicle_image,
+    totalAmount: b.totalAmount !== undefined ? b.totalAmount : b.total_amount,
+    pickupDate: b.pickupDate || b.pickup_date,
+    pickupTime: b.pickupTime || b.pickup_time,
+    returnDate: b.returnDate || b.return_date,
+    returnTime: b.returnTime || b.return_time,
+    customerName: b.customerName || b.customer_name,
+    customerPhone: b.customerPhone || b.customer_phone,
+    customerEmail: b.customerEmail || b.customer_email,
+    paymentStatus: b.paymentStatus || b.payment_status,
+  };
+}
+
 // Mock db object to match the old interface
 module.exports = {
   prepare: function(query) {
@@ -65,7 +102,8 @@ module.exports = {
         }
         if (query.includes('SELECT * FROM bookings')) {
           const bookings = getBookings();
-          return param ? bookings.filter(b => b.payment_status === param) : bookings;
+          const filtered = param ? bookings.filter(b => b.payment_status === param || b.paymentStatus === param) : bookings;
+          return filtered.map(normalizeBooking);
         }
         return [];
       },
@@ -76,7 +114,8 @@ module.exports = {
           return vehicles.find(v => v.id === param || v.id === parseInt(param));
         }
         const bookings = getBookings();
-        return bookings.find(b => b.id === param || b.booking_ref === param || b.bookingRef === param);
+        const booking = bookings.find(b => b.id === param || b.booking_ref === param || b.bookingRef === param);
+        return booking ? normalizeBooking(booking) : undefined;
       },
       run: function(...args) {
         if (query.includes('INSERT INTO vehicles')) {
@@ -88,13 +127,13 @@ module.exports = {
         }
         if (query.includes('INSERT INTO bookings')) {
           const bookings = getBookings();
-          const newBooking = { 
+          const newBooking = normalizeBooking({ 
             id: bookings.length + 1, 
             payment_status: 'pending',
             paymentStatus: 'pending',
             booking_ref: args[0].bookingRef,
             ...args[0] 
-          };
+          });
           bookings.push(newBooking);
           saveBookings(bookings);
           return { lastInsertRowid: newBooking.id };
@@ -131,6 +170,7 @@ module.exports = {
               bookings[idx].orderId = args[1];
             }
             bookings[idx].updated_at = new Date().toISOString();
+            bookings[idx] = normalizeBooking(bookings[idx]);
           }
           saveBookings(bookings);
         }
