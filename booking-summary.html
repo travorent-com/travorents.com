@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Booking | TravoRents</title>
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      alert("JS Error: " + message + " on line " + lineno);
+      return false;
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ─── Premium Styling System ─── */
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #FABF2C; /* Royal Yellow */
+      --primary-hover: #E0A818;
+      --bg: #F8F9FA;
+      --surface: #FFFFFF;
+      --text: #1A1A2E;
+      --text-muted: #6C757D;
+      --border: #E9ECEF;
+      --shadow: 0 10px 30px rgba(0,0,0,0.05);
+      --success: #28A745;
+      --danger: #DC3545;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2.5rem;
+      position: sticky; top: 0; z-index: 99;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: var(--shadow);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; color: var(--text);
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--primary);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 800;
+    }
+    .logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem; font-weight: 800;
+    }
+    .logo-text span { color: var(--primary-hover); }
+
+    .booking-flow {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+    }
+    .flow-step { display: flex; align-items: center; gap: 0.4rem; }
+    .flow-step.active { color: var(--text); }
+    .flow-step.active .step-num { background: var(--primary); color: var(--text); }
+    .step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--border); font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── Layout ─── */
+    .checkout-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 7fr 4fr;
+      gap: 2rem;
+    }
+
+    /* ─── General Cards ─── */
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.25rem; font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    .card-title i { color: var(--primary-hover); }
+
+    /* ─── Vehicle Summary ─── */
+    .vehicle-summary {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    .vehicle-image-wrapper {
+      background: #F1F3F5;
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border);
+    }
+    .vehicle-image-wrapper img {
+      max-width: 100%; max-height: 150px; object-fit: contain;
+    }
+    .vehicle-info h2 {
+      font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;
+    }
+    .details-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .detail-item {
+      display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);
+    }
+    .detail-item strong { color: var(--text); }
+    .badge {
+      display: inline-block; padding: 0.25rem 0.6rem;
+      border-radius: 4px; font-size: 0.75rem; font-weight: 700;
+      background: #E8F5E9; color: var(--success);
+    }
+
+    /* ─── Pickup / Drop details ─── */
+    .timeline-wrapper {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+      background: #F8F9FA;
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+    }
+    .timeline-node h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .timeline-node p { font-size: 0.85rem; color: var(--text-muted); }
+    .timeline-arrow { color: var(--primary-hover); font-size: 1.2rem; }
+
+    /* ─── Details Form ─── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+    input, select {
+      padding: 0.8rem 1rem; border-radius: 8px;
+      border: 1px solid #CED4DA; font-family: inherit; font-size: 0.95rem;
+      transition: all 0.2s; outline: none; width: 100%;
+    }
+    input:focus, select:focus {
+      border-color: var(--primary-hover);
+      box-shadow: 0 0 0 3px rgba(250, 191, 44, 0.2);
+    }
+
+    /* ─── Payment Methods ─── */
+    .payment-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .payment-tab {
+      padding: 1.2rem; border-radius: 12px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      cursor: pointer; display: flex; align-items: center; gap: 0.8rem;
+      font-weight: 600; font-size: 0.95rem; transition: all 0.2s;
+    }
+    .payment-tab.active {
+      border-color: var(--primary);
+      background: rgba(250, 191, 44, 0.05);
+    }
+    .payment-tab i { font-size: 1.4rem; color: var(--text-muted); }
+    .payment-tab.active i { color: var(--primary-hover); }
+
+    .payment-content {
+      background: #F8F9FA;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .online-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .online-opt-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .online-opt-item:hover {
+      border-color: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .online-opt-item.active {
+      border-color: var(--primary-hover);
+      background: rgba(250, 191, 44, 0.05);
+      box-shadow: 0 4px 12px rgba(250, 191, 44, 0.1);
+    }
+    .opt-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .opt-left i {
+      font-size: 1.2rem;
+      color: var(--primary-hover);
+      background: rgba(250, 191, 44, 0.1);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .opt-left strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .opt-left span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+    .pay-badge {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      background: #F1F3F5;
+      color: var(--text-muted);
+      border-radius: 50px;
+      font-weight: 600;
+    }
+    .qr-payment-box {
+      text-align: center; display: none;
+    }
+    .qr-payment-box.active { display: block; }
+    .qr-image-wrapper {
+      background: white; border-radius: 12px;
+      padding: 1rem; display: inline-block;
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .qr-image-wrapper img {
+      width: 180px; height: 180px; display: block;
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      position: sticky; top: 90px;
+    }
+    .price-breakdown {
+      list-style: none; display: flex; flex-direction: column; gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .price-row {
+      display: flex; justify-content: space-between; font-size: 0.95rem;
+    }
+    .price-row.total {
+      font-size: 1.3rem; font-weight: 800; border-top: 1px solid var(--border);
+      padding-top: 1rem; margin-top: 1rem;
+    }
+
+    /* Circular Timer */
+    .timer-card {
+      display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+      padding: 1.2rem; background: #FFFDE7; border: 1px solid #FFF59D;
+      border-radius: 12px; margin-bottom: 1.5rem;
+    }
+    .timer-circle {
+      position: relative; width: 60px; height: 60px;
+    }
+    .timer-circle svg {
+      width: 60px; height: 60px; transform: rotate(-90deg);
+    }
+    .timer-circle circle {
+      fill: none; stroke-width: 4;
+    }
+    .timer-circle .bg-circle { stroke: #FFF59D; }
+    .timer-circle .progress-circle {
+      stroke: var(--primary-hover);
+      stroke-dasharray: 176;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+    .timer-text {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.85rem; font-weight: 700;
+    }
+    .timer-info p { font-size: 0.85rem; color: #5D4037; font-weight: 600; }
+
+    /* Buttons */
+    .payment-btn {
+      width: 100%;
+      background: var(--primary);
+      color: var(--text);
+      border: none;
+      border-radius: 12px;
+      padding: 1.1rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 6px 20px rgba(250, 191, 44, 0.3);
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    }
+    .payment-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(250, 191, 44, 0.4);
+    }
+    .payment-btn:active { transform: translateY(0); }
+
+    /* ─── Modal Popup ─── */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      z-index: 999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1; pointer-events: all;
+    }
+    .modal-card {
+      background: var(--surface);
+      border-radius: 20px;
+      width: 100%; max-width: 580px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+      transform: scale(0.9); transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+    .modal-header {
+      background: var(--primary);
+      padding: 1.2rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+    }
+    .modal-close {
+      cursor: pointer; font-size: 1.3rem; border: none; background: none;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+    .terms-list {
+      max-height: 200px; overflow-y: auto;
+      padding: 1rem; background: #F8F9FA;
+      border: 1px solid var(--border); border-radius: 8px;
+      margin-bottom: 1.5rem; font-size: 0.88rem;
+    }
+    .terms-list p { margin-bottom: 0.8rem; }
+    .terms-list p:last-child { margin-bottom: 0; }
+
+    .checkbox-group {
+      display: flex; flex-direction: column; gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    .checkbox-row {
+      display: flex; align-items: flex-start; gap: 0.8rem;
+      cursor: pointer; font-size: 0.9rem;
+    }
+    .checkbox-row input {
+      width: 20px; height: 20px; accent-color: var(--primary-hover);
+      cursor: pointer; margin-top: 0.1rem;
+    }
+
+    .modal-actions {
+      display: flex; justify-content: flex-end;
+    }
+    .modal-btn {
+      background: var(--primary); border: none;
+      padding: 0.8rem 2.5rem; font-weight: 700;
+      border-radius: 8px; cursor: pointer; transition: all 0.2s;
+      font-family: inherit; font-size: 0.95rem;
+    }
+    .modal-btn:hover { background: var(--primary-hover); }
+    .modal-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .checkout-container { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      header { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">
+      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height: 48px; width: auto; object-fit: contain;">
+    </a>
+    <div class="booking-flow">
+      <div class="flow-step"><span class="step-num">1</span> Select Details</div>
+      <i class="fa-solid fa-chevron-right"></i>
+      <div class="flow-step active"><span class="step-num">2</span> Checkout & Pay</div>
+    </div>
+  </header>
+
+  <!-- Checkout Container -->
+  <div class="checkout-container">
+    
+    <!-- Left Column: Details -->
+    <div class="main-content">
+      
+      <!-- Card 1: Booking Summary -->
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-circle-info"></i> Booking Summary
+        </div>
+        
+        <div class="vehicle-summary">
+          <div class="vehicle-image-wrapper">
+            <img id="vehicleImage" src="images/honda activa.jpeg" alt="Vehicle">
+          </div>
+          <div class="vehicle-info">
+            <h2 id="vehicleName">Honda Activa 6G</h2>
+            <div class="details-row">
+              <div class="detail-item"><i class="fa-solid fa-gears"></i> Transmission: <strong id="vehicleTransmission">Automatic</strong></div>
+              <div class="detail-item"><i class="fa-solid fa-droplet"></i> Fuel: <strong id="vehicleFuel">Petrol</strong></div>
+            </div>
+            <div class="details-row">
+              <div class="detail-item"><i class="fa-solid fa-users"></i> Seats: <strong id="vehicleSeats">2</strong></div>
+              <div class="detail-item"><i class="fa-solid fa-gauge-high"></i> Limit: <strong>170 KM/day</strong></div>
+            </div>
+            <span class="badge"><i class="fa-solid fa-shield"></i> Helmet Included (Free)</span>
+          </div>
+        </div>
+
+        <div class="timeline-wrapper">
+          <div class="timeline-node">
+            <p>Pickup Location</p>
+            <h4 id="pickupLocation">Railway Station</h4>
+          </div>
+          <div class="timeline-arrow"><i class="fa-solid fa-arrow-right-long"></i></div>
+          <div class="timeline-node">
+            <p>Dates & Times</p>
+            <h4 id="bookingDates">27 May 2026 to 28 May 2026</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Customer Details -->
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-user-pen"></i> Your Details
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="customerName">Full Name *</label>
+            <input type="text" id="customerName" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="customerPhone">Phone Number *</label>
+            <input type="tel" id="customerPhone" placeholder="Enter 10-digit phone number" required>
+          </div>
+          <div class="form-group full">
+            <label for="customerEmail">Email Address *</label>
+            <input type="email" id="customerEmail" placeholder="Enter your email address" required>
+          </div>
+          <div class="form-group full">
+            <label for="helmetCount">Extra Helmets</label>
+            <select id="helmetCount" onchange="updateHelmetCharge()">
+              <option value="1">0 Helmet (Included Free)</option>
+              <option value="2">1 Helmets (+₹50)</option>
+              <option value="3">2 Helmets (+₹100)</option>
+              <option value="4">3 Helmets (+₹150)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Choose Payment Method -->
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-credit-card"></i> Choose Payment Method
+        </div>
+        
+        <div class="payment-tabs">
+          <div id="tabOnline" class="payment-tab active" onclick="setPaymentMethod('online')">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+            <div>
+              <p>Cash on Visit</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Pay cash or UPI at pickup</span>
+            </div>
+          </div>
+          <div id="tabQR" class="payment-tab" onclick="setPaymentMethod('qr')">
+            <i class="fa-solid fa-qrcode"></i>
+            <div>
+              <p>Scan QR Code</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Scan and pay using any UPI app</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-content">
+          <!-- Option A message -->
+          <div id="onlinePaymentDesc" style="font-size: 0.95rem; color: var(--text-muted); text-align: center; padding: 1rem 0;">
+            <i class="fa-solid fa-hand-holding-dollar" style="font-size: 3rem; color: var(--primary-hover); margin-bottom: 1rem; display: block;"></i>
+            <h3 style="color: var(--text); margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Cash on Visit (Pay at Pickup)</h3>
+            <p style="margin-bottom: 0.5rem; font-weight: 500;">You can pay via Cash or any UPI App (GPay, PhonePe, Paytm) when you pick up your vehicle.</p>
+            <span style="font-size: 0.85rem; color: var(--success); font-weight: 600;">⚠️ No advance online payment is required!</span>
+          </div>
+          
+          <!-- Option B Box -->
+          <div id="qrPaymentArea" class="qr-payment-box">
+            <p style="font-size: 0.95rem; margin-bottom: 1rem; color: var(--text-muted);">
+              Scan this QR using **GPay, PhonePe, Paytm, or BHIM** to pay.
+            </p>
+            <div class="qr-image-wrapper">
+              <img id="qrCodeImage" src="phonepe-qr.png" alt="PhonePe Merchant QR">
+            </div>
+            <p style="font-size: 0.85rem; color: var(--primary-hover); font-weight: 600; margin-top: 0.5rem;">
+              ⚠️ Pay exactly <strong style="color: var(--text);">₹<span id="qrTotalAmount">0</span></strong> before completing the booking!
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Sidebar -->
+    <div class="sidebar">
+      
+      <!-- Circular Countdown Timer -->
+      <div class="timer-card">
+        <div class="timer-circle">
+          <svg>
+            <circle class="bg-circle" cx="30" cy="30" r="28"></circle>
+            <circle class="progress-circle" id="timerProgress" cx="30" cy="30" r="28"></circle>
+          </svg>
+          <div class="timer-text" id="timerText">02:00</div>
+        </div>
+        <div class="timer-info">
+          <p>Complete payment before</p>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">time runs out</span>
+        </div>
+      </div>
+
+      <!-- Billing Breakdown -->
+      <div class="card" style="padding: 1.5rem;">
+        <div class="card-title" style="font-size: 1.1rem; margin-bottom: 1.2rem;">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Billing Details
+        </div>
+        <ul class="price-breakdown">
+          <li class="price-row">
+            <span>Vehicle Rental Charges</span>
+            <span>₹<span id="rentPrice">0</span></span>
+          </li>
+          <li class="price-row">
+            <span>Helmet Surcharge</span>
+            <span>₹<span id="helmetCharge">0</span></span>
+          </li>
+          <li class="price-row">
+            <span>GST (18%)</span>
+            <span>₹<span id="gstPrice">0</span></span>
+          </li>
+          <li class="price-row">
+            <span>Refundable Deposit</span>
+            <span>₹0</span>
+          </li>
+          <li class="price-row total">
+            <span>Total Due</span>
+            <span style="color: var(--success);">₹<span id="totalPrice">0</span></span>
+          </li>
+        </ul>
+
+        <button class="payment-btn" onclick="triggerTermsModal()">
+          <i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm Booking</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Terms & Conditions Modal Overlay -->
+  <div id="termsModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Terms & Conditions</h3>
+        <button class="modal-close" onclick="closeTermsModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="terms-list">
+          <p><strong>✓ Documents Required:</strong> You must present your original valid driving license and Aadhar card/ID proof at the time of pickup. Digital copies will be verified.</p>
+          <p><strong>✓ Speed Limit:</strong> Please adhere to standard speed limits. Excessive speeding warnings can result in penalties.</p>
+          <p><strong>✓ Fuel Policy:</strong> The vehicle is supplied with a full tank of fuel. You are requested to return the vehicle with a full tank, or fuel refill charges will apply.</p>
+          <p><strong>✓ Damage/Accident Liability:</strong> Any physical damage to the vehicle during the rental period is the sole responsibility of the renter.</p>
+          <p><strong>✓ Return Timing:</strong> Delayed returns will attract late return surcharges calculated on an hourly basis.</p>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-row">
+            <input type="checkbox" id="checkDocs" onchange="checkTermsAgreement()">
+            <span>I agree to upload and present a valid driving license and ID proof before the ride starts.</span>
+          </label>
+          <label class="checkbox-row">
+            <input type="checkbox" id="checkRules" onchange="checkTermsAgreement()">
+            <span>I accept the Terms and Conditions and agree to abide by the booking policies of TravoRents.com.</span>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button id="proceedBookingBtn" class="modal-btn" disabled onclick="executeBookingPayment()">PROCEED</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+  <script>
+    // Circular countdown timer logic (2 minutes)
+    let timeLeft = 120; // 2 minutes in seconds
+    const timerText = document.getElementById("timerText");
+    const progressCircle = document.getElementById("timerProgress");
+
+    const timerInterval = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        alert("Booking timer expired! Redirecting to homepage.");
+        window.location.href = "index.html";
+        return;
+      }
+      timeLeft--;
+
+      // Format time text
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      timerText.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+      // Progress bar animation (stroke-dashoffset from 0 to 176)
+      const pct = timeLeft / 120;
+      const offset = 176 - (pct * 176);
+      progressCircle.style.strokeDashoffset = offset;
+    }, 1000);
+
+    // Terms Modal triggers
+    function triggerTermsModal() {
+      // Validate customer details form first
+      const customerName = document.getElementById("customerName")?.value || "";
+      const customerPhone = document.getElementById("customerPhone")?.value || "";
+      const customerEmail = document.getElementById("customerEmail")?.value || "";
+
+      if (!customerName || !customerPhone || !customerEmail) {
+        alert("Please fill in your name, phone number, and email address.");
+        return;
+      }
+
+      document.getElementById("termsModal").classList.add("active");
+    }
+
+    function closeTermsModal() {
+      document.getElementById("termsModal").classList.remove("active");
+    }
+
+    function checkTermsAgreement() {
+      const checkDocs = document.getElementById("checkDocs").checked;
+      const checkRules = document.getElementById("checkRules").checked;
+      document.getElementById("proceedBookingBtn").disabled = !(checkDocs && checkRules);
+    }
+
+    function executeBookingPayment() {
+      closeTermsModal();
+      makePayment();
+    }
+  </script>
+</body>
+</html>
+
