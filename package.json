@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node whatsapp-backend.js"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "cors": "^2.8.5",
