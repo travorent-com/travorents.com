@@ -47,8 +47,20 @@ if (hamburger && navLinks) {
     }
   });
 
-  // Close nav when any link is clicked
-  $$('.nav-links a').forEach(link => {
+  // Handle mobile dropdown toggle
+  const dropdownToggle = document.querySelector('.dropdown-toggle');
+  if (dropdownToggle) {
+    dropdownToggle.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        const parentLi = dropdownToggle.closest('.dropdown');
+        if (parentLi) parentLi.classList.toggle('active');
+      }
+    });
+  }
+
+  // Close nav when non-dropdown link is clicked
+  $$('.nav-links a:not(.dropdown-toggle)').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
       const icon = hamburger.querySelector('i');

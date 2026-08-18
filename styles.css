@@ -32,6 +32,15 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:12px 4
 .nav-call:hover{background:var(--primary-mid)!important;}
 .hamburger{display:none;font-size:22px;cursor:pointer;color:var(--dark);}
 
+/* ===== DROPDOWN MENU ===== */
+.nav-links li.dropdown{position:relative;}
+.nav-links .dropdown-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;}
+.nav-links .dropdown-menu{display:none;position:absolute;top:100%;left:0;min-width:200px;background:#ffffff;box-shadow:0 10px 30px rgba(0,0,0,0.15);border-radius:12px;padding:8px 0;list-style:none;z-index:1100;border:1px solid rgba(12,68,124,0.1);margin-top:4px;}
+.nav-links li.dropdown:hover .dropdown-menu,.nav-links li.dropdown.active .dropdown-menu{display:block;}
+.nav-links .dropdown-menu li{width:100%;margin:0;}
+.nav-links .dropdown-menu li a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--dark);font-size:13.5px;font-weight:500;border-radius:0;transition:all 0.2s ease;white-space:nowrap;}
+.nav-links .dropdown-menu li a:hover{background:rgba(12,68,124,0.08);color:var(--primary);padding-left:20px;}
+
 /* ===== HERO ===== */
 .hero{min-height:100vh;background:linear-gradient(135deg,#07213f 0%,#0a2d56 50%,#0C447C 100%);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:90px;}
 
