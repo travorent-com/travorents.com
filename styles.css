@@ -419,10 +419,14 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
   .vehicles-grid{grid-template-columns:repeat(3,1fr);}
 }
 @media(max-width:768px){
-  nav{padding:14px 20px;}
-  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;padding:20px;box-shadow:var(--shadow);flex-direction:column;}
-  .nav-links.open{display:flex;}
-  .hamburger{display:block;}
+  nav{padding:14px 20px;position:relative;}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);flex-direction:column;gap:10px;z-index:1100;border-bottom:3px solid var(--primary);}
+  .nav-links.open{display:flex!important;}
+  .hamburger{display:block;font-size:24px;cursor:pointer;color:var(--dark);padding:5px;}
+  .nav-links li{width:100%;}
+  .nav-links li.dropdown{width:100%;}
+  .nav-links .dropdown-menu{position:static;box-shadow:none;border:none;padding:8px 0 8px 15px;width:100%;margin-top:5px;background:#f1f3f5;border-radius:8px;}
+  .nav-links li.dropdown.active .dropdown-menu{display:block!important;}
   .hero-content{padding:40px 20px;}
   .container{padding:0 20px;}
   section{padding:60px 0;}
