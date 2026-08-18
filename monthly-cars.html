@@ -37,23 +37,24 @@ section{padding:90px 0;padding-top:120px;}
 .section-header p{color:var(--gray);max-width:600px;margin:14px auto 0;font-size:15px;line-height:1.75;}
 .banner-badge{background:var(--accent);color:#3a1f00;display:inline-block;padding:6px 16px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:16px;}
 
-.vehicles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-@media (max-width:1000px){.vehicles-grid{grid-template-columns:repeat(2,1fr);}}
+.vehicles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+@media (max-width:1200px){.vehicles-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:900px){.vehicles-grid{grid-template-columns:repeat(2,1fr);}}
 @media (max-width:600px){.vehicles-grid{grid-template-columns:1fr;}}
 .vehicle-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);border:1px solid var(--light-gray);}
 .vehicle-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--primary-light);}
-.card-img{height:200px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;position:relative;}
+.card-img{height:190px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;position:relative;}
 .card-badge{position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;}
 .discount-tag{position:absolute;top:12px;left:12px;background:var(--accent);color:#3a1f00;font-size:11px;font-weight:800;padding:4px 10px;border-radius:50px;}
-.card-body{padding:22px;}
-.card-body h3{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:10px;}
-.card-specs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.spec-tag{background:var(--light-gray);color:var(--gray);font-size:11px;font-weight:600;padding:4px 10px;border-radius:50px;display:inline-flex;align-items:center;gap:4px;}
-.card-price{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--light-gray);margin-bottom:14px;}
-.price-item .amount{font-size:22px;font-weight:800;color:var(--primary);}
-.price-item .duration{font-size:12px;color:var(--gray);font-weight:600;}
-.original-price{text-decoration:line-through;color:var(--gray);font-size:13px;margin-right:4px;}
-.book-btn{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
+.card-body{padding:20px;}
+.card-body h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:10px;}
+.card-specs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.spec-tag{background:var(--light-gray);color:var(--gray);font-size:11px;font-weight:600;padding:4px 9px;border-radius:50px;display:inline-flex;align-items:center;gap:4px;}
+.card-price{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--light-gray);margin-bottom:12px;}
+.price-item .amount{font-size:20px;font-weight:800;color:var(--primary);}
+.price-item .duration{font-size:11px;color:var(--gray);font-weight:600;}
+.original-price{text-decoration:line-through;color:var(--gray);font-size:12px;margin-right:4px;}
+.book-btn{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
 .book-btn:hover{background:var(--primary-mid);}
 
 footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
@@ -93,8 +94,6 @@ footer ul li a:hover{color:var(--primary-light);}
           <li><a href="monthly-cars.html"><i class="fas fa-car" style="color:var(--accent-dark);"></i> Monthly Cars</a></li>
         </ul>
       </li>
-      <li><a href="cars.html">All Cars</a></li>
-      <li><a href="bikes.html">All Bikes</a></li>
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i> Call</a></li>
@@ -123,10 +122,9 @@ footer ul li a:hover{color:var(--primary-light);}
         <div class="card-body">
           <h3>Swift Dzire New Model</h3>
           <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-tools"></i> Free Servicing</span>
-            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Full Insurance</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seater</span>
+            <span class="spec-tag"><i class="fas fa-tools"></i> Servicing Free</span>
+            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Insurance</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
@@ -134,7 +132,7 @@ footer ul li a:hover{color:var(--primary-light);}
               <div class="duration">for 30 Days (₹933/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Swift Dzire New Model', 28000, 'Monthly Car (30 Days)', 'Manual', 5)"><i class="fas fa-calendar-check"></i> Book Monthly Plan ₹28,000</button>
+          <button class="book-btn" onclick="bookPackage('Swift Dzire New Model', 28000, 'Monthly Car (30 Days)', 'images/maruti dizaer.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹28,000</button>
         </div>
       </div>
 
@@ -148,8 +146,8 @@ footer ul li a:hover{color:var(--primary-light);}
         <div class="card-body">
           <h3>Maruti Alto K10</h3>
           <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-tools"></i> Free Servicing</span>
-            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Full Insurance</span>
+            <span class="spec-tag"><i class="fas fa-tools"></i> Servicing Free</span>
+            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Insurance</span>
             <span class="spec-tag"><i class="fas fa-leaf"></i> Economy</span>
           </div>
           <div class="card-price">
@@ -158,55 +156,79 @@ footer ul li a:hover{color:var(--primary-light);}
               <div class="duration">for 30 Days (₹733/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Maruti Alto K10', 22000, 'Monthly Car (30 Days)', 'Manual', 5)"><i class="fas fa-calendar-check"></i> Book Monthly Plan ₹22,000</button>
+          <button class="book-btn" onclick="bookPackage('Maruti Alto K10', 22000, 'Monthly Car (30 Days)', 'images/alto k10.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹22,000</button>
         </div>
       </div>
 
-      <!-- Hyundai Venue -->
+      <!-- Suzuki Baleno -->
       <div class="vehicle-card">
         <div class="card-img">
-          <img src="images/venue.jpeg" alt="Hyundai Venue" style="width:100%;height:100%;object-fit:cover;">
+          <img src="images/baleno.jpeg" alt="Suzuki Baleno" style="width:100%;height:100%;object-fit:cover;">
           <span class="discount-tag">Save 40%</span>
           <span class="card-badge">Manual</span>
         </div>
         <div class="card-body">
-          <h3>Hyundai Venue SUV</h3>
+          <h3>Suzuki Baleno</h3>
           <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-tools"></i> Free Maintenance</span>
-            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Full Insurance</span>
-            <span class="spec-tag"><i class="fas fa-car-side"></i> SUV Style</span>
+            <span class="spec-tag"><i class="fas fa-tools"></i> Maintenance Free</span>
+            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹60,000</span> <span class="amount">₹36,000</span></div>
-              <div class="duration">for 30 Days (₹1,200/day)</div>
+              <div><span class="original-price">₹51,000</span> <span class="amount">₹30,000</span></div>
+              <div class="duration">for 30 Days (₹1,000/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Hyundai Venue SUV', 36000, 'Monthly Car (30 Days)', 'Manual', 5)"><i class="fas fa-calendar-check"></i> Book Monthly Plan ₹36,000</button>
+          <button class="book-btn" onclick="bookPackage('Suzuki Baleno', 30000, 'Monthly Car (30 Days)', 'images/baleno.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹30,000</button>
         </div>
       </div>
 
-      <!-- Baleno Automatic -->
+      <!-- i20 Sunroof 2025 -->
       <div class="vehicle-card">
         <div class="card-img">
-          <img src="images/baleno automatic.jpeg" alt="Baleno Automatic" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 38%</span>
-          <span class="card-badge">Automatic</span>
+          <img src="images/hundyai.jpeg" alt="i20 Sunroof 2025" style="width:100%;height:100%;object-fit:cover;">
+          <span class="discount-tag">Save 40%</span>
+          <span class="card-badge">Manual</span>
         </div>
         <div class="card-body">
-          <h3>Baleno Automatic</h3>
+          <h3>i20 Sunroof 2025</h3>
           <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-tools"></i> Free Servicing</span>
-            <span class="spec-tag"><i class="fas fa-cog"></i> Automatic Drive</span>
-            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Comprehensive Insurance</span>
+            <span class="spec-tag"><i class="fas fa-sun"></i> Sunroof</span>
+            <span class="spec-tag"><i class="fas fa-tools"></i> Servicing Free</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹51,000</span> <span class="amount">₹32,000</span></div>
-              <div class="duration">for 30 Days (₹1,066/day)</div>
+              <div><span class="original-price">₹60,000</span> <span class="amount">₹35,000</span></div>
+              <div class="duration">for 30 Days (₹1,166/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Baleno Automatic', 32000, 'Monthly Car (30 Days)', 'Automatic', 5)"><i class="fas fa-calendar-check"></i> Book Monthly Plan ₹32,000</button>
+          <button class="book-btn" onclick="bookPackage('i20 Sunroof 2025', 35000, 'Monthly Car (30 Days)', 'images/hundyai.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹35,000</button>
+        </div>
+      </div>
+
+      <!-- Hyundai Venue SX -->
+      <div class="vehicle-card">
+        <div class="card-img">
+          <img src="images/venue.jpeg" alt="Hyundai Venue SX" style="width:100%;height:100%;object-fit:cover;">
+          <span class="discount-tag">Save 40%</span>
+          <span class="card-badge">Manual</span>
+        </div>
+        <div class="card-body">
+          <h3>Hyundai Venue SX</h3>
+          <div class="card-specs">
+            <span class="spec-tag"><i class="fas fa-tools"></i> Free Maintenance</span>
+            <span class="spec-tag"><i class="fas fa-shield-alt"></i> Insurance</span>
+            <span class="spec-tag"><i class="fas fa-car-side"></i> SUV</span>
+          </div>
+          <div class="card-price">
+            <div class="price-item">
+              <div><span class="original-price">₹69,000</span> <span class="amount">₹38,000</span></div>
+              <div class="duration">for 30 Days (₹1,266/day)</div>
+            </div>
+          </div>
+          <button class="book-btn" onclick="bookPackage('Hyundai Venue SX', 38000, 'Monthly Car (30 Days)', 'images/venue.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹38,000</button>
         </div>
       </div>
 
@@ -221,40 +243,64 @@ footer ul li a:hover{color:var(--primary-light);}
           <h3>Kia Carens (7 Seater)</h3>
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-tools"></i> Maintenance Included</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 7 Seater Luxury</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Diesel</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 7 Seater</span>
+            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹75,000</span> <span class="amount">₹48,000</span></div>
+              <div><span class="original-price">₹90,000</span> <span class="amount">₹48,000</span></div>
               <div class="duration">for 30 Days (₹1,600/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Kia Carens (7 Seater)', 48000, 'Monthly Car (30 Days)', 'Manual', 7)"><i class="fas fa-calendar-check"></i> Book Monthly Plan ₹48,000</button>
+          <button class="book-btn" onclick="bookPackage('Kia Carens (7 Seater)', 48000, 'Monthly Car (30 Days)', 'images/Kia Carens.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹48,000</button>
         </div>
       </div>
 
-      <!-- Mahindra Thar -->
+      <!-- Mahindra Thar ROX -->
       <div class="vehicle-card">
         <div class="card-img">
-          <img src="images/thar.jpeg" alt="Mahindra Thar" style="width:100%;height:100%;object-fit:cover;">
+          <img src="images/thar.jpeg" alt="Mahindra Thar ROX 2025" style="width:100%;height:100%;object-fit:cover;">
           <span class="discount-tag">Save 38%</span>
-          <span class="card-badge">Manual 4x4</span>
+          <span class="card-badge">Manual</span>
         </div>
         <div class="card-body">
-          <h3>Mahindra Thar 4x4 Hardtop</h3>
+          <h3>Mahindra Thar ROX 2025</h3>
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-tools"></i> Full Support</span>
-            <span class="spec-tag"><i class="fas fa-mountain"></i> 4x4 Off-Road</span>
-            <span class="spec-tag"><i class="fas fa-crown"></i> Luxury SUV</span>
+            <span class="spec-tag"><i class="fas fa-mountain"></i> 4x4 Offroad</span>
+            <span class="spec-tag"><i class="fas fa-crown"></i> SUV</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹1,05,000</span> <span class="amount">₹65,000</span></div>
+              <div><span class="original-price">₹1,20,000</span> <span class="amount">₹65,000</span></div>
               <div class="duration">for 30 Days (₹2,166/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Mahindra Thar 4x4', 65000, 'Monthly Car (30 Days)', 'Manual', 4)"><i class="fas fa-calendar-check"></i> Book Monthly Plan ₹65,000</button>
+          <button class="book-btn" onclick="bookPackage('Mahindra Thar ROX 2025', 65000, 'Monthly Car (30 Days)', 'images/thar.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹65,000</button>
+        </div>
+      </div>
+
+      <!-- Baleno Automatic -->
+      <div class="vehicle-card">
+        <div class="card-img">
+          <img src="images/baleno automatic.jpeg" alt="Baleno Automatic" style="width:100%;height:100%;object-fit:cover;">
+          <span class="discount-tag">Save 38%</span>
+          <span class="card-badge">Automatic</span>
+        </div>
+        <div class="card-body">
+          <h3>Baleno Automatic</h3>
+          <div class="card-specs">
+            <span class="spec-tag"><i class="fas fa-tools"></i> Servicing Free</span>
+            <span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
+          </div>
+          <div class="card-price">
+            <div class="price-item">
+              <div><span class="original-price">₹60,000</span> <span class="amount">₹32,000</span></div>
+              <div class="duration">for 30 Days (₹1,066/day)</div>
+            </div>
+          </div>
+          <button class="book-btn" onclick="bookPackage('Baleno Automatic', 32000, 'Monthly Car (30 Days)', 'images/baleno automatic.jpeg')"><i class="fas fa-calendar-check"></i> Book Monthly ₹32,000</button>
         </div>
       </div>
     </div>
@@ -283,8 +329,8 @@ footer ul li a:hover{color:var(--primary-light);}
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
-          <li><a href="cars.html">All Cars</a></li>
-          <li><a href="bikes.html">All Bikes</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -299,19 +345,19 @@ footer ul li a:hover{color:var(--primary-light);}
 <a href="tel:+918455065107" class="float-call"><i class="fas fa-phone-alt"></i></a>
 
 <script>
-function bookPackage(vehicleName, amount, packageType, transmission, seats) {
+function bookPackage(vehicleName, amount, packageType, imagePath) {
   const bookingObj = {
     vehicleName: vehicleName + " (" + packageType + ")",
-    vehicleImage: "images/main logo.png",
+    vehicleImage: imagePath || "images/main logo.png",
     amount: amount,
     location: "Bhubaneswar, Odisha",
     pickupDate: new Date().toISOString().split('T')[0],
     pickupTime: "09:30",
     returnDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
     returnTime: "09:30",
-    transmission: transmission || "Manual",
+    transmission: "Manual",
     fuel: "Petrol",
-    seats: seats || 5
+    seats: "5"
   };
   localStorage.setItem("booking", JSON.stringify(bookingObj));
   window.location.href = "booking-summary.html";

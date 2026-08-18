@@ -37,23 +37,24 @@ section{padding:90px 0;padding-top:120px;}
 .section-header p{color:var(--gray);max-width:600px;margin:14px auto 0;font-size:15px;line-height:1.75;}
 .banner-badge{background:var(--accent);color:#3a1f00;display:inline-block;padding:6px 16px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:16px;}
 
-.vehicles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-@media (max-width:1000px){.vehicles-grid{grid-template-columns:repeat(2,1fr);}}
+.vehicles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+@media (max-width:1200px){.vehicles-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:900px){.vehicles-grid{grid-template-columns:repeat(2,1fr);}}
 @media (max-width:600px){.vehicles-grid{grid-template-columns:1fr;}}
 .vehicle-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);border:1px solid var(--light-gray);}
 .vehicle-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--primary-light);}
-.card-img{height:200px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;position:relative;}
+.card-img{height:190px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;position:relative;}
 .card-badge{position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;}
 .discount-tag{position:absolute;top:12px;left:12px;background:var(--accent);color:#3a1f00;font-size:11px;font-weight:800;padding:4px 10px;border-radius:50px;}
-.card-body{padding:22px;}
-.card-body h3{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:10px;}
-.card-specs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.spec-tag{background:var(--light-gray);color:var(--gray);font-size:11px;font-weight:600;padding:4px 10px;border-radius:50px;display:inline-flex;align-items:center;gap:4px;}
-.card-price{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--light-gray);margin-bottom:14px;}
-.price-item .amount{font-size:22px;font-weight:800;color:var(--primary);}
-.price-item .duration{font-size:12px;color:var(--gray);font-weight:600;}
-.original-price{text-decoration:line-through;color:var(--gray);font-size:13px;margin-right:4px;}
-.book-btn{background:var(--primary);color:#fff;border:none;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
+.card-body{padding:20px;}
+.card-body h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:10px;}
+.card-specs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.spec-tag{background:var(--light-gray);color:var(--gray);font-size:11px;font-weight:600;padding:4px 9px;border-radius:50px;display:inline-flex;align-items:center;gap:4px;}
+.card-price{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--light-gray);margin-bottom:12px;}
+.price-item .amount{font-size:20px;font-weight:800;color:var(--primary);}
+.price-item .duration{font-size:11px;color:var(--gray);font-weight:600;}
+.original-price{text-decoration:line-through;color:var(--gray);font-size:12px;margin-right:4px;}
+.book-btn{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
 .book-btn:hover{background:var(--primary-mid);}
 
 footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
@@ -93,8 +94,6 @@ footer ul li a:hover{color:var(--primary-light);}
           <li><a href="monthly-cars.html"><i class="fas fa-car" style="color:var(--accent-dark);"></i> Monthly Cars</a></li>
         </ul>
       </li>
-      <li><a href="cars.html">All Cars</a></li>
-      <li><a href="bikes.html">All Bikes</a></li>
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i> Call</a></li>
@@ -125,8 +124,7 @@ footer ul li a:hover{color:var(--primary-light);}
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
             <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seater</span>
-            <span class="spec-tag"><i class="fas fa-road"></i> 1400 KM Limit</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
@@ -134,7 +132,7 @@ footer ul li a:hover{color:var(--primary-light);}
               <div class="duration">for 7 Days (₹1,400/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Swift Dzire New Model', 9800, 'Weekly Car (7 Days)', 'Manual', 5)"><i class="fas fa-calendar-check"></i> Book Weekly Plan ₹9,800</button>
+          <button class="book-btn" onclick="bookPackage('Swift Dzire New Model', 9800, 'Weekly Car (7 Days)', 'images/maruti dizaer.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹9,800</button>
         </div>
       </div>
 
@@ -150,8 +148,7 @@ footer ul li a:hover{color:var(--primary-light);}
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
             <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seater</span>
-            <span class="spec-tag"><i class="fas fa-leaf"></i> High Mileage</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
@@ -159,57 +156,79 @@ footer ul li a:hover{color:var(--primary-light);}
               <div class="duration">for 7 Days (₹1,100/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Maruti Alto K10', 7700, 'Weekly Car (7 Days)', 'Manual', 5)"><i class="fas fa-calendar-check"></i> Book Weekly Plan ₹7,700</button>
+          <button class="book-btn" onclick="bookPackage('Maruti Alto K10', 7700, 'Weekly Car (7 Days)', 'images/alto k10.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹7,700</button>
         </div>
       </div>
 
-      <!-- Hyundai Venue -->
+      <!-- Suzuki Baleno -->
       <div class="vehicle-card">
         <div class="card-img">
-          <img src="images/venue.jpeg" alt="Hyundai Venue" style="width:100%;height:100%;object-fit:cover;">
+          <img src="images/baleno.jpeg" alt="Suzuki Baleno" style="width:100%;height:100%;object-fit:cover;">
           <span class="discount-tag">Save 20%</span>
           <span class="card-badge">Manual</span>
         </div>
         <div class="card-body">
-          <h3>Hyundai Venue SUV</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> Climate Control</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seater</span>
-            <span class="spec-tag"><i class="fas fa-car-side"></i> Compact SUV</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹15,400</span> <span class="amount">₹12,600</span></div>
-              <div class="duration">for 7 Days (₹1,800/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Hyundai Venue SUV', 12600, 'Weekly Car (7 Days)', 'Manual', 5)"><i class="fas fa-calendar-check"></i> Book Weekly Plan ₹12,600</button>
-        </div>
-      </div>
-
-      <!-- Baleno Automatic -->
-      <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/baleno automatic.jpeg" alt="Baleno Automatic" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 20%</span>
-          <span class="card-badge">Automatic</span>
-        </div>
-        <div class="card-body">
-          <h3>Baleno Automatic</h3>
+          <h3>Suzuki Baleno</h3>
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
             <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seater</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹14,000</span> <span class="amount">₹11,200</span></div>
-              <div class="duration">for 7 Days (₹1,600/day)</div>
+              <div><span class="original-price">₹11,900</span> <span class="amount">₹10,500</span></div>
+              <div class="duration">for 7 Days (₹1,500/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Baleno Automatic', 11200, 'Weekly Car (7 Days)', 'Automatic', 5)"><i class="fas fa-calendar-check"></i> Book Weekly Plan ₹11,200</button>
+          <button class="book-btn" onclick="bookPackage('Suzuki Baleno', 10500, 'Weekly Car (7 Days)', 'images/baleno.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹10,500</button>
+        </div>
+      </div>
+
+      <!-- i20 Sunroof 2025 -->
+      <div class="vehicle-card">
+        <div class="card-img">
+          <img src="images/hundyai.jpeg" alt="i20 Sunroof 2025" style="width:100%;height:100%;object-fit:cover;">
+          <span class="discount-tag">Save 18%</span>
+          <span class="card-badge">Manual</span>
+        </div>
+        <div class="card-body">
+          <h3>i20 Sunroof 2025</h3>
+          <div class="card-specs">
+            <span class="spec-tag"><i class="fas fa-snowflake"></i> Climate Control</span>
+            <span class="spec-tag"><i class="fas fa-sun"></i> Sunroof</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
+          </div>
+          <div class="card-price">
+            <div class="price-item">
+              <div><span class="original-price">₹14,000</span> <span class="amount">₹11,900</span></div>
+              <div class="duration">for 7 Days (₹1,700/day)</div>
+            </div>
+          </div>
+          <button class="book-btn" onclick="bookPackage('i20 Sunroof 2025', 11900, 'Weekly Car (7 Days)', 'images/hundyai.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹11,900</button>
+        </div>
+      </div>
+
+      <!-- Hyundai Venue SX -->
+      <div class="vehicle-card">
+        <div class="card-img">
+          <img src="images/venue.jpeg" alt="Hyundai Venue SX" style="width:100%;height:100%;object-fit:cover;">
+          <span class="discount-tag">Save 20%</span>
+          <span class="card-badge">Manual</span>
+        </div>
+        <div class="card-body">
+          <h3>Hyundai Venue SX</h3>
+          <div class="card-specs">
+            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
+            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
+            <span class="spec-tag"><i class="fas fa-car-side"></i> SUV</span>
+          </div>
+          <div class="card-price">
+            <div class="price-item">
+              <div><span class="original-price">₹16,100</span> <span class="amount">₹13,300</span></div>
+              <div class="duration">for 7 Days (₹1,900/day)</div>
+            </div>
+          </div>
+          <button class="book-btn" onclick="bookPackage('Hyundai Venue SX', 13300, 'Weekly Car (7 Days)', 'images/venue.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹13,300</button>
         </div>
       </div>
 
@@ -224,40 +243,64 @@ footer ul li a:hover{color:var(--primary-light);}
           <h3>Kia Carens (7 Seater)</h3>
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-snowflake"></i> Rear AC Vent</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Diesel</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 7 Seater MPV</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 7 Seater</span>
+            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹21,700</span> <span class="amount">₹17,500</span></div>
-              <div class="duration">for 7 Days (₹2,500/day)</div>
+              <div><span class="original-price">₹21,000</span> <span class="amount">₹16,800</span></div>
+              <div class="duration">for 7 Days (₹2,400/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Kia Carens (7 Seater)', 17500, 'Weekly Car (7 Days)', 'Manual', 7)"><i class="fas fa-calendar-check"></i> Book Weekly Plan ₹17,500</button>
+          <button class="book-btn" onclick="bookPackage('Kia Carens (7 Seater)', 16800, 'Weekly Car (7 Days)', 'images/Kia Carens.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹16,800</button>
         </div>
       </div>
 
-      <!-- Mahindra Thar -->
+      <!-- Mahindra Thar ROX -->
       <div class="vehicle-card">
         <div class="card-img">
-          <img src="images/thar.jpeg" alt="Mahindra Thar" style="width:100%;height:100%;object-fit:cover;">
+          <img src="images/thar.jpeg" alt="Mahindra Thar ROX 2025" style="width:100%;height:100%;object-fit:cover;">
           <span class="discount-tag">Save 18%</span>
-          <span class="card-badge">Manual 4x4</span>
+          <span class="card-badge">Manual</span>
         </div>
         <div class="card-body">
-          <h3>Mahindra Thar 4x4 Hardtop</h3>
+          <h3>Mahindra Thar ROX 2025</h3>
           <div class="card-specs">
             <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Diesel</span>
-            <span class="spec-tag"><i class="fas fa-mountain"></i> 4x4 Off-Road</span>
+            <span class="spec-tag"><i class="fas fa-mountain"></i> 4x4 Offroad</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
           </div>
           <div class="card-price">
             <div class="price-item">
-              <div><span class="original-price">₹29,400</span> <span class="amount">₹24,500</span></div>
-              <div class="duration">for 7 Days (₹3,500/day)</div>
+              <div><span class="original-price">₹28,000</span> <span class="amount">₹23,100</span></div>
+              <div class="duration">for 7 Days (₹3,300/day)</div>
             </div>
           </div>
-          <button class="book-btn" onclick="bookPackage('Mahindra Thar 4x4', 24500, 'Weekly Car (7 Days)', 'Manual', 4)"><i class="fas fa-calendar-check"></i> Book Weekly Plan ₹24,500</button>
+          <button class="book-btn" onclick="bookPackage('Mahindra Thar ROX 2025', 23100, 'Weekly Car (7 Days)', 'images/thar.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹23,100</button>
+        </div>
+      </div>
+
+      <!-- Baleno Automatic -->
+      <div class="vehicle-card">
+        <div class="card-img">
+          <img src="images/baleno automatic.jpeg" alt="Baleno Automatic" style="width:100%;height:100%;object-fit:cover;">
+          <span class="discount-tag">Save 20%</span>
+          <span class="card-badge">Automatic</span>
+        </div>
+        <div class="card-body">
+          <h3>Baleno Automatic</h3>
+          <div class="card-specs">
+            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
+            <span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span>
+            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
+          </div>
+          <div class="card-price">
+            <div class="price-item">
+              <div><span class="original-price">₹14,000</span> <span class="amount">₹11,200</span></div>
+              <div class="duration">for 7 Days (₹1,600/day)</div>
+            </div>
+          </div>
+          <button class="book-btn" onclick="bookPackage('Baleno Automatic', 11200, 'Weekly Car (7 Days)', 'images/baleno automatic.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹11,200</button>
         </div>
       </div>
     </div>
@@ -286,8 +329,8 @@ footer ul li a:hover{color:var(--primary-light);}
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
-          <li><a href="cars.html">All Cars</a></li>
-          <li><a href="bikes.html">All Bikes</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -302,19 +345,19 @@ footer ul li a:hover{color:var(--primary-light);}
 <a href="tel:+918455065107" class="float-call"><i class="fas fa-phone-alt"></i></a>
 
 <script>
-function bookPackage(vehicleName, amount, packageType, transmission, seats) {
+function bookPackage(vehicleName, amount, packageType, imagePath) {
   const bookingObj = {
     vehicleName: vehicleName + " (" + packageType + ")",
-    vehicleImage: "images/main logo.png",
+    vehicleImage: imagePath || "images/main logo.png",
     amount: amount,
     location: "Bhubaneswar, Odisha",
     pickupDate: new Date().toISOString().split('T')[0],
     pickupTime: "09:30",
     returnDate: new Date(Date.now() + 7*24*60*60*1000).toISOString().split('T')[0],
     returnTime: "09:30",
-    transmission: transmission || "Manual",
+    transmission: "Manual",
     fuel: "Petrol",
-    seats: seats || 5
+    seats: "5"
   };
   localStorage.setItem("booking", JSON.stringify(bookingObj));
   window.location.href = "booking-summary.html";
