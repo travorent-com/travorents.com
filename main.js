@@ -227,6 +227,7 @@ function openPhonePe(booking) {
 }
 
 function confirmQRBooking(booking) {
+  sendBookingConfirmation(booking);
   fetch(`${API_BASE}/api/confirm-qr-booking`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -236,17 +237,16 @@ function confirmQRBooking(booking) {
   })
   .then(res => res.json())
   .then(data => {
-    // Redirect to success page even if api call returned success:false as backup
     window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
   })
   .catch(err => {
     console.error("QR Confirm Error:", err);
-    // Proceed to success page anyway as fallback
     window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
   });
 }
 
 function confirmCashBooking(booking) {
+  sendBookingConfirmation(booking);
   fetch(`${API_BASE}/api/confirm-cash-booking`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -256,33 +256,31 @@ function confirmCashBooking(booking) {
   })
   .then(res => res.json())
   .then(data => {
-    // Redirect to success page even if api call returned success:false as backup
     window.location.href = `payment-success.html?ref=${booking.bookingRef}&cash=1`;
   })
   .catch(err => {
     console.error("Cash Confirm Error:", err);
-    // Proceed to success page anyway as fallback
     window.location.href = `payment-success.html?ref=${booking.bookingRef}&cash=1`;
   });
 }
 
 function sendBookingConfirmation(booking) {
   const backendUrl = `${API_BASE}/api/send-whatsapp`;
+  const totPrice = document.getElementById("totalPrice") ? document.getElementById("totalPrice").innerText : (booking.totalAmount || booking.amount || "0");
   
   const payload = {
-  bookingId: booking.bookingRef || ("TR-" + Date.now()),
-  vehicle: booking.vehicleName,
-  amount: document.getElementById("totalPrice").innerText,
-  customerName: booking.customerName,
-  customerPhone: booking.customerPhone,
-  pickupDate: booking.pickupDate,
-  pickupTime: booking.pickupTime,
-  returnDate: booking.returnDate,
-  returnTime: booking.returnTime,
-  location: booking.location,
-  contacts: [booking.customerPhone]
-};
-
+    bookingId: booking.bookingRef || ("TR-" + Date.now()),
+    vehicle: booking.vehicleName,
+    amount: totPrice,
+    customerName: booking.customerName || "Customer",
+    customerPhone: booking.customerPhone || "",
+    pickupDate: booking.pickupDate || "",
+    pickupTime: booking.pickupTime || "",
+    returnDate: booking.returnDate || "",
+    returnTime: booking.returnTime || "",
+    location: booking.location || "Bhubaneswar",
+    contacts: [booking.customerPhone]
+  };
 
   fetch(backendUrl, {
     method: "POST",
@@ -293,10 +291,10 @@ function sendBookingConfirmation(booking) {
   })
   .then(res => res.json())
   .then(data => {
-    console.log("WhatsApp notification sent:", data);
+    console.log("Automatic WhatsApp notification sent to customer:", data);
   })
   .catch(err => {
-    console.error("Error sending WhatsApp:", err);
+    console.error("Error sending automatic WhatsApp:", err);
   });
 }
 function openBookingSummary(
