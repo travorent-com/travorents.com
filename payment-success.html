@@ -257,7 +257,7 @@
       <a href="index.html" class="btn btn-secondary">
         <i class="fas fa-home"></i> Back to Home
       </a>
-      <a href="tel:+6372465107" class="btn btn-secondary">
+      <a href="tel:+918455065107" class="btn btn-secondary">
         <i class="fas fa-phone-alt"></i> Call Us
       </a>
     </div>
@@ -276,16 +276,57 @@ document.addEventListener('DOMContentLoaded', function () {
     let booking = JSON.parse(localStorage.getItem('booking')) || {};
     const bookingIdElement = document.getElementById('bookingId');
 
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://127.0.0.1:3000'
+        : window.location.origin;
+
     function updateUI(b) {
         booking = b;
         const bId = b.booking_ref || b.bookingRef || 'TR-UNKNOWN';
         bookingIdElement.textContent = bId;
         localStorage.setItem('lastBookingId', bId);
+
+        const isQR = params.get('qr') === '1' || b.payment_status === 'qr_pending';
+        const isCash = params.get('cash') === '1' || b.payment_status === 'cash_on_visit';
+        
+        if (isQR) {
+            // Update Indicator Banner
+            const banner = document.querySelector('body > div');
+            if (banner) banner.innerHTML = "✅ Step 5 Complete: Booking Registered → Pending QR Verification";
+
+            // Update Card Title & Desc
+            const title = document.querySelector('.success-card h1');
+            if (title) title.innerText = "Booking Registered! 🎉";
+            const desc = document.querySelector('.success-card p');
+            if (desc) desc.innerText = "Your booking request has been received and is pending payment verification.";
+
+            // Update Next Steps
+            const steps = document.querySelectorAll('.next-steps li');
+            if (steps.length > 1) {
+                steps[1].innerHTML = "Our team will verify your QR payment transaction";
+            }
+        } else if (isCash) {
+            // Update Indicator Banner
+            const banner = document.querySelector('body > div');
+            if (banner) banner.innerHTML = "✅ Step 5 Complete: Booking Confirmed → WhatsApp Confirmation Sent";
+
+            // Update Card Title & Desc
+            const title = document.querySelector('.success-card h1');
+            if (title) title.innerText = "Booking Confirmed! 🚗";
+            const desc = document.querySelector('.success-card p');
+            if (desc) desc.innerText = "Your booking has been confirmed! Please pay cash or UPI at pickup.";
+
+            // Update Next Steps
+            const steps = document.querySelectorAll('.next-steps li');
+            if (steps.length > 1) {
+                steps[1].innerHTML = "Pay the rental amount at the time of vehicle pickup";
+            }
+        }
     }
 
     if (ref) {
         // Fetch real-time details from backend
-        fetch(`/api/bookings/${ref}`)
+        fetch(`${API_BASE}/api/bookings/${ref}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.booking) {
@@ -304,24 +345,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // WhatsApp Button
     document.getElementById("whatsappBtn").addEventListener("click", () => {
-        const phone = "916372465107";
+        const phone = "918455065107";
         const bId = booking.booking_ref || booking.bookingRef || 'TR-UNKNOWN';
+        const cName = booking.customer_name || booking.customerName || "Guest";
+        const cPhone = booking.customer_phone || booking.customerPhone || "";
         const vName = booking.vehicle_name || booking.vehicleName || "";
         const loc = booking.location || "";
         const pDate = booking.pickup_date || booking.pickupDate || "";
         const rDate = booking.return_date || booking.returnDate || "";
         const amt = booking.total_amount || booking.totalAmount || booking.amount || "";
 
+        const isQR = params.get('qr') === '1' || booking.payment_status === 'qr_pending';
+        const isCash = params.get('cash') === '1' || booking.payment_status === 'cash_on_visit';
+        
+        let paymentLabel = `Amount Paid: ₹${amt}`;
+        let statusMsg = '✅ Your TravoRents booking is confirmed!';
+        if (isQR) {
+            paymentLabel = `Amount Paid: ₹${amt} (via QR - Pending Verification)`;
+            statusMsg = '✅ Your TravoRents booking is registered!';
+        } else if (isCash) {
+            paymentLabel = `Amount to Pay (on Visit): ₹${amt}`;
+            statusMsg = '✅ Your TravoRents booking is confirmed (Pay on Visit)!';
+        }
+
         const message =
 `🎉 TravoRents.com — Booking Confirmation
 
-✅ Your TravoRents booking is confirmed!
+${statusMsg}
 
 📌 Booking ID: ${bId}
+📌 Customer Name: ${cName}
+📌 Customer Phone: ${cPhone}
 📌 Vehicle: ${vName}
 📌 Pickup: ${loc}
 📌 From: ${pDate}  →  ${rDate}
-📌 Amount Paid: ₹${amt}
+📌 ${paymentLabel}
 
 Thank you for choosing TravoRents! 🙏
 918455065107`;
@@ -337,3 +395,5 @@ Thank you for choosing TravoRents! 🙏
 
 </body>
 </html>
+
+

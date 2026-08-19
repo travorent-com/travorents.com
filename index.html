@@ -48,6 +48,16 @@
         }, 800);
       }, 3500);
     }
+
+    // Auto-select vehicle type if coming from cars/bikes fleet pages
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+    if (type) {
+      const select = document.getElementById('bkVehicleType');
+      if (select) {
+        select.value = type;
+      }
+    }
   });
 </script>
 
@@ -67,8 +77,15 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
-      <li><a href="cars.html">All Cars</a></li>
-      <li><a href="bikes.html">All Bikes</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">Monthly/Weekly <i class="fas fa-chevron-down" style="font-size:11px;"></i></a>
+        <ul class="dropdown-menu">
+          <li><a href="weekly-bikes.html"><i class="fas fa-motorcycle" style="color:var(--primary);"></i> Weekly Bikes</a></li>
+          <li><a href="weekly-cars.html"><i class="fas fa-car" style="color:var(--primary);"></i> Weekly Cars</a></li>
+          <li><a href="monthly-bikes.html"><i class="fas fa-motorcycle" style="color:var(--accent-dark);"></i> Monthly Bikes</a></li>
+          <li><a href="monthly-cars.html"><i class="fas fa-car" style="color:var(--accent-dark);"></i> Monthly Cars</a></li>
+        </ul>
+      </li>
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i>+91 84550 65107</a></li>
@@ -77,9 +94,50 @@
   </nav>
 </header>
 
-<!-- ══════════════ SHOWCASE ══════════════ -->
+<!-- ══════════════ SHOWCASE BANNERS (AUTO SCROLL LEFT) ══════════════ -->
 <section class="showcase-section">
-  <img src="images/main images.jpg" alt="Travo Rents - Showcase" class="showcase-image">
+  <div class="showcase-slider-container">
+    <div class="showcase-track">
+      <!-- Main Showcase Banner Image -->
+      <div class="showcase-slide">
+        <img src="images/main images.jpg" alt="Travo Rents - Self Drive Car & Bike Rental Bhubaneswar" class="showcase-image">
+      </div>
+      
+      <!-- Special Offer Slide: Weekly & Monthly Subscriptions -->
+      <div class="showcase-slide offer-slide">
+        <div class="offer-banner-content">
+          <div class="offer-badge"><i class="fas fa-fire"></i> EXCLUSIVE DISCOUNT OFFER</div>
+          <h2>Weekly &amp; Monthly Rental Subscriptions</h2>
+          <p>Save up to <strong>50% OFF</strong> on long-term Car and Bike rentals in Bhubaneswar. Free servicing, zero maintenance liability, helmets included &amp; doorstep delivery!</p>
+          <div class="offer-btn-group">
+            <a href="weekly-cars.html" class="offer-btn btn-weekly"><i class="fas fa-car"></i> Weekly Cars (Save 35%)</a>
+            <a href="monthly-cars.html" class="offer-btn btn-monthly"><i class="fas fa-calendar-alt"></i> Monthly Cars (Save 50%)</a>
+            <a href="weekly-bikes.html" class="offer-btn btn-weekly-bike"><i class="fas fa-motorcycle"></i> Weekly Bikes</a>
+            <a href="monthly-bikes.html" class="offer-btn btn-monthly-bike"><i class="fas fa-biking"></i> Monthly Bikes</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duplicate for Seamless Infinite Left Loop -->
+      <div class="showcase-slide">
+        <img src="images/main images.jpg" alt="Travo Rents - Self Drive Car & Bike Rental Bhubaneswar" class="showcase-image">
+      </div>
+      
+      <div class="showcase-slide offer-slide">
+        <div class="offer-banner-content">
+          <div class="offer-badge"><i class="fas fa-fire"></i> EXCLUSIVE DISCOUNT OFFER</div>
+          <h2>Weekly &amp; Monthly Rental Subscriptions</h2>
+          <p>Save up to <strong>50% OFF</strong> on long-term Car and Bike rentals in Bhubaneswar. Free servicing, zero maintenance liability, helmets included &amp; doorstep delivery!</p>
+          <div class="offer-btn-group">
+            <a href="weekly-cars.html" class="offer-btn btn-weekly"><i class="fas fa-car"></i> Weekly Cars (Save 35%)</a>
+            <a href="monthly-cars.html" class="offer-btn btn-monthly"><i class="fas fa-calendar-alt"></i> Monthly Cars (Save 50%)</a>
+            <a href="weekly-bikes.html" class="offer-btn btn-weekly-bike"><i class="fas fa-motorcycle"></i> Weekly Bikes</a>
+            <a href="monthly-bikes.html" class="offer-btn btn-monthly-bike"><i class="fas fa-biking"></i> Monthly Bikes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════ HERO ══════════════ -->
@@ -314,7 +372,7 @@
           <li><i class="fas fa-check-circle"></i> Multiple pickup locations in Bhubaneswar</li>
           <li><i class="fas fa-check-circle"></i> No vehicle over 12 months old</li>
         </ul>
-        <a href="tel:++91 84550 65107" class="btn-primary"><i class="fas fa-phone-alt"></i>+91 84550 65107</a>
+        <a href="tel:+918455065107" class="btn-primary"><i class="fas fa-phone-alt"></i>+91 84550 65107</a>
       </div>
     </div>
   </div>
@@ -417,7 +475,7 @@
         <span class="footer-logo-name">Travo<span>Rents</span>.com</span>
         <p>Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
         <p><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
-        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:++91 84550 65107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 +91 84550 65107</a></p>
+        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+918455065107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 84550 65107</a></p>
         <p><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:info@travorents.com" style="color:rgba(255,255,255,0.6);text-decoration:none">travorents.com@gmail.com</a></p>
         <div class="social-links">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -433,12 +491,13 @@
         <li><a href="terms-and-conditions.html"><i class="fas fa-chevron-right"></i>Terms & Conditions</a></li>
         <li><a href="refund-policy.html"><i class="fas fa-chevron-right"></i>Refund Policy</a></li>
         <li><a href="contact.html"><i class="fas fa-chevron-right"></i>Contact Us</a></li>
+        <li><a href="admin.html"><i class="fas fa-chevron-right"></i> Admin</a></li>
       </ul></div>
-      <div><h4>Services</h4><ul>
-        <li><a href="#vehicles"><i class="fas fa-chevron-right"></i> All Cars</a></li>
-        <li><a href="#vehicles"><i class="fas fa-chevron-right"></i> All Bikes</a></li>
-        <li><a href="#blog"><i class="fas fa-chevron-right"></i> Gallery</a></li>
-        <li><a href="#"><i class="fas fa-chevron-right"></i> Self Drive</a></li>
+      <div><h4>Weekly & Monthly</h4><ul>
+        <li><a href="weekly-bikes.html"><i class="fas fa-chevron-right"></i> Weekly Bikes</a></li>
+        <li><a href="weekly-cars.html"><i class="fas fa-chevron-right"></i> Weekly Cars</a></li>
+        <li><a href="monthly-bikes.html"><i class="fas fa-chevron-right"></i> Monthly Bikes</a></li>
+        <li><a href="monthly-cars.html"><i class="fas fa-chevron-right"></i> Monthly Cars</a></li>
       </ul></div>
       <div><h4>Newsletter</h4>
         <p>Subscribe for latest offers and updates.</p>
@@ -940,7 +999,7 @@ window.addEventListener('scroll',()=>{
 // ── Set today as min date
 (function(){
   const t=new Date().toISOString().split('T')[0];
-  const p=document.getElementById('bkPickup'),r=document.getElementById('bkReturn');
+  const p=document.getElementById('bkPickupDate'),r=document.getElementById('bkReturnDate');
   if(p)p.min=t;if(r)r.min=t;
   if(p)p.addEventListener('change',()=>{if(r)r.min=p.value;});
 })();
@@ -952,7 +1011,85 @@ function fmtDate(d){
   return new Date(d).toLocaleDateString('en-IN',opts);
 }
 
-// app.js handles openBookingSummary and findVehicle cleanly.
+// ── Open Booking Summary (Redirect to booking-summary.html)
+function openBookingSummary(vehicleName, vehicleImage, amount, transmission, fuel, seats){
+  const loc = document.getElementById('bkLocation')?.value;
+  const pDate = document.getElementById('bkPickupDate')?.value;
+  const pTime = document.getElementById('bkPickupTime')?.value;
+  const rDate = document.getElementById('bkReturnDate')?.value;
+  const rTime = document.getElementById('bkReturnTime')?.value;
+
+  if (!loc || !pDate || !pTime || !rDate || !rTime) {
+    openDateLocationModal(vehicleName, amount, "Daily Rental", vehicleImage, transmission, fuel, seats);
+    return;
+  }
+
+  // Verify dates validity
+  const pickup = new Date(pDate + 'T' + pTime);
+  const dropoff = new Date(rDate + 'T' + rTime);
+  if (dropoff <= pickup) {
+    openDateLocationModal(vehicleName, amount, "Daily Rental", vehicleImage, transmission, fuel, seats);
+    return;
+  }
+
+  // Store vehicle data in localStorage
+  const booking = {
+    vehicleName: vehicleName,
+    vehicleImage: vehicleImage,
+    amount: amount,
+    transmission: transmission,
+    fuel: fuel,
+    seats: seats,
+    pickupDate: pDate,
+    returnDate: rDate,
+    pickupTime: pTime,
+    returnTime: rTime,
+    location: loc
+  };
+  
+  // Save to localStorage and redirect
+  localStorage.setItem('booking', JSON.stringify(booking));
+  window.location.href = 'booking-summary.html';
+}
+
+function findVehicle() {
+
+    const vehicleType =
+        document.getElementById("bkVehicleType").value;
+
+    if (!vehicleType) {
+        alert("Please select a vehicle type");
+        return;
+    }
+
+    // Open Cars
+    if (vehicleType === "car" || vehicleType === "automatic") {
+
+        switchTab(
+            "cars",
+            document.querySelector(".tab-btn")
+        );
+
+        document.getElementById("vehicles")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+    // Open Bikes
+    if (vehicleType === "bike") {
+
+        switchTab(
+            "bikes",
+            document.querySelectorAll(".tab-btn")[1]
+        );
+
+        document.getElementById("vehicles")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+}
 
 
 // ── Old OpenSummary (Kept for backward compatibility if needed)
@@ -1166,9 +1303,9 @@ const WA_CONTACTS = [
 ];
 
 // ── Backend endpoint (Node.js server — see whatsapp-backend.js)
-const WA_BACKEND = (window.location.origin.includes('http') && !window.location.origin.includes('file:'))
-  ? window.location.origin + '/api/send-whatsapp'
-  : 'http://localhost:3000/api/send-whatsapp';
+const WA_BACKEND = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://127.0.0.1:3000/api/send-whatsapp'
+  : `${window.location.origin}/api/send-whatsapp`;
 
 // ── Build message text per role
 function waMessage(bookId, role) {
@@ -1423,7 +1560,348 @@ document.getElementById('waOverlay').addEventListener('click', function(e) {
 </div>
 </div>
 </div>
+<!-- ══════════════ DATE, TIME & LOCATION POPUP MODAL ══════════════ -->
+<style>
+.booking-modal-overlay {
+  display: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(10, 15, 30, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 999999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 15px !important;
+  box-sizing: border-box !important;
+}
+.booking-modal-overlay.active {
+  display: flex !important;
+}
+.booking-modal-card {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  max-width: 520px !important;
+  width: 100% !important;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45) !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(12,68,124,0.2) !important;
+  margin: auto !important;
+  font-family: 'Poppins', sans-serif !important;
+  color: #1a1a2e !important;
+  animation: modalPopIn 0.3s ease-out !important;
+}
+@keyframes modalPopIn {
+  from { opacity: 0; transform: scale(0.92) translateY(15px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.booking-modal-header {
+  padding: 18px 24px !important;
+  background: #0C447C !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+.modal-close-btn {
+  background: rgba(255,255,255,0.15) !important;
+  border: none !important;
+  font-size: 18px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s !important;
+}
+.modal-close-btn:hover {
+  background: rgba(255,255,255,0.3) !important;
+}
+.booking-modal-body {
+  padding: 22px 24px !important;
+}
+.modal-form-group {
+  margin-bottom: 16px !important;
+}
+.modal-form-group label {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #1a1a2e !important;
+  margin-bottom: 6px !important;
+}
+.modal-form-group input, .modal-form-group select {
+  width: 100% !important;
+  padding: 11px 14px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #d0d7de !important;
+  font-size: 14px !important;
+  font-family: 'Poppins', sans-serif !important;
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  box-sizing: border-box !important;
+}
+.modal-form-group input:focus, .modal-form-group select:focus {
+  border-color: #0C447C !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(12,68,124,0.12) !important;
+}
+.modal-form-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+}
+@media(max-width:480px){
+  .modal-form-grid { grid-template-columns: 1fr !important; }
+}
+.modal-info-box {
+  background: rgba(12,68,124,0.06) !important;
+  border-left: 4px solid #0C447C !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  margin-top: 10px !important;
+  font-size: 13px !important;
+  color: #1a1a2e !important;
+}
+.booking-modal-footer {
+  padding: 16px 24px !important;
+  background: #f8f9fa !important;
+  border-top: 1px solid #e1e8ed !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+}
+.btn-cancel {
+  background: #e1e8ed !important;
+  color: #1a1a2e !important;
+  border: none !important;
+  padding: 11px 20px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+.btn-cancel:hover {
+  background: #d0d7de !important;
+}
+.btn-confirm {
+  background: #0C447C !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 11px 24px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.btn-confirm:hover {
+  background: #185FA5 !important;
+}
+</style>
+
+<div id="bookingModal" class="booking-modal-overlay">
+  <div class="booking-modal-card">
+    <div class="booking-modal-header">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img id="modalVehicleImage" src="" alt="Vehicle" style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:2px solid #ffffff;">
+        <div>
+          <h3 id="modalVehicleTitle" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:800;color:#ffffff;margin:0;">Select Booking Details</h3>
+          <span id="modalPackageBadge" style="background:#EF9F27;color:#3a1f00;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:50px;display:inline-block;margin-top:4px;">Rental Booking</span>
+        </div>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeBookingModal()"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <form id="modalBookingForm" onsubmit="confirmModalBooking(event)">
+      <div class="booking-modal-body">
+        
+        <!-- Pick-up Location -->
+        <div class="modal-form-group">
+          <label><i class="fas fa-map-marker-alt" style="color:#0C447C;"></i> Pick-Up Location *</label>
+          <select id="modalLocation" required>
+            <option value="">-- Choose Pick-Up Location --</option>
+            <option value="Nayapalli (Main Office)">Nayapalli (Main Office)</option>
+            <option value="Railway Station, Bhubaneswar">Railway Station, Bhubaneswar</option>
+            <option value="Airport (Biju Patnaik International)">Airport (Biju Patnaik International)</option>
+            <option value="Patia (KIIT Square)">Patia (KIIT Square)</option>
+            <option value="Jaydev Vihar Square">Jaydev Vihar Square</option>
+            <option value="Master Canteen Square">Master Canteen Square</option>
+            <option value="Doorstep Delivery (Bhubaneswar)">Doorstep Delivery (Bhubaneswar)</option>
+          </select>
+        </div>
+
+        <!-- Dates & Times Grid -->
+        <div class="modal-form-grid">
+          <div class="modal-form-group">
+            <label><i class="fas fa-calendar-alt" style="color:#0C447C;"></i> Pick-Up Date *</label>
+            <input type="date" id="modalPickupDate" required onchange="autoUpdateReturnDate()">
+          </div>
+
+          <div class="modal-form-group">
+            <label><i class="fas fa-clock" style="color:#0C447C;"></i> Pick-Up Time *</label>
+            <input type="time" id="modalPickupTime" value="09:30" required>
+          </div>
+
+          <div class="modal-form-group">
+            <label><i class="fas fa-calendar-check" style="color:#BA7517;"></i> Return Date *</label>
+            <input type="date" id="modalReturnDate" required>
+          </div>
+
+          <div class="modal-form-group">
+            <label><i class="fas fa-clock" style="color:#BA7517;"></i> Return Time *</label>
+            <input type="time" id="modalReturnTime" value="09:30" required>
+          </div>
+        </div>
+
+        <!-- Duration info -->
+        <div class="modal-info-box">
+          <p style="margin:0;"><i class="fas fa-info-circle" style="color:#0C447C;"></i> Duration: <strong id="modalDurationLabel">1 Day</strong> &nbsp;|&nbsp; Amount: <strong id="modalPriceLabel" style="color:#0C447C;">₹0</strong></p>
+        </div>
+      </div>
+
+      <div class="booking-modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
+        <button type="submit" class="btn-confirm"><i class="fas fa-arrow-right"></i> Proceed to Checkout</button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<script>
+let currentPackageData = null;
+
+function bookPackage(vehicleName, amount, packageType, imagePath) {
+  openDateLocationModal(vehicleName, amount, packageType, imagePath, "Manual", "Petrol", "2");
+}
+
+function payNow(amount, vehicleName, imagePath) {
+  openDateLocationModal(vehicleName || "Vehicle", amount, "Daily Rental", imagePath || "images/main logo.png", "Manual", "Petrol", "2");
+}
+
+function openDateLocationModal(vehicleName, amount, packageType, imagePath, transmission, fuel, seats) {
+  try {
+    const pkgLower = (packageType || '').toLowerCase();
+    const isMonthly = pkgLower.includes('monthly');
+    const isWeekly = pkgLower.includes('weekly');
+    const durationDays = isMonthly ? 30 : (isWeekly ? 7 : 1);
+    
+    currentPackageData = {
+      vehicleName: vehicleName || "Selected Vehicle",
+      packageType: packageType || "Daily Rental",
+      amount: amount || 0,
+      imagePath: imagePath || "images/main logo.png",
+      durationDays: durationDays,
+      seats: seats || (vehicleName && vehicleName.toLowerCase().includes('car') ? "5" : "2"),
+      transmission: transmission || (vehicleName && vehicleName.toLowerCase().includes('automatic') ? "Automatic" : "Manual"),
+      fuel: fuel || "Petrol"
+    };
+
+    const titleEl = document.getElementById('modalVehicleTitle');
+    const imgEl = document.getElementById('modalVehicleImage');
+    const badgeEl = document.getElementById('modalPackageBadge');
+    const durEl = document.getElementById('modalDurationLabel');
+    const priceEl = document.getElementById('modalPriceLabel');
+
+    if (titleEl) titleEl.textContent = currentPackageData.vehicleName;
+    if (imgEl) imgEl.src = currentPackageData.imagePath;
+    if (badgeEl) badgeEl.textContent = currentPackageData.packageType + " (₹" + Number(currentPackageData.amount).toLocaleString() + ")";
+    if (durEl) durEl.textContent = currentPackageData.durationDays + (currentPackageData.durationDays > 1 ? " Days" : " Day");
+    if (priceEl) priceEl.textContent = "₹" + Number(currentPackageData.amount).toLocaleString();
+
+    // Default dates
+    const today = new Date();
+    const pickupStr = today.toISOString().split('T')[0];
+    const returnDateObj = new Date(today.getTime() + currentPackageData.durationDays * 24 * 60 * 60 * 1000);
+    const returnStr = returnDateObj.toISOString().split('T')[0];
+
+    const pDateInput = document.getElementById('modalPickupDate');
+    const rDateInput = document.getElementById('modalReturnDate');
+    
+    if (pDateInput) {
+      pDateInput.min = pickupStr;
+      pDateInput.value = pickupStr;
+    }
+    if (rDateInput) {
+      rDateInput.value = returnStr;
+    }
+
+    const modal = document.getElementById('bookingModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  } catch (err) {
+    console.error("Error opening booking modal:", err);
+  }
+}
+
+function autoUpdateReturnDate() {
+  if (!currentPackageData) return;
+  const pDateInput = document.getElementById('modalPickupDate');
+  const rDateInput = document.getElementById('modalReturnDate');
+  if (pDateInput && pDateInput.value && rDateInput) {
+    const pickupObj = new Date(pDateInput.value);
+    const returnObj = new Date(pickupObj.getTime() + currentPackageData.durationDays * 24 * 60 * 60 * 1000);
+    rDateInput.value = returnObj.toISOString().split('T')[0];
+  }
+}
+
+function closeBookingModal() {
+  const modal = document.getElementById('bookingModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
+  document.body.style.overflow = '';
+}
+
+function confirmModalBooking(e) {
+  if (e) e.preventDefault();
+  if (!currentPackageData) return;
+
+  const loc = document.getElementById('modalLocation')?.value;
+  const pickupDate = document.getElementById('modalPickupDate')?.value;
+  const pickupTime = document.getElementById('modalPickupTime')?.value;
+  const returnDate = document.getElementById('modalReturnDate')?.value;
+  const returnTime = document.getElementById('modalReturnTime')?.value;
+
+  if (!loc || !pickupDate || !pickupTime || !returnDate || !returnTime) {
+    alert('Please select location, pickup date & time, and return date & time.');
+    return;
+  }
+
+  const bookingObj = {
+    vehicleName: currentPackageData.vehicleName + (currentPackageData.packageType ? " (" + currentPackageData.packageType + ")" : ""),
+    vehicleImage: currentPackageData.imagePath,
+    amount: currentPackageData.amount,
+    location: loc,
+    pickupDate: pickupDate,
+    pickupTime: pickupTime,
+    returnDate: returnDate,
+    returnTime: returnTime,
+    transmission: currentPackageData.transmission,
+    fuel: currentPackageData.fuel,
+    seats: currentPackageData.seats
+  };
+
+  localStorage.setItem("booking", JSON.stringify(bookingObj));
+  window.location.href = "booking-summary.html";
+}
+</script>
 
 </body>
 </html>
+
+

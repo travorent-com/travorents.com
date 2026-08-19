@@ -3,226 +3,220 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Admin Control Dashboard — TravoRents</title>
+<title>Admin — TravoRents</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#0C447C;--primary-mid:#185FA5;--primary-light:#378ADD;
     --accent:#EF9F27;--accent-dark:#BA7517;
-    --dark:#0f172a;--darker:#090d16;--gray:#64748b;--light:#f8fafc;--white:#fff;
-    --border:#e2e8f0;
-    --success:#10b981;--success-bg:#ecfdf5;
-    --pending-bg:#fffbebf0;--pending-text:#b45309;
-    --danger:#ef4444;--danger-bg:#fef2f2;
-    --shadow:0 4px 20px rgba(0,0,0,0.06);
-    --radius:12px;
+    --dark:#1c1c1c;--gray:#6c757d;--light:#f6f8fa;--white:#fff;
+    --border:#e6e9ee;
+    --success:#1f9d55;--success-bg:#e8f8ee;
+    --pending-bg:#fff4e0;--pending-text:#9a6500;
   }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:'Poppins',sans-serif;background:#f1f5f9;color:var(--dark);}
-  header{background:linear-gradient(135deg,#0C447C,#185FA5);color:#fff;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:0 4px 20px rgba(12,68,124,0.25);}
-  header h1{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:900;margin:0;letter-spacing:-0.5px;}
+  body{margin:0;font-family:'Poppins',sans-serif;background:var(--light);color:var(--dark);}
+  header{background:var(--primary);color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  header h1{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;margin:0;}
   header h1 span{color:var(--accent);}
-  header .tagline{font-size:12px;opacity:0.85;font-weight:400;margin-left:10px;padding-left:10px;border-left:1px solid rgba(255,255,255,0.3);}
-  header a{color:#e2e8f0;text-decoration:none;font-size:13.5px;font-weight:600;background:rgba(255,255,255,0.12);padding:8px 16px;border-radius:8px;transition:all 0.2s;}
-  header a:hover{background:rgba(255,255,255,0.25);color:#fff;}
-  main{max-width:1380px;margin:0 auto;padding:28px 20px 60px;}
+  header a{color:#dce8f5;text-decoration:none;font-size:13px;font-weight:600;}
+  header a:hover{color:#fff;}
+  main{max-width:1180px;margin:0 auto;padding:28px 20px 60px;}
 
-  /* Stats Grid */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
-  .stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
-  .stat-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--primary);}
-  .stat-card.revenue::before{background:var(--success);}
-  .stat-card.completed::before{background:var(--primary-light);}
-  .stat-card.pending::before{background:var(--accent);}
-  .stat-card.vehicles::before{background:#8b5cf6;}
-  .stat-card .num{font-family:'Montserrat',sans-serif;font-size:28px;font-weight:900;color:var(--dark);margin-bottom:4px;}
-  .stat-card .label{font-size:13px;color:var(--gray);font-weight:500;}
+  .tabs{display:flex;gap:8px;margin-bottom:20px;}
+  .tab-btn{background:#fff;border:2px solid var(--border);border-radius:10px;padding:10px 18px;font-weight:600;font-size:14px;color:var(--gray);cursor:pointer;font-family:'Poppins',sans-serif;}
+  .tab-btn.active{border-color:var(--primary);color:var(--primary);background:#eef5fc;}
 
-  /* Tabs */
-  .tabs{display:flex;gap:10px;margin-bottom:20px;}
-  .tab-btn{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 22px;font-weight:700;font-size:14px;color:var(--gray);cursor:pointer;font-family:'Poppins',sans-serif;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;}
-  .tab-btn.active{border-color:var(--primary);color:var(--primary);background:#eff6ff;box-shadow:0 2px 10px rgba(12,68,124,0.1);}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px;}
+  .stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+  .stat-card .num{font-family:'Montserrat',sans-serif;font-size:26px;font-weight:800;color:var(--primary);}
+  .stat-card .label{font-size:12.5px;color:var(--gray);margin-top:2px;}
 
-  /* Panels */
-  .panel{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);}
-  .panel-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;}
-  .panel-head h2{font-size:18px;font-weight:800;margin:0;font-family:'Montserrat',sans-serif;color:var(--primary);}
-  .btn-group{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-  .refresh-btn{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
+  .panel{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+  .panel-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .panel-head h2{font-size:16px;font-weight:700;margin:0;}
+  .refresh-btn{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;}
   .refresh-btn:hover{background:var(--primary-mid);}
-  .download-btn{background:var(--success);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
-  .download-btn:hover{background:#059669;}
 
-  /* Search and Filter Box */
-  .filter-container{padding:18px 24px;background:#f8fafc;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:14px;}
-  .search-row{display:flex;gap:10px;align-items:center;}
-  .search-row input{flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:9px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;}
-  .search-btn{background:var(--primary-mid);color:#fff;border:none;border-radius:9px;padding:10px 20px;font-weight:600;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
-  .search-btn:hover{background:var(--primary);}
-
-  .filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-  .filter-row select{padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Poppins',sans-serif;background:#fff;color:var(--dark);font-weight:500;}
-  .reset-btn{background:#e2e8f0;color:var(--dark);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-  .reset-btn:hover{background:#cbd5e1;}
-
-  /* Table styling */
   table{width:100%;border-collapse:collapse;font-size:13.5px;}
-  th{text-align:left;padding:14px 18px;background:#f1f5f9;color:var(--gray);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap;}
-  td{padding:14px 18px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  th{text-align:left;padding:11px 16px;background:#fafbfc;color:var(--gray);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top;}
   tr:last-child td{border-bottom:none;}
-  tr:hover td{background:#f8fafc;}
+  tr:hover td{background:#fafcff;}
 
-  /* Badges & Action Buttons */
-  .badge{display:inline-block;padding:5px 12px;border-radius:50px;font-size:11.5px;font-weight:700;text-transform:capitalize;}
-  .badge.completed{background:var(--success-bg);color:var(--success);border:1px solid #a7f3d0;}
-  .badge.pending{background:var(--pending-bg);color:var(--pending-text);border:1px solid #fde68a;}
-  .badge.failed{background:var(--danger-bg);color:var(--danger);border:1px solid #fecaca;}
+  .badge{display:inline-block;padding:4px 10px;border-radius:50px;font-size:11.5px;font-weight:700;}
+  .badge.completed{background:var(--success-bg);color:var(--success);}
+  .badge.pending{background:var(--pending-bg);color:var(--pending-text);}
+  .badge.failed{background:#fde8e8;color:#c0392b;}
 
-  .badge.cat{background:#eff6ff;color:var(--primary);font-weight:700;}
-  .avail-on{color:var(--success);font-weight:700;display:inline-flex;align-items:center;gap:4px;}
-  .avail-off{color:var(--danger);font-weight:700;display:inline-flex;align-items:center;gap:4px;}
+  .badge.cat{background:#eef5fc;color:var(--primary);}
+  .avail-on{color:var(--success);font-weight:600;}
+  .avail-off{color:#c0392b;font-weight:600;}
+  .toggle-btn{border:1px solid var(--border);background:#fff;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer;color:var(--gray);}
+  .toggle-btn:hover{border-color:var(--primary);color:var(--primary);}
 
-  /* Action Buttons */
-  .action-group{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-  .toggle-btn{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--dark);transition:all 0.2s;display:inline-flex;align-items:center;gap:5px;}
-  .toggle-btn.mark-unavail{border-color:#fca5a5;color:var(--danger);background:#fff5f5;}
-  .toggle-btn.mark-unavail:hover{background:var(--danger);color:#fff;}
-  .toggle-btn.mark-avail{border-color:#6ee7b7;color:var(--success);background:#f0fdf4;}
-  .toggle-btn.mark-avail:hover{background:var(--success);color:#fff;}
+  .empty,.loading{padding:40px 20px;text-align:center;color:var(--gray);font-size:14px;}
+  .ref{font-family:monospace;font-size:12.5px;color:var(--primary);}
 
-  .delete-btn{border:1px solid #fca5a5;background:#fff;color:var(--danger);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-  .delete-btn:hover{background:var(--danger);color:#fff;}
-
-  .wa-chat-btn{background:#25D366;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;}
-  .wa-chat-btn:hover{background:#1eb857;}
-
-  .status-select{padding:4px 8px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-family:'Poppins',sans-serif;font-weight:600;}
-
-  .empty,.loading{padding:50px 20px;text-align:center;color:var(--gray);font-size:15px;}
-  .ref{font-family:monospace;font-size:13px;font-weight:700;color:var(--primary);}
-
-  /* Toast Notification */
-  #adminToast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--dark);color:#fff;padding:14px 22px;border-radius:10px;font-size:13.5px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,0.2);display:none;align-items:center;gap:10px;animation:fadeIn 0.3s ease;}
-
-  .add-vehicle{padding:24px;border-top:1px solid var(--border);background:#f8fafc;}
-  .add-vehicle h3{font-size:16px;margin:0 0 16px;font-family:'Montserrat',sans-serif;color:var(--primary);}
-  .add-vehicle form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;align-items:end;}
-  .add-vehicle label{font-size:12px;color:var(--gray);font-weight:600;display:block;margin-bottom:5px;}
-  .add-vehicle input,.add-vehicle select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;font-family:'Poppins',sans-serif;background:#fff;}
-  .add-vehicle .submit-btn{background:var(--accent);color:#3a1f00;border:none;border-radius:8px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;height:42px;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+  .add-vehicle{padding:16px 20px;border-top:1px solid var(--border);background:#fafbfc;}
+  .add-vehicle h3{font-size:14px;margin:0 0 12px;}
+  .add-vehicle form{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:end;}
+  .add-vehicle label{font-size:11.5px;color:var(--gray);font-weight:600;display:block;margin-bottom:4px;}
+  .add-vehicle input,.add-vehicle select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:'Poppins',sans-serif;}
+  .add-vehicle .submit-btn{background:var(--accent);color:#3a1f00;border:none;border-radius:7px;padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer;height:38px;}
   .add-vehicle .submit-btn:hover{background:var(--accent-dark);color:#fff;}
 
   .hidden{display:none;}
-  @media (max-width:768px){ header{padding:16px 20px;} table{font-size:12.5px;} th,td{padding:10px 12px;} }
+  @media (max-width:700px){ header{padding:14px 16px;} table{font-size:12.5px;} th,td{padding:9px 10px;} }
+
+  /* ─── Login Overlay ─── */
+  .login-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #0C447C;
+    z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .login-card {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%; max-width: 400px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .login-card h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px; font-weight: 800; color: #0C447C;
+    margin: 0 0 10px;
+  }
+  .login-card p {
+    font-size: 13.5px; color: #6c757d;
+    margin: 0 0 25px;
+  }
+  .login-group {
+    text-align: left; margin-bottom: 18px;
+  }
+  .login-group label {
+    display: block; font-size: 12px; font-weight: 600; color: #6c757d;
+    margin-bottom: 6px;
+  }
+  .login-group input {
+    width: 100%; padding: 11px 13px; border: 1px solid #e6e9ee;
+    border-radius: 8px; font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .login-group input:focus {
+    border-color: #0C447C;
+  }
+  .login-btn {
+    width: 100%; background: #EF9F27; color: #fff; border: none;
+    border-radius: 8px; padding: 12px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: inherit; margin-top: 10px;
+    transition: background 0.2s;
+  }
+  .login-btn:hover {
+    background: #BA7517;
+  }
+  .login-error {
+    color: #c0392b; font-size: 12.5px; font-weight: 600; margin-top: 15px;
+    display: none;
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <h1>TravoRents <span>Admin</span></h1>
-    <span class="tagline">Premium Fleet & Booking Operations Dashboard</span>
+<!-- Protection Logic -->
+<script>
+  (function() {
+    const session = sessionStorage.getItem("admin_session");
+    if (session === "logged_in") {
+      document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.getElementById("loginOverlay");
+        if (overlay) overlay.style.display = "none";
+      });
+    } else {
+      document.write('<style id="protectionStyles">header, main { display: none !important; }</style>');
+    }
+  })();
+</script>
+
+<!-- Login Card Overlay -->
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-card">
+    <h2>TravoRents Admin</h2>
+    <p>Sign in to access the administrator panel</p>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="login-group">
+        <label for="adminUser">Username</label>
+        <input type="text" id="adminUser" placeholder="Enter username" required autocomplete="username">
+      </div>
+      <div class="login-group">
+        <label for="adminPass">Password</label>
+        <input type="password" id="adminPass" placeholder="Enter password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn">LOG IN</button>
+      <div id="loginError" class="login-error">Invalid username or password!</div>
+    </form>
   </div>
-  <a href="index.html"><i class="fas fa-arrow-left"></i> Back to website</a>
+</div>
+
+<script>
+  function handleLogin(event) {
+    event.preventDefault();
+    const user = document.getElementById("adminUser").value;
+    const pass = document.getElementById("adminPass").value;
+    const errorDiv = document.getElementById("loginError");
+
+    if (user === "Travorents" && pass === "Travorents@1234") {
+      sessionStorage.setItem("admin_session", "logged_in");
+      
+      // Remove protection stylesheet
+      const protStyles = document.getElementById("protectionStyles");
+      if (protStyles) protStyles.remove();
+      
+      // Hide overlay
+      document.getElementById("loginOverlay").style.display = "none";
+    } else {
+      errorDiv.style.display = "block";
+    }
+  }
+</script>
+
+<header>
+  <h1>TravoRents <span>Admin</span></h1>
+  <a href="index.html">← Back to site</a>
 </header>
 
 <main>
-  <!-- STATS OVERVIEW -->
   <div class="stats" id="statsRow"></div>
 
-  <!-- NAVIGATION TABS -->
   <div class="tabs">
-    <button class="tab-btn active" data-tab="bookings" onclick="switchTab('bookings', this)"><i class="fas fa-list-alt"></i> Bookings Log</button>
-    <button class="tab-btn" data-tab="vehicles" onclick="switchTab('vehicles', this)"><i class="fas fa-car"></i> Fleet Vehicles</button>
+    <button class="tab-btn active" data-tab="bookings" onclick="switchTab('bookings', this)">Bookings</button>
+    <button class="tab-btn" data-tab="vehicles" onclick="switchTab('vehicles', this)">Vehicles</button>
   </div>
 
-  <!-- BOOKINGS PANEL -->
   <section id="tab-bookings" class="panel">
     <div class="panel-head">
-      <h2>All Bookings Operations</h2>
-      <div class="btn-group">
-        <button class="refresh-btn" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> Refresh</button>
-        <button class="download-btn" onclick="downloadLogs()"><i class="fas fa-file-csv"></i> Download Everyday Logs</button>
-      </div>
+      <h2>All bookings</h2>
+      <button class="refresh-btn" onclick="loadBookings()">Refresh</button>
     </div>
-
-    <!-- Search & Filters -->
-    <div class="filter-container">
-      <div class="search-row">
-        <input type="text" id="bookingSearchInput" placeholder="Search by Booking Ref, Customer Name, Phone, Vehicle, or Location..." onkeyup="handleBookingKey(event)">
-        <button class="search-btn" onclick="applyBookingFilters()"><i class="fas fa-search"></i> Search</button>
-      </div>
-      <div class="filter-row">
-        <select id="filterBookingStatus" onchange="applyBookingFilters()">
-          <option value="">All Statuses</option>
-          <option value="completed">Completed</option>
-          <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
-        </select>
-        <select id="filterBookingLocation" onchange="applyBookingFilters()">
-          <option value="">All Locations</option>
-          <option value="Nayapalli">Nayapalli (Main Office)</option>
-          <option value="Railway Station">Railway Station</option>
-          <option value="Airport">Airport</option>
-          <option value="SUM Hospital">SUM Hospital</option>
-          <option value="Patia Parking">Patia Parking</option>
-        </select>
-        <button class="reset-btn" onclick="resetBookingFilters()"><i class="fas fa-undo"></i> Reset Filters</button>
-      </div>
-    </div>
-
-    <div id="bookingsTableWrap"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading bookings data…</div></div>
+    <div id="bookingsTableWrap"><div class="loading">Loading bookings…</div></div>
   </section>
 
-  <!-- VEHICLES PANEL -->
   <section id="tab-vehicles" class="panel hidden">
     <div class="panel-head">
-      <h2>Fleet Vehicles Management</h2>
-      <div class="btn-group">
-        <button class="refresh-btn" onclick="loadVehicles()"><i class="fas fa-sync-alt"></i> Refresh</button>
-        <button class="download-btn" onclick="downloadLogs()"><i class="fas fa-file-csv"></i> Download Everyday Logs</button>
-      </div>
+      <h2>All vehicles</h2>
+      <button class="refresh-btn" onclick="loadVehicles()">Refresh</button>
     </div>
+    <div id="vehiclesTableWrap"><div class="loading">Loading vehicles…</div></div>
 
-    <!-- Search & Filters for Vehicles -->
-    <div class="filter-container">
-      <div class="search-row">
-        <input type="text" id="vehicleSearchInput" placeholder="Search vehicle by name, category, fuel, location..." onkeyup="handleVehicleKey(event)">
-        <button class="search-btn" onclick="applyVehicleFilters()"><i class="fas fa-search"></i> Search</button>
-      </div>
-      <div class="filter-row">
-        <select id="filterVehicleCategory" onchange="applyVehicleFilters()">
-          <option value="">All Categories</option>
-          <option value="car">Cars</option>
-          <option value="bike">Bikes</option>
-        </select>
-        <select id="filterVehicleTrans" onchange="applyVehicleFilters()">
-          <option value="">All Transmissions</option>
-          <option value="Manual">Manual</option>
-          <option value="Automatic">Automatic</option>
-        </select>
-        <select id="filterVehicleLocation" onchange="applyVehicleFilters()">
-          <option value="">All Locations</option>
-          <option value="Nayapalli">Nayapalli (Main Office)</option>
-          <option value="Railway Station">Railway Station</option>
-          <option value="Airport">Airport</option>
-          <option value="SUM Hospital">SUM Hospital</option>
-          <option value="Patia Parking">Patia Parking</option>
-        </select>
-        <button class="reset-btn" onclick="resetVehicleFilters()"><i class="fas fa-undo"></i> Reset Filters</button>
-      </div>
-    </div>
-
-    <div id="vehiclesTableWrap"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading vehicles fleet…</div></div>
-
-    <!-- Add Vehicle Form with Location field between Fuel and Seats -->
     <div class="add-vehicle">
-      <h3><i class="fas fa-plus-circle"></i> Add a New Vehicle to Fleet</h3>
+      <h3>Add a new vehicle</h3>
       <form id="addVehicleForm" onsubmit="handleAddVehicle(event)">
-        <div><label>Vehicle Name</label><input name="name" required placeholder="e.g. Honda Activa 6G"></div>
+        <div><label>Name</label><input name="name" required placeholder="e.g. Honda Activa 6G"></div>
         <div><label>Category</label>
           <select name="category" required>
             <option value="car">Car</option>
@@ -239,42 +233,17 @@
           </select>
         </div>
         <div><label>Fuel</label><input name="fuel" value="Petrol"></div>
-        <div><label>Location</label>
-          <select name="location">
-            <option value="Nayapalli (Main Office)">Nayapalli (Main Office)</option>
-            <option value="Railway Station">Railway Station</option>
-            <option value="Airport">Airport</option>
-            <option value="SUM Hospital">SUM Hospital</option>
-            <option value="Patia Parking">Patia Parking</option>
-          </select>
-        </div>
         <div><label>Seats</label><input name="seats" type="number" value="5"></div>
-        <div><button type="submit" class="submit-btn"><i class="fas fa-check"></i> Add Vehicle</button></div>
+        <div><button type="submit" class="submit-btn">Add vehicle</button></div>
       </form>
     </div>
   </section>
 </main>
 
-<!-- TOAST NOTIFICATION CONTAINER -->
-<div id="adminToast"><i class="fas fa-check-circle" style="color:#10b981;"></i> <span id="toastMsg">Action completed successfully</span></div>
-
 <script>
-const API_BASE = (typeof window !== 'undefined' && window.location.origin && window.location.origin.includes('http') && !window.location.origin.includes('file:'))
-  ? window.location.origin
-  : "http://127.0.0.1:3000";
-
-let cachedBookings = [];
-let cachedVehicles = [];
-
-function showToast(msg) {
-  const toast = document.getElementById('adminToast');
-  const msgSpan = document.getElementById('toastMsg');
-  if (toast && msgSpan) {
-    msgSpan.textContent = msg;
-    toast.style.display = 'flex';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
-  }
-}
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://127.0.0.1:3000'
+  : 'https://travorents-com.onrender.com';
 
 function switchTab(tab, btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -299,323 +268,130 @@ function fmtDateTime(s){
 }
 
 async function loadStats(bookings, vehicles){
-  const completed = bookings.filter(b => (b.payment_status === 'completed' || b.paymentStatus === 'completed'));
-  const revenue = completed.reduce((sum, b) => sum + (b.total_amount || b.totalAmount || b.amount || 0), 0);
-  const activeVehicles = vehicles.filter(v => v.available === 1 || v.available === true);
-
+  const completed = bookings.filter(b => b.payment_status === 'completed');
+  const revenue = completed.reduce((sum, b) => sum + (b.total_amount || 0), 0);
   const stats = [
-    { label: 'Total Revenue', num: fmtMoney(revenue), type: 'revenue' },
-    { label: 'Total Bookings', num: bookings.length, type: 'bookings' },
-    { label: 'Completed Rentals', num: completed.length, type: 'completed' },
-    { label: 'Pending / Unpaid', num: bookings.length - completed.length, type: 'pending' },
-    { label: 'Vehicles Available', num: activeVehicles.length + ' / ' + vehicles.length, type: 'vehicles' },
+    { label: 'Total bookings', num: bookings.length },
+    { label: 'Completed', num: completed.length },
+    { label: 'Pending / abandoned', num: bookings.length - completed.length },
+    { label: 'Revenue collected', num: fmtMoney(revenue) },
+    { label: 'Vehicles listed', num: vehicles.length },
   ];
   document.getElementById('statsRow').innerHTML = stats.map(s => `
-    <div class="stat-card ${s.type}">
-      <div class="num">${s.num}</div>
-      <div class="label">${s.label}</div>
-    </div>
+    <div class="stat-card"><div class="num">${s.num}</div><div class="label">${s.label}</div></div>
   `).join('');
 }
 
-// ── BOOKINGS OPERATIONS
+let cachedVehicles = [];
+
 async function loadBookings(){
   const wrap = document.getElementById('bookingsTableWrap');
-  wrap.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading bookings…</div>';
+  wrap.innerHTML = '<div class="loading">Loading bookings…</div>';
   try {
     const res = await fetch(`${API_BASE}/api/bookings`);
     const data = await res.json();
     if (!data.success) throw new Error(data.message || 'Failed to load');
-    cachedBookings = data.bookings || [];
+    const bookings = data.bookings;
 
-    loadStats(cachedBookings, cachedVehicles);
-    renderBookingsTable(cachedBookings);
+    loadStats(bookings, cachedVehicles);
+
+    if (bookings.length === 0) {
+      wrap.innerHTML = '<div class="empty">No bookings yet. They\'ll show up here as soon as a customer checks out.</div>';
+      return;
+    }
+
+    wrap.innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Ref</th><th>Vehicle</th><th>Customer</th><th>Pickup → Return</th>
+          <th>Amount</th><th>Status</th><th>Created</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          ${bookings.map(b => {
+            const status = b.payment_status || b.paymentStatus || 'pending';
+            let actionBtn = '—';
+            if (status === 'qr_pending') {
+              actionBtn = `<button class="toggle-btn" onclick="approveQRBooking('${b.booking_ref}')" style="background:var(--success-bg); color:var(--success); border: 1px solid var(--success); padding:6px 12px; border-radius:5px; cursor:pointer; font-weight: 600;">Approve Payment</button>`;
+            } else if (status === 'completed') {
+              actionBtn = `<span style="color:var(--success); font-weight: 600;">✓ Approved</span>`;
+            }
+            return `
+              <tr>
+                <td class="ref">${escapeHtml(b.booking_ref)}</td>
+                <td>${escapeHtml(b.vehicle_name)}</td>
+                <td>
+                  ${escapeHtml(b.customer_name || '—')}<br>
+                  <span style="color:var(--gray);font-size:12px">${escapeHtml(b.customer_phone || '')}</span>
+                </td>
+                <td>${escapeHtml(b.pickup_date)} ${escapeHtml(b.pickup_time||'')}<br>→ ${escapeHtml(b.return_date)} ${escapeHtml(b.return_time||'')}</td>
+                <td>${fmtMoney(b.total_amount)}</td>
+                <td><span class="badge ${escapeHtml(status)}">${escapeHtml(status)}</span></td>
+                <td>${fmtDateTime(b.created_at)}</td>
+                <td>${actionBtn}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
   } catch (err) {
-    wrap.innerHTML = `<div class="empty">Couldn't reach backend server at ${API_BASE}. Ensure server is running.</div>`;
+    wrap.innerHTML = `<div class="empty">Couldn't reach the backend at ${API_BASE}. Make sure the server is running (<code>node whatsapp-backend.js</code>).</div>`;
     console.error(err);
   }
 }
 
-function handleBookingKey(e){
-  applyBookingFilters();
-}
-
-function applyBookingFilters(){
-  const query = (document.getElementById('bookingSearchInput')?.value || '').toLowerCase().trim();
-  const statusFilter = document.getElementById('filterBookingStatus')?.value || '';
-  const locFilter = document.getElementById('filterBookingLocation')?.value || '';
-
-  const filtered = cachedBookings.filter(b => {
-    const bRef = (b.booking_ref || b.bookingRef || '').toLowerCase();
-    const vName = (b.vehicle_name || b.vehicleName || '').toLowerCase();
-    const cName = (b.customer_name || b.customerName || '').toLowerCase();
-    const cPhone = (b.customer_phone || b.customerPhone || '').toLowerCase();
-    const loc = (b.location || '').toLowerCase();
-    const pStat = (b.payment_status || b.paymentStatus || '').toLowerCase();
-
-    const matchesSearch = !query || bRef.includes(query) || vName.includes(query) || cName.includes(query) || cPhone.includes(query) || loc.includes(query);
-    const matchesStatus = !statusFilter || pStat === statusFilter.toLowerCase();
-    const matchesLoc = !locFilter || loc.includes(locFilter.toLowerCase());
-
-    return matchesSearch && matchesStatus && matchesLoc;
-  });
-
-  renderBookingsTable(filtered);
-}
-
-function resetBookingFilters(){
-  if (document.getElementById('bookingSearchInput')) document.getElementById('bookingSearchInput').value = '';
-  if (document.getElementById('filterBookingStatus')) document.getElementById('filterBookingStatus').value = '';
-  if (document.getElementById('filterBookingLocation')) document.getElementById('filterBookingLocation').value = '';
-  renderBookingsTable(cachedBookings);
-}
-
-function renderBookingsTable(bookings){
-  const wrap = document.getElementById('bookingsTableWrap');
-  if (bookings.length === 0) {
-    wrap.innerHTML = '<div class="empty"><i class="fas fa-inbox"></i> No matching bookings found.</div>';
-    return;
-  }
-
-  wrap.innerHTML = `
-    <table>
-      <thead><tr>
-        <th>Booking Ref</th><th>Vehicle</th><th>Customer Info</th><th>Pickup → Return</th>
-        <th>Amount</th><th>Status</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        ${bookings.map(b => {
-          const bRef = b.booking_ref || b.bookingRef || 'TR-P';
-          const vName = b.vehicle_name || b.vehicleName || 'Vehicle';
-          const cName = b.customer_name || b.customerName || '—';
-          const cPhone = (b.customer_phone || b.customerPhone || '').replace(/\D/g, '');
-          const pDate = b.pickup_date || b.pickupDate || '';
-          const pTime = b.pickup_time || b.pickupTime || '';
-          const rDate = b.return_date || b.returnDate || '';
-          const rTime = b.return_time || b.returnTime || '';
-          const loc = b.location || 'Nayapalli (Main Office)';
-          const amt = b.total_amount || b.totalAmount || b.amount || 0;
-          const pStat = b.payment_status || b.paymentStatus || 'pending';
-
-          return `
-          <tr>
-            <td class="ref">${escapeHtml(bRef)}</td>
-            <td><strong>${escapeHtml(vName)}</strong><br><span style="color:var(--gray);font-size:11.5px">📍 ${escapeHtml(loc)}</span></td>
-            <td>
-              <strong>${escapeHtml(cName)}</strong><br>
-              <span style="color:var(--gray);font-size:12px">📞 +${escapeHtml(cPhone)}</span>
-            </td>
-            <td>${escapeHtml(pDate)} ${escapeHtml(pTime)}<br>→ ${escapeHtml(rDate)} ${escapeHtml(rTime)}</td>
-            <td><strong>${fmtMoney(amt)}</strong></td>
-            <td>
-              <select class="status-select" onchange="updateBookingStatus('${escapeHtml(bRef)}', this.value)">
-                <option value="pending" ${pStat === 'pending' ? 'selected' : ''}>Pending</option>
-                <option value="completed" ${pStat === 'completed' ? 'selected' : ''}>Completed</option>
-                <option value="failed" ${pStat === 'failed' ? 'selected' : ''}>Failed</option>
-              </select>
-            </td>
-            <td>
-              <div class="action-group">
-                ${cPhone ? `<a href="https://wa.me/${cPhone.startsWith('91')?cPhone:'91'+cPhone}?text=Hello%20${encodeURIComponent(cName)},%20regarding%20your%20TravoRents%20booking%20${bRef}" target="_blank" class="wa-chat-btn"><i class="fab fa-whatsapp"></i> Chat</a>` : ''}
-                <button class="delete-btn" onclick="deleteBooking('${escapeHtml(bRef)}')"><i class="fas fa-trash"></i></button>
-              </div>
-            </td>
-          </tr>
-        `;}).join('')}
-      </tbody>
-    </table>
-  `;
-}
-
-async function updateBookingStatus(ref, newStatus) {
-  try {
-    await fetch(`${API_BASE}/api/bookings/${ref}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paymentStatus: newStatus })
-    });
-    showToast(`Booking ${ref} status updated to ${newStatus}`);
-    loadBookings();
-  } catch (err) {
-    alert("Could not update status.");
-  }
-}
-
-async function deleteBooking(ref) {
-  if (!confirm(`Are you sure you want to delete booking ${ref}?`)) return;
-  try {
-    await fetch(`${API_BASE}/api/bookings/${ref}`, { method: 'DELETE' });
-    showToast(`Booking ${ref} deleted`);
-    loadBookings();
-  } catch (err) {
-    alert("Could not delete booking.");
-  }
-}
-
-// ── VEHICLES OPERATIONS & FIXED AVAILABILITY TOGGLE
-const DEFAULT_VEHICLES = [
-  { id: 1, name: 'Swift Dzire New Model', category: 'car', image: 'images/maruti dizaer.jpeg', price_12hr: 1300, price_24hr: 1600, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 2, name: 'Maruti Alto', category: 'car', image: 'images/alto k10.jpeg', price_12hr: 1020, price_24hr: 1320, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 3, name: 'Suzuki Baleno', category: 'car', image: 'images/baleno.jpeg', price_12hr: 1400, price_24hr: 1700, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 4, name: 'i20 Sunroof 2025', category: 'car', image: 'images/hundyai.jpeg', price_12hr: 1500, price_24hr: 2000, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 5, name: 'Hyundai Venue SX', category: 'car', image: 'images/venue.jpeg', price_12hr: 1700, price_24hr: 2300, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 6, name: 'Kia Carens (7 Seater)', category: 'car', image: 'images/Kia Carens.jpeg', price_12hr: 2500, price_24hr: 3000, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 7, available: 1 },
-  { id: 7, name: 'Mahindra Thar ROX 2025', category: 'car', image: 'images/thar.jpeg', price_12hr: 3500, price_24hr: 4000, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 8, name: 'Baleno Automatic', category: 'car', image: 'images/baleno automatic.jpeg', price_12hr: 1600, price_24hr: 2000, transmission: 'Automatic', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 5, available: 1 },
-  { id: 9, name: 'Royal Enfield Bullet 350', category: 'bike', image: 'images/Royal Enfield.jpeg', price_12hr: 800, price_24hr: 1100, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 2, available: 1 },
-  { id: 10, name: 'KTM 200', category: 'bike', image: 'images/ktm duke.jpeg', price_12hr: 1000, price_24hr: 1400, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 2, available: 1 },
-  { id: 11, name: 'Yamaha R15 V4', category: 'bike', image: 'images/yamaha.jpeg', price_12hr: 1000, price_24hr: 1200, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 2, available: 1 },
-  { id: 12, name: 'Honda Activa 6G', category: 'bike', image: 'images/honda activa.jpeg', price_12hr: 400, price_24hr: 500, transmission: 'Automatic', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 2, available: 1 },
-  { id: 13, name: 'Hero Pleasure Plus', category: 'bike', image: 'images/Hero Pleasure Plus.jpeg', price_12hr: 400, price_24hr: 550, transmission: 'Automatic', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 2, available: 1 },
-  { id: 14, name: 'Pulsar 150', category: 'bike', image: 'images/pulser 150.jpeg', price_12hr: 500, price_24hr: 700, transmission: 'Manual', fuel: 'Petrol', location: 'Nayapalli (Main Office)', seats: 2, available: 1 }
-];
-
 async function loadVehicles(){
   const wrap = document.getElementById('vehiclesTableWrap');
-  wrap.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading vehicles fleet…</div>';
-  
-  // Check local cache first
-  const stored = localStorage.getItem('travorentsVehicles');
-  if (stored) {
-    try { cachedVehicles = JSON.parse(stored); } catch(e){}
-  }
-  if (!cachedVehicles || cachedVehicles.length === 0) {
-    cachedVehicles = DEFAULT_VEHICLES;
-  }
-
+  wrap.innerHTML = '<div class="loading">Loading vehicles…</div>';
   try {
     const res = await fetch(`${API_BASE}/api/vehicles`);
     const data = await res.json();
-    if (data.success && data.vehicles && data.vehicles.length > 0) {
-      cachedVehicles = data.vehicles;
-      localStorage.setItem('travorentsVehicles', JSON.stringify(cachedVehicles));
+    if (!data.success) throw new Error(data.message || 'Failed to load');
+    cachedVehicles = data.vehicles;
+
+    if (data.vehicles.length === 0) {
+      wrap.innerHTML = '<div class="empty">No vehicles yet. Add one below.</div>';
+      return;
     }
+
+    wrap.innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Name</th><th>Category</th><th>Price /24hr</th><th>Transmission</th><th>Fuel</th><th>Seats</th><th>Available</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${data.vehicles.map(v => `
+            <tr>
+              <td>${escapeHtml(v.name)}</td>
+              <td><span class="badge cat">${escapeHtml(v.category)}</span></td>
+              <td>${fmtMoney(v.price_24hr)}</td>
+              <td>${escapeHtml(v.transmission || '—')}</td>
+              <td>${escapeHtml(v.fuel || '—')}</td>
+              <td>${v.seats ?? '—'}</td>
+              <td><span class="${v.available ? 'avail-on' : 'avail-off'}">${v.available ? 'Yes' : 'No'}</span></td>
+              <td><button class="toggle-btn" onclick="toggleAvailability(${v.id}, ${v.available ? 0 : 1})">${v.available ? 'Mark unavailable' : 'Mark available'}</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
   } catch (err) {
-    console.log('Backend offline, using local cached vehicles fleet');
+    wrap.innerHTML = `<div class="empty">Couldn't reach the backend at ${API_BASE}. Make sure the server is running (<code>node whatsapp-backend.js</code>).</div>`;
+    console.error(err);
   }
-
-  loadStats(cachedBookings, cachedVehicles);
-  renderVehiclesTable(cachedVehicles);
 }
 
-function handleVehicleKey(e){
-  applyVehicleFilters();
-}
-
-function applyVehicleFilters(){
-  const query = (document.getElementById('vehicleSearchInput')?.value || '').toLowerCase().trim();
-  const catFilter = document.getElementById('filterVehicleCategory')?.value || '';
-  const transFilter = document.getElementById('filterVehicleTrans')?.value || '';
-  const locFilter = document.getElementById('filterVehicleLocation')?.value || '';
-
-  const filtered = cachedVehicles.filter(v => {
-    const vName = (v.name || '').toLowerCase();
-    const vCat = (v.category || '').toLowerCase();
-    const vFuel = (v.fuel || '').toLowerCase();
-    const vLoc = (v.location || 'Nayapalli (Main Office)').toLowerCase();
-
-    const matchesSearch = !query || vName.includes(query) || vCat.includes(query) || vFuel.includes(query) || vLoc.includes(query);
-    const matchesCat = !catFilter || vCat === catFilter.toLowerCase();
-    const matchesTrans = !transFilter || (v.transmission || '').toLowerCase() === transFilter.toLowerCase();
-    const matchesLoc = !locFilter || vLoc.includes(locFilter.toLowerCase());
-
-    return matchesSearch && matchesCat && matchesTrans && matchesLoc;
-  });
-
-  renderVehiclesTable(filtered);
-}
-
-function resetVehicleFilters(){
-  if (document.getElementById('vehicleSearchInput')) document.getElementById('vehicleSearchInput').value = '';
-  if (document.getElementById('filterVehicleCategory')) document.getElementById('filterVehicleCategory').value = '';
-  if (document.getElementById('filterVehicleTrans')) document.getElementById('filterVehicleTrans').value = '';
-  if (document.getElementById('filterVehicleLocation')) document.getElementById('filterVehicleLocation').value = '';
-  renderVehiclesTable(cachedVehicles);
-}
-
-function renderVehiclesTable(vehicles){
-  const wrap = document.getElementById('vehiclesTableWrap');
-  if (vehicles.length === 0) {
-    wrap.innerHTML = '<div class="empty"><i class="fas fa-car"></i> No matching vehicles found in fleet.</div>';
-    return;
-  }
-
-  // Columns: Name | Category | Price /24hr | Transmission | Fuel | Location | Seats | Available | Actions
-  wrap.innerHTML = `
-    <table>
-      <thead><tr>
-        <th>Name</th><th>Category</th><th>Price /24hr</th><th>Transmission</th><th>Fuel</th><th>Location</th><th>Seats</th><th>Available</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        ${vehicles.map(v => {
-          const isAvail = (v.available === 1 || v.available === true || v.available === '1');
-          return `
-          <tr>
-            <td><strong>${escapeHtml(v.name)}</strong></td>
-            <td><span class="badge cat">${escapeHtml(v.category)}</span></td>
-            <td><strong>${fmtMoney(v.price_24hr)}</strong></td>
-            <td>${escapeHtml(v.transmission || '—')}</td>
-            <td>${escapeHtml(v.fuel || '—')}</td>
-            <td>📍 ${escapeHtml(v.location || 'Nayapalli (Main Office)')}</td>
-            <td>${v.seats ?? '—'}</td>
-            <td>
-              <span class="${isAvail ? 'avail-on' : 'avail-off'}">
-                <i class="fas ${isAvail ? 'fa-check-circle' : 'fa-times-circle'}"></i>
-                ${isAvail ? 'Yes (Available)' : 'No (Unmarked)'}
-              </span>
-            </td>
-            <td>
-              <div class="action-group">
-                <button class="toggle-btn ${isAvail ? 'mark-unavail' : 'mark-avail'}" onclick="toggleAvailability(${v.id}, ${isAvail ? 0 : 1})">
-                  <i class="fas ${isAvail ? 'fa-ban' : 'fa-check'}"></i>
-                  ${isAvail ? 'Mark Unavailable' : 'Mark Available'}
-                </button>
-                <button class="delete-btn" onclick="deleteVehicle(${v.id})"><i class="fas fa-trash"></i></button>
-              </div>
-            </td>
-          </tr>
-        `;}).join('')}
-      </tbody>
-    </table>
-  `;
-}
-
-// Fixed Toggle Availability (Instant local state update & server sync)
-async function toggleAvailability(id, newAvailableState){
-  const targetState = newAvailableState ? 1 : 0;
-  
-  // 1. Update in-memory cache and localStorage immediately for 100% reliable UI response
-  const idx = cachedVehicles.findIndex(v => Number(v.id) === Number(id));
-  if (idx >= 0) {
-    cachedVehicles[idx].available = targetState;
-    localStorage.setItem('travorentsVehicles', JSON.stringify(cachedVehicles));
-  }
-
-  // 2. Re-render table and update stats counters right away
-  renderVehiclesTable(cachedVehicles);
-  loadStats(cachedBookings, cachedVehicles);
-  showToast(`Vehicle availability updated to ${targetState ? 'Available' : 'Unmarked / Unavailable'}`);
-
-  // 3. Sync state to backend server if active
+async function toggleAvailability(id, available){
   try {
     await fetch(`${API_BASE}/api/vehicles/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ available: targetState })
+      body: JSON.stringify({ available })
     });
-  } catch (err) {
-    console.log('Backend server offline, state saved to local browser storage.');
-  }
-}
-
-async function deleteVehicle(id) {
-  if (!confirm("Are you sure you want to delete this vehicle from your fleet?")) return;
-  try {
-    await fetch(`${API_BASE}/api/vehicles/${id}`, { method: 'DELETE' });
-    showToast("Vehicle removed from fleet");
     loadVehicles();
   } catch (err) {
-    alert("Could not delete vehicle.");
+    alert('Could not update vehicle availability.');
+    console.error(err);
   }
 }
 
@@ -631,7 +407,6 @@ async function handleAddVehicle(e){
     price_24hr: Number(fd.get('price_24hr')),
     transmission: fd.get('transmission'),
     fuel: fd.get('fuel'),
-    location: fd.get('location') || 'Nayapalli (Main Office)',
     seats: fd.get('seats') ? Number(fd.get('seats')) : null,
   };
   try {
@@ -643,7 +418,6 @@ async function handleAddVehicle(e){
     const data = await res.json();
     if (!data.success) throw new Error(data.message || 'Failed to add vehicle');
     form.reset();
-    showToast("New vehicle added to fleet successfully");
     loadVehicles();
   } catch (err) {
     alert('Could not add vehicle: ' + err.message);
@@ -651,65 +425,26 @@ async function handleAddVehicle(e){
   }
 }
 
-// ── DOWNLOAD EVERYDAY LOGS (CSV Export)
-function downloadLogs() {
-  if (cachedBookings.length === 0) {
-    alert("No log entries available to download.");
-    return;
+async function approveQRBooking(bookingRef) {
+  if (!confirm(`Are you sure you want to approve booking ${bookingRef} and send the confirmation WhatsApp message?`)) return;
+  
+  try {
+    const res = await fetch(`${API_BASE}/api/approve-qr-booking`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookingRef })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message || 'Payment approved successfully!');
+      loadBookings();
+    } else {
+      alert('Approval failed: ' + data.message);
+    }
+  } catch (err) {
+    alert('Could not approve payment.');
+    console.error(err);
   }
-
-  const headers = [
-    "Created Date",
-    "Booking Ref",
-    "Vehicle Name",
-    "Customer Name",
-    "Customer Phone",
-    "Customer Email",
-    "Pickup Date",
-    "Pickup Time",
-    "Return Date",
-    "Return Time",
-    "Location",
-    "Transmission",
-    "Total Amount (INR)",
-    "Payment Status"
-  ];
-
-  const csvRows = [];
-  csvRows.push(headers.join(","));
-
-  cachedBookings.forEach(b => {
-    const row = [
-      `"${b.created_at || ''}"`,
-      `"${b.booking_ref || b.bookingRef || ''}"`,
-      `"${(b.vehicle_name || b.vehicleName || '').replace(/"/g, '""')}"`,
-      `"${(b.customer_name || b.customerName || '').replace(/"/g, '""')}"`,
-      `"${b.customer_phone || b.customerPhone || ''}"`,
-      `"${b.customer_email || b.customerEmail || ''}"`,
-      `"${b.pickup_date || b.pickupDate || ''}"`,
-      `"${b.pickup_time || b.pickupTime || ''}"`,
-      `"${b.return_date || b.returnDate || ''}"`,
-      `"${b.return_time || b.returnTime || ''}"`,
-      `"${(b.location || 'Nayapalli (Main Office)').replace(/"/g, '""')}"`,
-      `"${b.transmission || ''}"`,
-      `"${b.total_amount || b.totalAmount || b.amount || 0}"`,
-      `"${b.payment_status || b.paymentStatus || 'pending'}"`
-    ];
-    csvRows.push(row.join(","));
-  });
-
-  const csvContent = csvRows.join("\n");
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  const todayStr = new Date().toISOString().split("T")[0];
-  link.setAttribute("href", url);
-  link.setAttribute("download", `travorents-everyday-full-logs-${todayStr}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  showToast("Everyday full logs downloaded as CSV");
 }
 
 // Initial load
@@ -718,3 +453,5 @@ loadVehicles().then(loadBookings);
 
 </body>
 </html>
+
+

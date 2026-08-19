@@ -2,7 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "travorentsPendingVehicle";
-  const BUSINESS_WHATSAPP = "916372465107";
+  const BUSINESS_WHATSAPP = "918455065107";
   let couponDiscount = 0;
   let lastBookingId = "";
 
@@ -32,30 +32,22 @@
   }
 
   function setDefaults() {
-    const location = byId("bkLocation");
     const pickupDate = byId("bkPickupDate");
     const returnDate = byId("bkReturnDate");
     const pickupTime = byId("bkPickupTime");
     const returnTime = byId("bkReturnTime");
 
-    if (location && !location.value) location.value = "Nayapalli (Main Office)";
-    if (pickupDate) {
-      pickupDate.min = dateValue(0);
-      if (!pickupDate.value) pickupDate.value = dateValue(0);
-    }
-    if (returnDate) {
-      returnDate.min = pickupDate ? pickupDate.value : dateValue(0);
-      if (!returnDate.value) returnDate.value = dateValue(1);
-    }
-    if (pickupTime && !pickupTime.value) pickupTime.value = "09:30";
-    if (returnTime && !returnTime.value) returnTime.value = "09:30";
+    pickupDate.min = dateValue(0);
+    if (!pickupDate.value) pickupDate.value = dateValue(0);
+    returnDate.min = pickupDate.value;
+    if (!returnDate.value) returnDate.value = dateValue(1);
+    if (!pickupTime.value) pickupTime.value = "09:30";
+    if (!returnTime.value) returnTime.value = "09:30";
 
-    if (pickupDate && returnDate) {
-      pickupDate.addEventListener("change", function () {
-        returnDate.min = pickupDate.value || dateValue(0);
-        if (returnDate.value < returnDate.min) returnDate.value = returnDate.min;
-      });
-    }
+    pickupDate.addEventListener("change", function () {
+      returnDate.min = pickupDate.value || dateValue(0);
+      if (returnDate.value < returnDate.min) returnDate.value = returnDate.min;
+    });
   }
 
   function datesAreValid(showErrors) {
@@ -65,19 +57,13 @@
     const pickupTime = byId("bkPickupTime");
     const returnTime = byId("bkReturnTime");
 
-    if (location && !location.value) location.value = "Nayapalli (Main Office)";
-    if (pickupDate && !pickupDate.value) pickupDate.value = dateValue(0);
-    if (returnDate && !returnDate.value) returnDate.value = dateValue(1);
-    if (pickupTime && !pickupTime.value) pickupTime.value = "09:30";
-    if (returnTime && !returnTime.value) returnTime.value = "09:30";
+    if (!location.value || !pickupDate.value || !returnDate.value || !pickupTime.value || !returnTime.value) {
+      if (showErrors) showToast("Choose a location, dates, and times before booking.", "warning");
+      return false;
+    }
 
-    const pDate = pickupDate ? pickupDate.value : dateValue(0);
-    const rDate = returnDate ? returnDate.value : dateValue(1);
-    const pTime = pickupTime ? pickupTime.value : "09:30";
-    const rTime = returnTime ? returnTime.value : "09:30";
-
-    const pickup = new Date(pDate + "T" + pTime);
-    const dropoff = new Date(rDate + "T" + rTime);
+    const pickup = new Date(pickupDate.value + "T" + pickupTime.value);
+    const dropoff = new Date(returnDate.value + "T" + returnTime.value);
     if (dropoff <= pickup) {
       if (showErrors) showToast("Return time must be after pick-up time.", "error");
       return false;
@@ -86,35 +72,34 @@
   }
 
   function rentalDays() {
-    const pDate = (byId("bkPickupDate") && byId("bkPickupDate").value) || dateValue(0);
-    const pTime = (byId("bkPickupTime") && byId("bkPickupTime").value) || "09:30";
-    const rDate = (byId("bkReturnDate") && byId("bkReturnDate").value) || dateValue(1);
-    const rTime = (byId("bkReturnTime") && byId("bkReturnTime").value) || "09:30";
-    const pickup = new Date(pDate + "T" + pTime);
-    const dropoff = new Date(rDate + "T" + rTime);
+    const pickup = new Date(byId("bkPickupDate").value + "T" + byId("bkPickupTime").value);
+    const dropoff = new Date(byId("bkReturnDate").value + "T" + byId("bkReturnTime").value);
     return Math.max(1, Math.ceil((dropoff - pickup) / 86400000));
   }
 
   window.findVehicle = function () {
-    const vehicleTypeEl = byId("bkVehicleType");
-    const type = vehicleTypeEl ? vehicleTypeEl.value : "car";
+    const type = byId("bkVehicleType").value;
     if (!type) {
-      showToast("Please choose vehicle type below or browse cars & bikes.", "info");
+      showToast("Select a vehicle type first.", "warning");
+      byId("bkVehicleType").focus();
+      return;
     }
-    datesAreValid(false);
+    if (!datesAreValid(true)) return;
 
-    const target = (type === "bike") ? "bikes" : "cars";
+    const target = type === "bike" ? "bikes" : "cars";
     const button = Array.from(document.querySelectorAll(".tab-btn")).find(function (item) {
       return item.textContent.toLowerCase().includes(target === "bikes" ? "bike" : "car");
     });
     if (button) switchTab(target, button);
-    const vSec = byId("vehicles");
-    if (vSec) vSec.scrollIntoView({ behavior: "smooth", block: "start" });
-    showToast("Selected " + (target === "bikes" ? "Bikes" : "Cars") + " fleet below.", "success");
+    byId("vehicles").scrollIntoView({ behavior: "smooth", block: "start" });
+    showToast("Choose your " + (target === "bikes" ? "bike" : "car") + " below.", "success");
   };
 
   window.openBookingSummary = function (name, image, amount, transmission, fuel, seats) {
-    datesAreValid(false);
+    if (!datesAreValid(true)) {
+      byId("home").scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
 
     currentVehicle = {
       name: name,
@@ -127,49 +112,23 @@
     };
     couponDiscount = 0;
 
-    const loc = (byId("bkLocation") && byId("bkLocation").value) || "Nayapalli (Main Office)";
-    const pDate = (byId("bkPickupDate") && byId("bkPickupDate").value) || dateValue(0);
-    const rDate = (byId("bkReturnDate") && byId("bkReturnDate").value) || dateValue(1);
-    const pTime = (byId("bkPickupTime") && byId("bkPickupTime").value) || "09:30";
-    const rTime = (byId("bkReturnTime") && byId("bkReturnTime").value) || "09:30";
+    byId("summVehicleImg").innerHTML =
+      '<img src="' + image + '" alt="' + name.replace(/"/g, "&quot;") + '">';
+    byId("summVehicleName").textContent = name;
+    byId("summTransmission").textContent = transmission;
+    byId("summFuel").textContent = fuel;
+    byId("summSeats").textContent = seats;
+    byId("summPickupDate").textContent = fmtDate(byId("bkPickupDate").value);
+    byId("summReturnDate").textContent = fmtDate(byId("bkReturnDate").value);
+    byId("summPickupTime").textContent = formatTime(byId("bkPickupTime").value);
+    byId("summReturnTime").textContent = formatTime(byId("bkReturnTime").value);
+    byId("summLocationName").textContent = byId("bkLocation").value;
+    byId("summKmLimit").textContent = rentalDays() * 200 + " km";
+    byId("couponInput").value = "";
 
-    const booking = {
-      vehicleName: name,
-      vehicleImage: image,
-      amount: Number(amount),
-      transmission: transmission,
-      fuel: fuel,
-      seats: Number(seats),
-      pickupDate: pDate,
-      returnDate: rDate,
-      pickupTime: pTime,
-      returnTime: rTime,
-      location: loc
-    };
-
-    localStorage.setItem("booking", JSON.stringify(booking));
-
-    const summaryOverlay = byId("summaryOverlay");
-    if (summaryOverlay) {
-      if (byId("summVehicleImg")) byId("summVehicleImg").innerHTML = '<img src="' + image + '" alt="' + name.replace(/"/g, "&quot;") + '">';
-      if (byId("summVehicleName")) byId("summVehicleName").textContent = name;
-      if (byId("summTransmission")) byId("summTransmission").textContent = transmission;
-      if (byId("summFuel")) byId("summFuel").textContent = fuel;
-      if (byId("summSeats")) byId("summSeats").textContent = seats;
-      if (byId("summPickupDate")) byId("summPickupDate").textContent = fmtDate(pDate);
-      if (byId("summReturnDate")) byId("summReturnDate").textContent = fmtDate(rDate);
-      if (byId("summPickupTime")) byId("summPickupTime").textContent = formatTime(pTime);
-      if (byId("summReturnTime")) byId("summReturnTime").textContent = formatTime(rTime);
-      if (byId("summLocationName")) byId("summLocationName").textContent = loc;
-      if (byId("summKmLimit")) byId("summKmLimit").textContent = rentalDays() * 200 + " km";
-      if (byId("couponInput")) byId("couponInput").value = "";
-
-      calcTotal();
-      summaryOverlay.classList.add("active");
-      document.body.style.overflow = "hidden";
-    } else {
-      window.location.href = "booking-summary.html";
-    }
+    calcTotal();
+    byId("summaryOverlay").classList.add("active");
+    document.body.style.overflow = "hidden";
   };
 
   window.calcTotal = function () {
@@ -442,3 +401,5 @@
   };
 
 })();
+
+
