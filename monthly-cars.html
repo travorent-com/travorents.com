@@ -375,8 +375,8 @@ footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
 
 <!-- ══════════════ DATE, TIME & LOCATION POPUP MODAL ══════════════ -->
 <style>
-#bookingModal.booking-modal-overlay {
-  display: none !important;
+.booking-modal-overlay {
+  display: none;
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -393,7 +393,7 @@ footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
   padding: 15px !important;
   box-sizing: border-box !important;
 }
-#bookingModal.booking-modal-overlay.active {
+.booking-modal-overlay.active {
   display: flex !important;
 }
 .booking-modal-card {
@@ -625,45 +625,69 @@ document.addEventListener('DOMContentLoaded', function() {
 let currentPackageData = null;
 
 function bookPackage(vehicleName, amount, packageType, imagePath) {
-  const isMonthly = packageType.toLowerCase().includes('monthly');
-  const durationDays = isMonthly ? 30 : 7;
-  
-  currentPackageData = {
-    vehicleName: vehicleName,
-    packageType: packageType,
-    amount: amount,
-    imagePath: imagePath || "images/main logo.png",
-    durationDays: durationDays,
-    seats: vehicleName.toLowerCase().includes('car') || packageType.toLowerCase().includes('car') ? "5" : "2",
-    transmission: vehicleName.toLowerCase().includes('automatic') ? "Automatic" : "Manual",
-    fuel: "Petrol"
-  };
+  openDateLocationModal(vehicleName, amount, packageType, imagePath, "Manual", "Petrol", "5");
+}
 
-  document.getElementById('modalVehicleTitle').textContent = vehicleName;
-  document.getElementById('modalVehicleImage').src = currentPackageData.imagePath;
-  document.getElementById('modalPackageBadge').textContent = packageType + " (₹" + Number(amount).toLocaleString() + ")";
-  document.getElementById('modalDurationLabel').textContent = durationDays + " Days";
-  document.getElementById('modalPriceLabel').textContent = "₹" + Number(amount).toLocaleString();
+function payNow(amount, vehicleName, imagePath) {
+  openDateLocationModal(vehicleName || "Vehicle", amount, "Daily Rental", imagePath || "images/main logo.png", "Manual", "Petrol", "5");
+}
 
-  // Set default dates
-  const today = new Date();
-  const pickupStr = today.toISOString().split('T')[0];
-  
-  const returnDateObj = new Date(today.getTime() + durationDays * 24 * 60 * 60 * 1000);
-  const returnStr = returnDateObj.toISOString().split('T')[0];
+function openDateLocationModal(vehicleName, amount, packageType, imagePath, transmission, fuel, seats) {
+  try {
+    const pkgLower = (packageType || '').toLowerCase();
+    const isMonthly = pkgLower.includes('monthly');
+    const isWeekly = pkgLower.includes('weekly');
+    const durationDays = isMonthly ? 30 : (isWeekly ? 7 : 1);
+    
+    currentPackageData = {
+      vehicleName: vehicleName || "Selected Vehicle",
+      packageType: packageType || "Rental Package",
+      amount: amount || 0,
+      imagePath: imagePath || "images/main logo.png",
+      durationDays: durationDays,
+      seats: seats || (vehicleName && vehicleName.toLowerCase().includes('car') ? "5" : "2"),
+      transmission: transmission || (vehicleName && vehicleName.toLowerCase().includes('automatic') ? "Automatic" : "Manual"),
+      fuel: fuel || "Petrol"
+    };
 
-  const pDateInput = document.getElementById('modalPickupDate');
-  const rDateInput = document.getElementById('modalReturnDate');
-  
-  if (pDateInput) {
-    pDateInput.min = pickupStr;
-    pDateInput.value = pickupStr;
+    const titleEl = document.getElementById('modalVehicleTitle');
+    const imgEl = document.getElementById('modalVehicleImage');
+    const badgeEl = document.getElementById('modalPackageBadge');
+    const durEl = document.getElementById('modalDurationLabel');
+    const priceEl = document.getElementById('modalPriceLabel');
+
+    if (titleEl) titleEl.textContent = currentPackageData.vehicleName;
+    if (imgEl) imgEl.src = currentPackageData.imagePath;
+    if (badgeEl) badgeEl.textContent = currentPackageData.packageType + " (₹" + Number(currentPackageData.amount).toLocaleString() + ")";
+    if (durEl) durEl.textContent = currentPackageData.durationDays + (currentPackageData.durationDays > 1 ? " Days" : " Day");
+    if (priceEl) priceEl.textContent = "₹" + Number(currentPackageData.amount).toLocaleString();
+
+    // Default dates
+    const today = new Date();
+    const pickupStr = today.toISOString().split('T')[0];
+    const returnDateObj = new Date(today.getTime() + currentPackageData.durationDays * 24 * 60 * 60 * 1000);
+    const returnStr = returnDateObj.toISOString().split('T')[0];
+
+    const pDateInput = document.getElementById('modalPickupDate');
+    const rDateInput = document.getElementById('modalReturnDate');
+    
+    if (pDateInput) {
+      pDateInput.min = pickupStr;
+      pDateInput.value = pickupStr;
+    }
+    if (rDateInput) {
+      rDateInput.value = returnStr;
+    }
+
+    const modal = document.getElementById('bookingModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  } catch (err) {
+    console.error("Error opening booking modal:", err);
   }
-  if (rDateInput) {
-    rDateInput.value = returnStr;
-  }
-
-  document.getElementById('bookingModal').classList.add('active');
 }
 
 function autoUpdateReturnDate() {
@@ -679,18 +703,22 @@ function autoUpdateReturnDate() {
 
 function closeBookingModal() {
   const modal = document.getElementById('bookingModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
+  document.body.style.overflow = '';
 }
 
 function confirmModalBooking(e) {
-  e.preventDefault();
+  if (e) e.preventDefault();
   if (!currentPackageData) return;
 
-  const loc = document.getElementById('modalLocation').value;
-  const pickupDate = document.getElementById('modalPickupDate').value;
-  const pickupTime = document.getElementById('modalPickupTime').value;
-  const returnDate = document.getElementById('modalReturnDate').value;
-  const returnTime = document.getElementById('modalReturnTime').value;
+  const loc = document.getElementById('modalLocation')?.value;
+  const pickupDate = document.getElementById('modalPickupDate')?.value;
+  const pickupTime = document.getElementById('modalPickupTime')?.value;
+  const returnDate = document.getElementById('modalReturnDate')?.value;
+  const returnTime = document.getElementById('modalReturnTime')?.value;
 
   if (!loc || !pickupDate || !pickupTime || !returnDate || !returnTime) {
     alert('Please select location, pickup date & time, and return date & time.');
@@ -698,7 +726,7 @@ function confirmModalBooking(e) {
   }
 
   const bookingObj = {
-    vehicleName: currentPackageData.vehicleName + " (" + currentPackageData.packageType + ")",
+    vehicleName: currentPackageData.vehicleName + (currentPackageData.packageType ? " (" + currentPackageData.packageType + ")" : ""),
     vehicleImage: currentPackageData.imagePath,
     amount: currentPackageData.amount,
     location: loc,
