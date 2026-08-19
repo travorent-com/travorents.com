@@ -374,14 +374,163 @@ footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
 <a href="tel:+918455065107" class="float-call"><i class="fas fa-phone-alt"></i></a>
 
 <!-- ══════════════ DATE, TIME & LOCATION POPUP MODAL ══════════════ -->
+<style>
+#bookingModal.booking-modal-overlay {
+  display: none !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(10, 15, 30, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 999999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 15px !important;
+  box-sizing: border-box !important;
+}
+#bookingModal.booking-modal-overlay.active {
+  display: flex !important;
+}
+.booking-modal-card {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  max-width: 520px !important;
+  width: 100% !important;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45) !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(12,68,124,0.2) !important;
+  margin: auto !important;
+  font-family: 'Poppins', sans-serif !important;
+  color: #1a1a2e !important;
+  animation: modalPopIn 0.3s ease-out !important;
+}
+@keyframes modalPopIn {
+  from { opacity: 0; transform: scale(0.92) translateY(15px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.booking-modal-header {
+  padding: 18px 24px !important;
+  background: #0C447C !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+.modal-close-btn {
+  background: rgba(255,255,255,0.15) !important;
+  border: none !important;
+  font-size: 18px !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s !important;
+}
+.modal-close-btn:hover {
+  background: rgba(255,255,255,0.3) !important;
+}
+.booking-modal-body {
+  padding: 22px 24px !important;
+}
+.modal-form-group {
+  margin-bottom: 16px !important;
+}
+.modal-form-group label {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #1a1a2e !important;
+  margin-bottom: 6px !important;
+}
+.modal-form-group input, .modal-form-group select {
+  width: 100% !important;
+  padding: 11px 14px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #d0d7de !important;
+  font-size: 14px !important;
+  font-family: 'Poppins', sans-serif !important;
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  box-sizing: border-box !important;
+}
+.modal-form-group input:focus, .modal-form-group select:focus {
+  border-color: #0C447C !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(12,68,124,0.12) !important;
+}
+.modal-form-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+}
+@media(max-width:480px){
+  .modal-form-grid { grid-template-columns: 1fr !important; }
+}
+.modal-info-box {
+  background: rgba(12,68,124,0.06) !important;
+  border-left: 4px solid #0C447C !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  margin-top: 10px !important;
+  font-size: 13px !important;
+  color: #1a1a2e !important;
+}
+.booking-modal-footer {
+  padding: 16px 24px !important;
+  background: #f8f9fa !important;
+  border-top: 1px solid #e1e8ed !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+}
+.btn-cancel {
+  background: #e1e8ed !important;
+  color: #1a1a2e !important;
+  border: none !important;
+  padding: 11px 20px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+.btn-cancel:hover {
+  background: #d0d7de !important;
+}
+.btn-confirm {
+  background: #0C447C !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 11px 24px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.btn-confirm:hover {
+  background: #185FA5 !important;
+}
+</style>
+
 <div id="bookingModal" class="booking-modal-overlay">
   <div class="booking-modal-card">
     <div class="booking-modal-header">
       <div style="display:flex;align-items:center;gap:12px;">
-        <img id="modalVehicleImage" src="" alt="Vehicle" style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #e1e8ed;">
+        <img id="modalVehicleImage" src="" alt="Vehicle" style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:2px solid #ffffff;">
         <div>
-          <h3 id="modalVehicleTitle" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:800;color:var(--dark);margin:0;">Select Booking Details</h3>
-          <span id="modalPackageBadge" style="background:var(--accent);color:#3a1f00;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:50px;display:inline-block;margin-top:4px;">Weekly / Monthly Package</span>
+          <h3 id="modalVehicleTitle" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:800;color:#ffffff;margin:0;">Select Booking Details</h3>
+          <span id="modalPackageBadge" style="background:#EF9F27;color:#3a1f00;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:50px;display:inline-block;margin-top:4px;">Weekly / Monthly Package</span>
         </div>
       </div>
       <button type="button" class="modal-close-btn" onclick="closeBookingModal()"><i class="fas fa-times"></i></button>
@@ -392,7 +541,7 @@ footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
         
         <!-- Pick-up Location -->
         <div class="modal-form-group">
-          <label><i class="fas fa-map-marker-alt" style="color:var(--primary);"></i> Pick-Up Location *</label>
+          <label><i class="fas fa-map-marker-alt" style="color:#0C447C;"></i> Pick-Up Location *</label>
           <select id="modalLocation" required>
             <option value="">-- Choose Pick-Up Location --</option>
             <option value="Nayapalli (Main Office)">Nayapalli (Main Office)</option>
@@ -408,29 +557,29 @@ footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
         <!-- Dates & Times Grid -->
         <div class="modal-form-grid">
           <div class="modal-form-group">
-            <label><i class="fas fa-calendar-alt" style="color:var(--primary);"></i> Pick-Up Date *</label>
+            <label><i class="fas fa-calendar-alt" style="color:#0C447C;"></i> Pick-Up Date *</label>
             <input type="date" id="modalPickupDate" required onchange="autoUpdateReturnDate()">
           </div>
 
           <div class="modal-form-group">
-            <label><i class="fas fa-clock" style="color:var(--primary);"></i> Pick-Up Time *</label>
+            <label><i class="fas fa-clock" style="color:#0C447C;"></i> Pick-Up Time *</label>
             <input type="time" id="modalPickupTime" value="09:30" required>
           </div>
 
           <div class="modal-form-group">
-            <label><i class="fas fa-calendar-check" style="color:var(--accent-dark);"></i> Return Date *</label>
+            <label><i class="fas fa-calendar-check" style="color:#BA7517;"></i> Return Date *</label>
             <input type="date" id="modalReturnDate" required>
           </div>
 
           <div class="modal-form-group">
-            <label><i class="fas fa-clock" style="color:var(--accent-dark);"></i> Return Time *</label>
+            <label><i class="fas fa-clock" style="color:#BA7517;"></i> Return Time *</label>
             <input type="time" id="modalReturnTime" value="09:30" required>
           </div>
         </div>
 
         <!-- Duration info -->
         <div class="modal-info-box">
-          <p><i class="fas fa-info-circle" style="color:var(--primary);"></i> Duration: <strong id="modalDurationLabel">7 Days</strong> &nbsp;|&nbsp; Payable Amount: <strong id="modalPriceLabel" style="color:var(--primary);">₹0</strong></p>
+          <p style="margin:0;"><i class="fas fa-info-circle" style="color:#0C447C;"></i> Duration: <strong id="modalDurationLabel">7 Days</strong> &nbsp;|&nbsp; Payable Amount: <strong id="modalPriceLabel" style="color:#0C447C;">₹0</strong></p>
         </div>
       </div>
 
