@@ -1,112 +1,50 @@
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://127.0.0.1:3000'
-  : 'https://travorents-com.onrender.com';
+// Base URL of the TravoRents backend (serves the API + the database).
+const API_BASE = (typeof window !== 'undefined' && window.location.origin && window.location.origin.includes('http') && !window.location.origin.includes('file:'))
+  ? window.location.origin
+  : "http://127.0.0.1:3000";
 
+document.addEventListener("DOMContentLoaded", function () {
+  if (!window.location.pathname.includes("booking-summary.html")) return;
 
-const booking =
-JSON.parse(localStorage.getItem("booking"));
-
-if(!booking){
-alert("No booking found");
-window.location.href="index.html";
-}
-
-if (document.getElementById("vehicleName")) {
-  document.getElementById("vehicleName").innerText = booking.vehicleName;
-}
-if (document.getElementById("vehicleImage")) {
-  document.getElementById("vehicleImage").src = booking.vehicleImage;
-}
-if (document.getElementById("vehicleTransmission")) {
-  document.getElementById("vehicleTransmission").innerText = booking.transmission || "Manual";
-}
-if (document.getElementById("vehicleFuel")) {
-  document.getElementById("vehicleFuel").innerText = booking.fuel || "Petrol";
-}
-if (document.getElementById("vehicleSeats")) {
-  document.getElementById("vehicleSeats").innerText = booking.seats || "2";
-}
-
-// Populate Pickup Location
-if (document.getElementById("pickupLocation")) {
-  document.getElementById("pickupLocation").innerText = booking.location;
-}
-
-// Populate Booking Dates nicely
-if (document.getElementById("bookingDates")) {
-  document.getElementById("bookingDates").innerText = `${booking.pickupDate} (${booking.pickupTime}) to ${booking.returnDate} (${booking.returnTime})`;
-}
-
-// Legacy elements backup (if they exist)
-if (document.getElementById("pickupDate")) document.getElementById("pickupDate").innerText = booking.pickupDate;
-if (document.getElementById("returnDate")) document.getElementById("returnDate").innerText = booking.returnDate;
-if (document.getElementById("pickupTime")) document.getElementById("pickupTime").innerText = booking.pickupTime;
-if (document.getElementById("returnTime")) document.getElementById("returnTime").innerText = booking.returnTime;
-
-const rent =
-Number(booking.amount);
-
-const gst =
-Math.round(rent*0.18);
-
-const total =
-rent+gst;
-
-document.getElementById("rentPrice").innerText =
-rent;
-
-document.getElementById("gstPrice").innerText =
-gst;
-
-// Initialize payment method
-let paymentMethod = "online";
-
-function updateQRAndTotal(newTotal) {
-  if (document.getElementById("totalPrice")) {
-    document.getElementById("totalPrice").innerText = newTotal;
+  const booking = JSON.parse(localStorage.getItem("booking"));
+  if (!booking) {
+    alert("No vehicle selected. Returning to fleet catalog.");
+    window.location.href = "index.html#vehicles";
+    return;
   }
-  if (document.getElementById("qrTotalAmount")) {
-    document.getElementById("qrTotalAmount").innerText = newTotal;
-  }
-  const qrImg = document.getElementById("qrCodeImage");
-  if (qrImg) {
-    const upiLink = "upi://pay?pa=8984330609@jupiteraxis&pn=TravoRents&am=" + newTotal + "&cu=INR&tn=TravoRents";
-    qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(upiLink);
-  }
-}
 
-// Initial update
-updateQRAndTotal(total);
+  const vName = document.getElementById("vehicleName");
+  if (vName) vName.innerText = booking.vehicleName || "Vehicle";
+  const vImg = document.getElementById("vehicleImage");
+  if (vImg) vImg.src = booking.vehicleImage || "";
+  const pDate = document.getElementById("pickupDate");
+  if (pDate) pDate.innerText = booking.pickupDate || "";
+  const rDate = document.getElementById("returnDate");
+  if (rDate) rDate.innerText = booking.returnDate || "";
+  const pTime = document.getElementById("pickupTime");
+  if (pTime) pTime.innerText = booking.pickupTime || "";
+  const rTime = document.getElementById("returnTime");
+  if (rTime) rTime.innerText = booking.returnTime || "";
+  const pLoc = document.getElementById("pickupLocation");
+  if (pLoc) pLoc.innerText = booking.location || "Nayapalli (Main Office)";
 
-function setPaymentMethod(method) {
-  paymentMethod = method;
-  const tabOnline = document.getElementById("tabOnline");
-  const tabQR = document.getElementById("tabQR");
-  const qrArea = document.getElementById("qrPaymentArea");
-  const onlineDesc = document.getElementById("onlinePaymentDesc");
-  const payBtn = document.querySelector(".payment-btn");
+  const rent = Number(booking.amount) || 0;
+  const gst = Math.round(rent * 0.18);
+  const total = rent + gst;
 
-  if (method === "online") {
-    if (tabOnline) tabOnline.classList.add("active");
-    if (tabQR) tabQR.classList.remove("active");
-    if (onlineDesc) onlineDesc.style.display = "block";
-    if (qrArea) qrArea.style.display = "none";
-    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm Booking (Pay on Visit)</span>';
-  } else {
-    if (tabQR) tabQR.classList.add("active");
-    if (tabOnline) tabOnline.classList.remove("active");
-    if (onlineDesc) onlineDesc.style.display = "none";
-    if (qrArea) qrArea.style.display = "block";
-    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm & Send WhatsApp</span>';
-  }
-}
+  const rPrice = document.getElementById("rentPrice");
+  if (rPrice) rPrice.innerText = rent;
+  const gPrice = document.getElementById("gstPrice");
+  if (gPrice) gPrice.innerText = gst;
+  const tPrice = document.getElementById("totalPrice");
+  if (tPrice) tPrice.innerText = total;
+});
 
-function makePayment(){
-  // Get customer details from booking
+function makePayment() {
   const customerName = document.getElementById("customerName")?.value || "Guest";
   const customerPhone = document.getElementById("customerPhone")?.value || "";
   const customerEmail = document.getElementById("customerEmail")?.value || "";
-  const termsAccepted = (document.getElementById("checkDocs")?.checked && document.getElementById("checkRules")?.checked) || document.getElementById("termsCheckbox")?.checked || false;
+  const termsAccepted = document.getElementById("termsCheckbox")?.checked || false;
 
   if (!termsAccepted) {
     alert("Please accept Terms & Conditions to proceed");
@@ -118,41 +56,19 @@ function makePayment(){
     return;
   }
 
-  // Store customer details
   const booking = JSON.parse(localStorage.getItem("booking")) || {};
   booking.customerName = customerName;
   booking.customerPhone = customerPhone;
   booking.customerEmail = customerEmail;
-  booking.paymentId = paymentMethod === "online" ? "CASH_ON_VISIT" : "QR_PAYMENT";
+  booking.paymentId = "pending";
   localStorage.setItem("booking", JSON.stringify(booking));
 
-  // Create a booking record in the database now, before payment, so we
-  // never lose the booking even if the customer abandons checkout.
   createBookingInDb(booking).then((saved) => {
     if (saved && saved.booking_ref) {
       booking.bookingRef = saved.booking_ref;
       localStorage.setItem("booking", JSON.stringify(booking));
-      
-      if (paymentMethod === "online") {
-        confirmCashBooking(booking);
-      } else {
-        confirmQRBooking(booking);
-      }
-    } else {
-      // Backend is unreachable or returned an error!
-      // Fallback to local-only flow so nothing on the page breaks.
-      console.warn("Backend server unreachable. Falling back to local checkout.");
-      const offlineRef = "TR-" + Date.now();
-      booking.bookingRef = offlineRef;
-      booking.payment_status = paymentMethod === "online" ? "cash_on_visit" : "qr_pending";
-      localStorage.setItem("booking", JSON.stringify(booking));
-      
-      if (paymentMethod === "online") {
-        window.location.href = `payment-success.html?ref=${offlineRef}&cash=1`;
-      } else {
-        window.location.href = `payment-success.html?ref=${offlineRef}&qr=1`;
-      }
     }
+    openPhonePe(booking);
   });
 }
 
@@ -226,61 +142,23 @@ function openPhonePe(booking) {
   });
 }
 
-function confirmQRBooking(booking) {
-  sendBookingConfirmation(booking);
-  fetch(`${API_BASE}/api/confirm-qr-booking`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      bookingRef: booking.bookingRef
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
-  })
-  .catch(err => {
-    console.error("QR Confirm Error:", err);
-    window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
-  });
-}
-
-function confirmCashBooking(booking) {
-  sendBookingConfirmation(booking);
-  fetch(`${API_BASE}/api/confirm-cash-booking`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      bookingRef: booking.bookingRef
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    window.location.href = `payment-success.html?ref=${booking.bookingRef}&cash=1`;
-  })
-  .catch(err => {
-    console.error("Cash Confirm Error:", err);
-    window.location.href = `payment-success.html?ref=${booking.bookingRef}&cash=1`;
-  });
-}
-
 function sendBookingConfirmation(booking) {
   const backendUrl = `${API_BASE}/api/send-whatsapp`;
-  const totPrice = document.getElementById("totalPrice") ? document.getElementById("totalPrice").innerText : (booking.totalAmount || booking.amount || "0");
   
   const payload = {
-    bookingId: booking.bookingRef || ("TR-" + Date.now()),
-    vehicle: booking.vehicleName,
-    amount: totPrice,
-    customerName: booking.customerName || "Customer",
-    customerPhone: booking.customerPhone || "",
-    pickupDate: booking.pickupDate || "",
-    pickupTime: booking.pickupTime || "",
-    returnDate: booking.returnDate || "",
-    returnTime: booking.returnTime || "",
-    location: booking.location || "Bhubaneswar",
-    contacts: [booking.customerPhone]
-  };
+  bookingId: booking.bookingRef || ("TR-" + Date.now()),
+  vehicle: booking.vehicleName,
+  amount: document.getElementById("totalPrice").innerText,
+  customerName: booking.customerName,
+  customerPhone: booking.customerPhone,
+  pickupDate: booking.pickupDate,
+  pickupTime: booking.pickupTime,
+  returnDate: booking.returnDate,
+  returnTime: booking.returnTime,
+  location: booking.location,
+  contacts: [booking.customerPhone]
+};
+
 
   fetch(backendUrl, {
     method: "POST",
@@ -291,10 +169,10 @@ function sendBookingConfirmation(booking) {
   })
   .then(res => res.json())
   .then(data => {
-    console.log("Automatic WhatsApp notification sent to customer:", data);
+    console.log("WhatsApp notification sent:", data);
   })
   .catch(err => {
-    console.error("Error sending automatic WhatsApp:", err);
+    console.error("Error sending WhatsApp:", err);
   });
 }
 function openBookingSummary(
@@ -501,6 +379,6 @@ function updateHelmetCharge() {
         gstPrice +
         helmetCharge;
 
-    updateQRAndTotal(total.toFixed(0));
+    document.getElementById("totalPrice").textContent =
+        total.toFixed(0);
 }
-

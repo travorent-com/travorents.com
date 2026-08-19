@@ -1,4 +1,3 @@
-const originalPort = process.env.PORT;
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -8,7 +7,7 @@ const path = require('path');
 const db = require('./db');
 
 const app = express();
-const PORT = originalPort || process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // ════════════════════════════════════════
 // PHONEPE CONFIGURATION
@@ -35,19 +34,10 @@ const OWNER_PHONE   = process.env.OWNER_WHATSAPP_NUMBER     || '918455065107';
 // ════════════════════════════════════════
 const APP_BASE_URL = process.env.APP_BASE_URL || `http://localhost:${PORT}`;
 
-// Manual CORS middleware to ensure headers are set on all requests
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
-  next();
-});
-
 app.use(cors({
-  origin: '*',
+  origin: ['http://localhost:5500', 'http://127.0.0.1:5500',
+           'http://localhost:8000', 'http://127.0.0.1:8000',
+           'http://localhost:3000', 'http://127.0.0.1:3000', 'null'],
   methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
@@ -58,10 +48,6 @@ app.use(express.static(path.join(__dirname)));
 // ════════════════════════════════════════
 // HEALTH CHECK
 // ════════════════════════════════════════
-app.get('/', (req, res) => {
-  res.status(200).send('OK');
-});
-
 app.get('/health', (req, res) => {
   res.json({
     status: 'online',
@@ -99,16 +85,16 @@ app.get('/api/vehicles/:id', (req, res) => {
 });
 
 app.post('/api/vehicles', (req, res) => {
-  const { name, category, image, price_12hr, price_24hr, transmission, fuel, seats } = req.body || {};
+  const { name, category, image, price_12hr, price_24hr, transmission, fuel, location, seats } = req.body || {};
   if (!name || !category || !image || price_24hr === undefined)
     return res.status(400).json({ success: false, message: 'Missing required vehicle fields' });
   if (category !== 'car' && category !== 'bike')
     return res.status(400).json({ success: false, message: "category must be 'car' or 'bike'" });
   try {
     const result = db.prepare(`
-      INSERT INTO vehicles (name, category, image, price_12hr, price_24hr, transmission, fuel, seats)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(name, category, image, price_12hr ?? null, price_24hr, transmission ?? null, fuel ?? null, seats ?? null);
+      INSERT INTO vehicles (name, category, image, price_12hr, price_24hr, transmission, fuel, location, seats)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(name, category, image, price_12hr ?? null, price_24hr, transmission ?? null, fuel ?? null, location ?? 'Nayapalli (Main Office)', seats ?? null);
     const vehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(result.lastInsertRowid);
     res.status(201).json({ success: true, vehicle });
   } catch (error) {
@@ -123,10 +109,27 @@ app.patch('/api/vehicles/:id', (req, res) => {
   try {
     db.prepare('UPDATE vehicles SET available = ? WHERE id = ?').run(available ? 1 : 0, req.params.id);
     const vehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(req.params.id);
-    if (!vehicle) return res.status(404).json({ success: false, message: 'Vehicle not found' });
     res.json({ success: true, vehicle });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to update vehicle' });
+  }
+});
+
+app.delete('/api/vehicles/:id', (req, res) => {
+  try {
+    db.prepare('DELETE FROM vehicles WHERE id = ?').run(req.params.id);
+    res.json({ success: true, message: 'Vehicle deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete vehicle' });
+  }
+});
+
+app.delete('/api/bookings/:ref', (req, res) => {
+  try {
+    db.prepare('DELETE FROM bookings WHERE booking_ref = ?').run(req.params.ref);
+    res.json({ success: true, message: 'Booking deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete booking' });
   }
 });
 
@@ -409,22 +412,55 @@ async function sendWhatsAppMessage(to, body) {
   }
 }
 
+async function sendWhatsAppTemplate(to, templateName, parameters) {
+  if (!WA_TOKEN || !WA_PHONE_ID) {
+    console.log(`[WhatsApp] NOT CONFIGURED — simulating template "${templateName}" to ${to}`);
+    return { success: true, simulated: true };
+  }
+
+  try {
+    const response = await axios.post(
+      `https://graph.facebook.com/${WA_VERSION}/${WA_PHONE_ID}/messages`,
+      {
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to,
+        type: 'template',
+        template: {
+          name: templateName,
+          language: { code: 'en_US' },
+          components: [
+            {
+              type: 'body',
+              parameters: parameters
+            }
+          ]
+        }
+      },
+      { headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' } }
+    );
+    console.log(`[WhatsApp ✓] Sent template "${templateName}" to ${to} — ID: ${response.data.messages?.[0]?.id}`);
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error(`[WhatsApp ✗] Template failed for ${to}:`, error.response?.data || error.message);
+    return { success: false, error: error.message };
+  }
+}
+
 async function sendWhatsAppToCustomer(booking) {
   const phone = (booking.customer_phone || '').replace(/\D/g, '');
   if (!phone) return;
   const to = phone.startsWith('91') ? phone : `91${phone}`;
 
-  const msg =
-    `🎉 *TravoRents.com — Booking Confirmed!*\n\n` +
-    `✅ Your TravoRents booking is confirmed!\n\n` +
-    `📋 *Booking ID:* ${booking.booking_ref}\n` +
-    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
-    `📍 *Pickup:* ${booking.location || '—'}\n` +
-    `📅 *From:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
-    `💰 *Amount Paid:* ₹${booking.total_amount}\n\n` +
-    `Thank you for choosing TravoRents! 🙏`;
+  // jaspers_market_order_confirmation_v1 parameters mapping:
+  // 1: Customer Name, 2: Vehicle Name (or Details), 3: Total Amount
+  const parameters = [
+    { type: 'text', text: booking.customer_name || 'Customer' },
+    { type: 'text', text: booking.vehicle_name || 'Vehicle' },
+    { type: 'text', text: String(booking.total_amount || '') }
+  ];
 
-  return sendWhatsAppMessage(to, msg);
+  return sendWhatsAppTemplate(to, 'jaspers_market_order_confirmation_v1', parameters);
 }
 
 async function sendWhatsAppToOwner(booking) {
@@ -438,6 +474,9 @@ async function sendWhatsAppToOwner(booking) {
     `📅 *Dates:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
     `💰 *Amount:* ₹${booking.total_amount} ✅ *RECEIVED*`;
 
+  // Note: Since raw text is business-initiated, it requires the owner to have
+  // messaged the test number within the last 24 hours.
+  console.log(`[WhatsApp] Sending owner alert. Note: Owner must have messaged the test number in last 24h.`);
   return sendWhatsAppMessage(OWNER_PHONE, msg);
 }
 
@@ -471,179 +510,10 @@ app.post('/api/send-whatsapp', async (req, res) => {
     vehicle,
     amount,
     customer: customerPhone,
+    deliveredAt: new Date().toISOString(),
+    simulated: custResult.simulated || false,
+    message: 'WhatsApp messages sent to customer and owner',
   });
-});
-
-// ════════════════════════════════════════
-// CONFIRM QR PAYMENT
-// ════════════════════════════════════════
-app.post('/api/confirm-qr-booking', async (req, res) => {
-  const { bookingRef } = req.body || {};
-  if (!bookingRef) return res.status(400).json({ success: false, message: 'bookingRef is required' });
-
-  try {
-    // Update booking in DB
-    db.prepare(`UPDATE bookings SET payment_status = ?, order_id = ? WHERE booking_ref = ?`)
-      .run('qr_pending', 'QR_PAYMENT', bookingRef);
-
-    const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
-    if (booking) {
-      // Send WhatsApp ONLY to owner for verification alert
-      await sendWhatsAppToOwnerQR(booking);
-    }
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error('[QR Confirm Error]:', error.message);
-    res.status(500).json({ success: false, message: 'Failed to process QR payment confirmation' });
-  }
-});
-
-// ════════════════════════════════════════
-// CONFIRM CASH ON VISIT BOOKING
-// ════════════════════════════════════════
-app.post('/api/confirm-cash-booking', async (req, res) => {
-  const { bookingRef } = req.body || {};
-  if (!bookingRef) return res.status(400).json({ success: false, message: 'bookingRef is required' });
-
-  try {
-    // Update booking in DB
-    db.prepare(`UPDATE bookings SET payment_status = ?, order_id = ? WHERE booking_ref = ?`)
-      .run('cash_on_visit', 'CASH_ON_VISIT', bookingRef);
-
-    const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
-    if (booking) {
-      // Send WhatsApp notifications to both customer and owner
-      await Promise.all([
-        sendWhatsAppToCustomerCash(booking),
-        sendWhatsAppToOwnerCash(booking)
-      ]);
-    }
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error('[Cash Confirm Error]:', error.message);
-    res.status(500).json({ success: false, message: 'Failed to process Cash on Visit confirmation' });
-  }
-});
-
-// ════════════════════════════════════════
-// APPROVE QR PAYMENT (ADMIN ONLY)
-// ════════════════════════════════════════
-app.post('/api/approve-qr-booking', async (req, res) => {
-  const { bookingRef } = req.body || {};
-  if (!bookingRef) return res.status(400).json({ success: false, message: 'bookingRef is required' });
-
-  try {
-    // Update booking in DB to completed
-    db.prepare(`UPDATE bookings SET payment_status = ?, order_id = ? WHERE booking_ref = ?`)
-      .run('completed', 'QR_VERIFIED', bookingRef);
-
-    const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
-    if (booking) {
-      // Send official WhatsApp booking confirmation to customer and owner
-      await Promise.all([
-        sendWhatsAppToCustomer(booking),
-        sendWhatsAppToOwner(booking),
-      ]);
-    }
-
-    res.json({ success: true, message: 'Booking approved and WhatsApp confirmation sent!' });
-  } catch (error) {
-    console.error('[QR Approve Error]:', error.message);
-    res.status(500).json({ success: false, message: 'Failed to approve booking' });
-  }
-});
-
-async function sendWhatsAppToCustomerQR(booking) {
-  const phone = (booking.customer_phone || '').replace(/\D/g, '');
-  if (!phone) return;
-  const to = phone.startsWith('91') ? phone : `91${phone}`;
-
-  const msg =
-    `🎉 *TravoRents.com — Booking Registered!*\n\n` +
-    `✅ Your TravoRents booking is registered and pending QR verification!\n\n` +
-    `📋 *Booking ID:* ${booking.booking_ref}\n` +
-    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
-    `📍 *Pickup:* ${booking.location || '—'}\n` +
-    `📅 *From:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
-    `💰 *Amount Paid:* ₹${booking.total_amount} (via QR)\n\n` +
-    `We will confirm your payment shortly! Thank you! 🙏`;
-
-  return sendWhatsAppMessage(to, msg);
-}
-
-async function sendWhatsAppToOwnerQR(booking) {
-  const msg =
-    `🔔 *New QR Booking — TravoRents (Pending Verification)*\n\n` +
-    `📋 *Booking ID:* ${booking.booking_ref}\n` +
-    `👤 *Customer:* ${booking.customer_name || '—'}\n` +
-    `📞 *Phone:* +${(booking.customer_phone || '').replace(/\D/g, '')}\n` +
-    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
-    `📍 *Pickup:* ${booking.location || '—'}\n` +
-    `📅 *Dates:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
-    `💰 *Amount:* ₹${booking.total_amount} ⚠️ *PAID VIA QR - CHECK PHONEPE APP*`;
-
-  return sendWhatsAppMessage(OWNER_PHONE, msg);
-}
-
-async function sendWhatsAppToCustomerCash(booking) {
-  const phone = (booking.customer_phone || '').replace(/\D/g, '');
-  if (!phone) return;
-  const to = phone.startsWith('91') ? phone : `91${phone}`;
-
-  const msg =
-    `🎉 *TravoRents.com — Booking Confirmed!*\n\n` +
-    `✅ Your TravoRents booking is confirmed!\n\n` +
-    `📋 *Booking ID:* ${booking.booking_ref}\n` +
-    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
-    `📍 *Pickup:* ${booking.location || '—'}\n` +
-    `📅 *From:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
-    `💰 *Amount to Pay (on Visit):* ₹${booking.total_amount}\n\n` +
-    `Please pay cash or UPI at the time of pickup. Thank you for choosing TravoRents! 🙏`;
-
-  return sendWhatsAppMessage(to, msg);
-}
-
-async function sendWhatsAppToOwnerCash(booking) {
-  const msg =
-    `🔔 *New Cash Booking — TravoRents (Pay on Visit)*\n\n` +
-    `📋 *Booking ID:* ${booking.booking_ref}\n` +
-    `👤 *Customer:* ${booking.customer_name || '—'}\n` +
-    `📞 *Phone:* +${(booking.customer_phone || '').replace(/\D/g, '')}\n` +
-    `🚗 *Vehicle:* ${booking.vehicle_name}\n` +
-    `📍 *Pickup:* ${booking.location || '—'}\n` +
-    `📅 *Dates:* ${booking.pickup_date} ${booking.pickup_time}  →  ${booking.return_date} ${booking.return_time}\n` +
-    `💰 *Amount:* ₹${booking.total_amount} (Pay on Visit)`;
-
-  return sendWhatsAppMessage(OWNER_PHONE, msg);
-}
-
-// ════════════════════════════════════════
-// WHATSAPP WEBHOOK VERIFICATION (META)
-// ════════════════════════════════════════
-app.get('/webhook', (req, res) => {
-  const mode = req.query['hub.mode'];
-  const token = req.query['hub.verify_token'];
-  const challenge = req.query['hub.challenge'];
-
-  const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN || 'travorents_verify_token';
-
-  if (mode && token) {
-    if (mode === 'subscribe' && token === verifyToken) {
-      console.log('[Webhook Verified successfully]');
-      return res.status(200).send(challenge);
-    } else {
-      return res.sendStatus(403);
-    }
-  }
-  return res.sendStatus(400);
-});
-
-app.post('/webhook', (req, res) => {
-  const body = req.body;
-  console.log('[Webhook Payload Received]:', JSON.stringify(body, null, 2));
-  res.status(200).send('EVENT_RECEIVED');
 });
 
 // ════════════════════════════════════════
@@ -654,5 +524,3 @@ app.listen(PORT, () => {
   console.log(`   PhonePe: ${PHONEPE_MERCHANT_ID ? '✅ Configured' : '⚠️  Not configured (test mode)'}`);
   console.log(`   WhatsApp: ${WA_TOKEN ? '✅ Configured' : '⚠️  Not configured (simulated)'}\n`);
 });
-
-

@@ -54,43 +54,6 @@ function saveBookings(data) {
   fs.writeFileSync(BOOKINGS_FILE, JSON.stringify(data, null, 2));
 }
 
-// Helper function to normalize bookings between snake_case and camelCase
-function normalizeBooking(b) {
-  if (!b) return b;
-  return {
-    ...b,
-    // Ensure snake_case keys are present
-    booking_ref: b.booking_ref || b.bookingRef,
-    vehicle_id: b.vehicle_id !== undefined ? b.vehicle_id : b.vehicleId,
-    vehicle_name: b.vehicle_name || b.vehicleName,
-    vehicle_image: b.vehicle_image || b.vehicleImage,
-    total_amount: b.total_amount !== undefined ? b.total_amount : b.totalAmount,
-    pickup_date: b.pickup_date || b.pickupDate,
-    pickup_time: b.pickup_time || b.pickupTime,
-    return_date: b.return_date || b.returnDate,
-    return_time: b.return_time || b.returnTime,
-    customer_name: b.customer_name || b.customerName,
-    customer_phone: b.customer_phone || b.customerPhone,
-    customer_email: b.customer_email || b.customerEmail,
-    payment_status: b.payment_status || b.paymentStatus,
-    
-    // Ensure camelCase keys are also present
-    bookingRef: b.bookingRef || b.booking_ref,
-    vehicleId: b.vehicleId !== undefined ? b.vehicleId : b.vehicle_id,
-    vehicleName: b.vehicleName || b.vehicle_name,
-    vehicleImage: b.vehicleImage || b.vehicle_image,
-    totalAmount: b.totalAmount !== undefined ? b.totalAmount : b.total_amount,
-    pickupDate: b.pickupDate || b.pickup_date,
-    pickupTime: b.pickupTime || b.pickup_time,
-    returnDate: b.returnDate || b.return_date,
-    returnTime: b.returnTime || b.return_time,
-    customerName: b.customerName || b.customer_name,
-    customerPhone: b.customerPhone || b.customer_phone,
-    customerEmail: b.customerEmail || b.customer_email,
-    paymentStatus: b.paymentStatus || b.payment_status,
-  };
-}
-
 // Mock db object to match the old interface
 module.exports = {
   prepare: function(query) {
@@ -102,8 +65,7 @@ module.exports = {
         }
         if (query.includes('SELECT * FROM bookings')) {
           const bookings = getBookings();
-          const filtered = param ? bookings.filter(b => b.payment_status === param || b.paymentStatus === param) : bookings;
-          return filtered.map(normalizeBooking);
+          return param ? bookings.filter(b => b.payment_status === param) : bookings;
         }
         return [];
       },
@@ -114,50 +76,121 @@ module.exports = {
           return vehicles.find(v => v.id === param || v.id === parseInt(param));
         }
         const bookings = getBookings();
-        const booking = bookings.find(b => b.id === param || b.booking_ref === param || b.bookingRef === param);
-        return booking ? normalizeBooking(booking) : undefined;
+        return bookings.find(b => b.id === param || b.booking_ref === param);
       },
       run: function(...args) {
         if (query.includes('INSERT INTO vehicles')) {
           const vehicles = getVehicles();
-          const newVehicle = { id: vehicles.length + 1, ...args[0] };
+          const raw = typeof args[0] === 'object' ? args[0] : {};
+          const newVehicle = {
+            id: vehicles.length + 1,
+            name: args[0] || raw.name || 'Vehicle',
+            category: args[1] || raw.category || 'car',
+            image: args[2] || raw.image || '',
+            price_12hr: args[3] ?? raw.price_12hr ?? null,
+            price_24hr: args[4] ?? raw.price_24hr ?? 1500,
+            transmission: args[5] || raw.transmission || 'Manual',
+            fuel: args[6] || raw.fuel || 'Petrol',
+            location: args[7] || raw.location || 'Nayapalli (Main Office)',
+            seats: args[8] ?? raw.seats ?? 5,
+            available: 1
+          };
           vehicles.push(newVehicle);
           saveVehicles(vehicles);
           return { lastInsertRowid: newVehicle.id };
         }
         if (query.includes('INSERT INTO bookings')) {
           const bookings = getBookings();
-          const newBooking = normalizeBooking({ 
-            id: bookings.length + 1, 
-            payment_status: 'pending',
-            paymentStatus: 'pending',
-            booking_ref: args[0].bookingRef,
-            ...args[0] 
-          });
+          const raw = args[0] || {};
+          const bRef = raw.bookingRef || raw.booking_ref || ('TR-' + Date.now());
+          const vName = raw.vehicleName || raw.vehicle_name || 'Vehicle';
+          const vImg = raw.vehicleImage || raw.vehicle_image || '';
+          const amt = Number(raw.amount || 0);
+          const gstVal = Number(raw.gst || Math.round(amt * 0.18));
+          const totAmt = Number(raw.totalAmount || raw.total_amount || (amt + gstVal));
+          const cName = raw.customerName || raw.customer_name || 'Guest';
+          const cPhone = raw.customerPhone || raw.customer_phone || '';
+          const cEmail = raw.customerEmail || raw.customer_email || '';
+          const pDate = raw.pickupDate || raw.pickup_date || '';
+          const pTime = raw.pickupTime || raw.pickup_time || '';
+          const rDate = raw.returnDate || raw.return_date || '';
+          const rTime = raw.returnTime || raw.return_time || '';
+          const loc = raw.location || '';
+          const trans = raw.transmission || '';
+          const fuelVal = raw.fuel || 'Petrol';
+          const seatsVal = raw.seats || 5;
+
+          const newBooking = {
+            id: bookings.length + 1,
+            booking_ref: bRef,
+            bookingRef: bRef,
+            vehicle_id: raw.vehicleId || raw.vehicle_id || null,
+            vehicleId: raw.vehicleId || raw.vehicle_id || null,
+            vehicle_name: vName,
+            vehicleName: vName,
+            vehicle_image: vImg,
+            vehicleImage: vImg,
+            amount: amt,
+            gst: gstVal,
+            total_amount: totAmt,
+            totalAmount: totAmt,
+            transmission: trans,
+            fuel: fuelVal,
+            seats: seatsVal,
+            pickup_date: pDate,
+            pickupDate: pDate,
+            pickup_time: pTime,
+            pickupTime: pTime,
+            return_date: rDate,
+            returnDate: rDate,
+            return_time: rTime,
+            returnTime: rTime,
+            location: loc,
+            customer_name: cName,
+            customerName: cName,
+            customer_phone: cPhone,
+            customerPhone: cPhone,
+            customer_email: cEmail,
+            customerEmail: cEmail,
+            payment_status: raw.paymentStatus || raw.payment_status || 'pending',
+            created_at: new Date().toISOString()
+          };
           bookings.push(newBooking);
           saveBookings(bookings);
           return { lastInsertRowid: newBooking.id };
         }
         if (query.includes('UPDATE vehicles')) {
           const vehicles = getVehicles();
-          const idx = vehicles.findIndex(v => v.id === args[1]);
-          if (idx >= 0) vehicles[idx].available = args[0];
-          saveVehicles(vehicles);
+          const targetId = Number(args[1]);
+          const idx = vehicles.findIndex(v => Number(v.id) === targetId);
+          if (idx >= 0) {
+            vehicles[idx].available = Number(args[0]) ? 1 : 0;
+            saveVehicles(vehicles);
+          }
+          return { changes: 1 };
+        }
+        if (query.includes('DELETE FROM vehicles')) {
+          const vehicles = getVehicles();
+          const targetId = Number(args[0]);
+          const filtered = vehicles.filter(v => Number(v.id) !== targetId);
+          saveVehicles(filtered);
+          return { changes: 1 };
+        }
+        if (query.includes('DELETE FROM bookings')) {
+          const bookings = getBookings();
+          const ref = String(args[0]);
+          const filtered = bookings.filter(b => (b.booking_ref || b.bookingRef) !== ref);
+          saveBookings(filtered);
+          return { changes: 1 };
         }
         if (query.includes('UPDATE bookings')) {
           const bookings = getBookings();
-          const ref = args[args.length - 1];
-          const idx = bookings.findIndex(b => b.booking_ref === ref || b.bookingRef === ref);
+          const ref = String(args[args.length - 1]);
+          const idx = bookings.findIndex(b => (b.booking_ref || b.bookingRef) === ref);
           if (idx >= 0) {
             if (args.length === 5) {
-              if (args[0] !== null) {
-                bookings[idx].payment_id = args[0];
-                bookings[idx].paymentId = args[0];
-              }
-              if (args[1] !== null) {
-                bookings[idx].order_id = args[1];
-                bookings[idx].orderId = args[1];
-              }
+              if (args[0] !== null) bookings[idx].payment_id = args[0];
+              if (args[1] !== null) bookings[idx].order_id = args[1];
               if (args[2] !== null) bookings[idx].place = args[2];
               if (args[3] !== null) {
                 bookings[idx].payment_status = args[3];
@@ -167,12 +200,13 @@ module.exports = {
               bookings[idx].payment_status = args[0];
               bookings[idx].paymentStatus = args[0];
               bookings[idx].order_id = args[1];
-              bookings[idx].orderId = args[1];
+            } else if (args[0] && typeof args[0] === 'object') {
+              Object.assign(bookings[idx], args[0]);
             }
             bookings[idx].updated_at = new Date().toISOString();
-            bookings[idx] = normalizeBooking(bookings[idx]);
           }
           saveBookings(bookings);
+          return { changes: 1 };
         }
         return { changes: 1 };
       }
@@ -180,5 +214,3 @@ module.exports = {
   },
   exec: function() {}
 };
-
-

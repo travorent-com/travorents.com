@@ -3,745 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weekly Car Rentals in Bhubaneswar - TravoRents.com</title>
+<title>Weekly Car Rental Subscriptions – TravoRents.com</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root{--primary:#0C447C;--primary-mid:#185FA5;--primary-light:#378ADD;--accent:#EF9F27;--accent-dark:#BA7517;--dark:#1a1a2e;--darker:#0a0f1e;--light:#f8f9fa;--gray:#6c757d;--light-gray:#f1f3f5;--white:#fff;--shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 8px 40px rgba(0,0,0,0.18);--radius:12px;--transition:all 0.3s ease;}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Poppins',sans-serif;color:var(--dark);background:var(--white);overflow-x:hidden;}
-header{position:fixed;top:0;width:100%;z-index:1000;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);box-shadow:0 2px 20px rgba(0,0,0,0.08);}
-.header-top{background:var(--primary);color:white;text-align:right;padding:6px 40px;font-size:13px;}
-.header-top a{color:#fff;text-decoration:none;}
-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 40px;max-width:1300px;margin:0 auto;}
-.logo-wrap{display:flex;align-items:center;text-decoration:none;}
-.nav-links{display:flex;list-style:none;gap:6px;align-items:center;}
-.nav-links a{text-decoration:none;color:var(--dark);font-size:14px;font-weight:500;padding:8px 13px;border-radius:8px;transition:var(--transition);}
-.nav-links a:hover{color:var(--primary);background:rgba(12,68,124,0.07);}
-.nav-call{background:var(--primary)!important;color:white!important;border-radius:50px!important;padding:8px 20px!important;font-weight:600!important;}
-.hamburger{display:none;font-size:24px;cursor:pointer;color:var(--dark);padding:5px;}
-
-/* Dropdown */
-.nav-links li.dropdown{position:relative;}
-.nav-links .dropdown-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;}
-.nav-links .dropdown-menu{display:none;position:absolute;top:100%;left:0;min-width:200px;background:#ffffff;box-shadow:0 10px 30px rgba(0,0,0,0.15);border-radius:12px;padding:8px 0;list-style:none;z-index:1100;border:1px solid rgba(12,68,124,0.1);margin-top:4px;}
-.nav-links li.dropdown:hover .dropdown-menu{display:block;}
-.nav-links .dropdown-menu li{width:100%;margin:0;}
-.nav-links .dropdown-menu li a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--dark);font-size:13.5px;font-weight:500;border-radius:0;transition:all 0.2s ease;white-space:nowrap;}
-.nav-links .dropdown-menu li a:hover{background:rgba(12,68,124,0.08);color:var(--primary);padding-left:20px;}
-
-@media(max-width:768px){
-  nav{padding:14px 20px;position:relative;}
-  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);flex-direction:column;gap:10px;z-index:1100;border-bottom:3px solid var(--primary);}
-  .nav-links.open{display:flex!important;}
-  .hamburger{display:block;}
-  .nav-links li{width:100%;}
-  .nav-links li.dropdown{width:100%;}
-  .nav-links .dropdown-menu{position:static;box-shadow:none;border:none;padding:8px 0 8px 15px;width:100%;margin-top:5px;background:#f1f3f5;border-radius:8px;}
-  .nav-links li.dropdown.active .dropdown-menu{display:block!important;}
-  .header-top{display:none;}
-}
-
-section{padding:90px 0;padding-top:120px;}
-.container{max-width:1300px;margin:0 auto;padding:0 40px;}
-.section-header{text-align:center;margin-bottom:50px;}
-.section-label{display:inline-flex;align-items:center;gap:10px;color:var(--primary);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
-.section-label::before,.section-label::after{content:'';width:28px;height:2px;background:currentColor;flex-shrink:0;}
-.section-header h2{font-family:'Montserrat',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;color:var(--dark);}
-.section-header p{color:var(--gray);max-width:600px;margin:14px auto 0;font-size:15px;line-height:1.75;}
-.banner-badge{background:var(--accent);color:#3a1f00;display:inline-block;padding:6px 16px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:16px;}
-
-.vehicles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
-@media (max-width:1200px){.vehicles-grid{grid-template-columns:repeat(3,1fr);}}
-@media (max-width:900px){.vehicles-grid{grid-template-columns:repeat(2,1fr);}}
-@media (max-width:600px){.vehicles-grid{grid-template-columns:1fr;}}
-.vehicle-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);border:1px solid var(--light-gray);}
-.vehicle-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--primary-light);}
-.card-img{height:190px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;position:relative;}
-.card-badge{position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:50px;}
-.discount-tag{position:absolute;top:12px;left:12px;background:var(--accent);color:#3a1f00;font-size:11px;font-weight:800;padding:4px 10px;border-radius:50px;}
-.card-body{padding:20px;}
-.card-body h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:10px;}
-.card-specs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-.spec-tag{background:var(--light-gray);color:var(--gray);font-size:11px;font-weight:600;padding:4px 9px;border-radius:50px;display:inline-flex;align-items:center;gap:4px;}
-.card-price{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--light-gray);margin-bottom:12px;}
-.price-item .amount{font-size:20px;font-weight:800;color:var(--primary);}
-.price-item .duration{font-size:11px;color:var(--gray);font-weight:600;}
-.original-price{text-decoration:line-through;color:var(--gray);font-size:12px;margin-right:4px;}
-.book-btn{background:var(--primary);color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;}
-.book-btn:hover{background:var(--primary-mid);}
-
-footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:50px;margin-bottom:60px;}
-@media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:768px){.footer-grid{grid-template-columns:1fr;}}
-.float-call{position:fixed;bottom:30px;right:30px;z-index:999;background:var(--primary);color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 25px rgba(12,68,124,0.5);text-decoration:none;}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- ══════════════ HEADER ══════════════ -->
-<header>
+<header id="mainHeader">
   <div class="header-top">
-    <a href="tel:8455065107">+91 8455065107</a> &nbsp;|&nbsp;
+    <i class="fas fa-phone-alt"></i> Call Anytime:
+    <a href="tel:8455065107">+91 84550 65107</a> &nbsp;|&nbsp;
     <a href="mailto:travorents.com@gmail.com">travorents.com@gmail.com</a>
   </div>
   <nav>
     <a href="index.html" class="logo-wrap">
-      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height:55px;width:auto;">
+      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height:55px;width:auto;object-fit:contain;">
     </a>
-    <ul class="nav-links" id="navLinks">
+    <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" style="color:var(--primary); font-weight:700;">Monthly/Weekly <i class="fas fa-chevron-down" style="font-size:11px;"></i></a>
-        <ul class="dropdown-menu">
-          <li><a href="weekly-bikes.html"><i class="fas fa-motorcycle" style="color:var(--primary);"></i> Weekly Bikes</a></li>
-          <li><a href="weekly-cars.html"><i class="fas fa-car" style="color:var(--primary);"></i> Weekly Cars</a></li>
-          <li><a href="monthly-bikes.html"><i class="fas fa-motorcycle" style="color:var(--accent-dark);"></i> Monthly Bikes</a></li>
-          <li><a href="monthly-cars.html"><i class="fas fa-car" style="color:var(--accent-dark);"></i> Monthly Cars</a></li>
-        </ul>
-      </li>
+      <li><a href="cars.html">All Cars</a></li>
+      <li><a href="bikes.html">All Bikes</a></li>
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i> Call</a></li>
     </ul>
-    <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
   </nav>
 </header>
 
-<!-- ══════════════ WEEKLY CARS SECTION ══════════════ -->
-<section>
+<section class="vehicles-section" style="padding-top: 140px;">
   <div class="container">
     <div class="section-header">
-      <div class="banner-badge"><i class="fas fa-percent"></i> Save up to 35% on 7-Day Rentals</div>
-      <div class="section-label">Weekly Car Packages</div>
-      <h2>Self-Drive Weekly Car Rentals in Bhubaneswar</h2>
-      <p>Drive in comfort with our discounted 7-day car packages. Fully sanitized, well-maintained cars with 24/7 roadside assistance.</p>
+      <div class="section-label">Weekly Subscriptions</div>
+      <h2>Weekly Car Rentals (Save up to 35%)</h2>
+      <p>Enjoy flexible 7-day self-drive car rentals with zero maintenance liability and free servicing in Bhubaneswar.</p>
     </div>
 
     <div class="vehicles-grid">
-      <!-- Swift Dzire -->
       <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/maruti dizaer.jpeg" alt="Swift Dzire" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 20%</span>
-          <span class="card-badge">Manual</span>
-        </div>
+        <div class="card-img"><img src="images/maruti dizaer.jpeg" alt="Swift Dzire" style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Weekly Deal</span></div>
         <div class="card-body">
-          <h3>Swift Dzire New Model</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹11,200</span> <span class="amount">₹9,800</span></div>
-              <div class="duration">for 7 Days (₹1,400/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Swift Dzire New Model', 9800, 'Weekly Car (7 Days)', 'images/maruti dizaer.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹9,800</button>
+          <h3>Swift Dzire New Model (7 Days)</h3>
+          <div class="card-specs"><span class="spec-tag"><i class="fas fa-car"></i> Sedan</span><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span></div>
+          <button class="book-btn" onclick="subscribeWeekly('Swift Dzire New Model', 'images/maruti dizaer.jpeg', 8999, 'Manual', 'Petrol', 5)">Book 7 Days @ ₹8,999</button>
         </div>
       </div>
 
-      <!-- Maruti Alto -->
       <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/alto k10.jpeg" alt="Maruti Alto K10" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 25%</span>
-          <span class="card-badge">Manual</span>
-        </div>
+        <div class="card-img"><img src="images/baleno.jpeg" alt="Suzuki Baleno" style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Weekly Deal</span></div>
         <div class="card-body">
-          <h3>Maruti Alto K10</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹9,240</span> <span class="amount">₹7,700</span></div>
-              <div class="duration">for 7 Days (₹1,100/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Maruti Alto K10', 7700, 'Weekly Car (7 Days)', 'images/alto k10.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹7,700</button>
+          <h3>Suzuki Baleno (7 Days)</h3>
+          <div class="card-specs"><span class="spec-tag"><i class="fas fa-car"></i> Hatchback</span><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span></div>
+          <button class="book-btn" onclick="subscribeWeekly('Suzuki Baleno', 'images/baleno.jpeg', 9499, 'Manual', 'Petrol', 5)">Book 7 Days @ ₹9,499</button>
         </div>
       </div>
 
-      <!-- Suzuki Baleno -->
       <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/baleno.jpeg" alt="Suzuki Baleno" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 20%</span>
-          <span class="card-badge">Manual</span>
-        </div>
+        <div class="card-img"><img src="images/venue.jpeg" alt="Hyundai Venue" style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Weekly Deal</span></div>
         <div class="card-body">
-          <h3>Suzuki Baleno</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹11,900</span> <span class="amount">₹10,500</span></div>
-              <div class="duration">for 7 Days (₹1,500/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Suzuki Baleno', 10500, 'Weekly Car (7 Days)', 'images/baleno.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹10,500</button>
+          <h3>Hyundai Venue SX (7 Days)</h3>
+          <div class="card-specs"><span class="spec-tag"><i class="fas fa-car"></i> Compact SUV</span><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span></div>
+          <button class="book-btn" onclick="subscribeWeekly('Hyundai Venue SX', 'images/venue.jpeg', 12999, 'Manual', 'Petrol', 5)">Book 7 Days @ ₹12,999</button>
         </div>
       </div>
 
-      <!-- i20 Sunroof 2025 -->
       <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/hundyai.jpeg" alt="i20 Sunroof 2025" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 18%</span>
-          <span class="card-badge">Manual</span>
-        </div>
+        <div class="card-img"><img src="images/Kia Carens.jpeg" alt="Kia Carens" style="width:100%;height:100%;object-fit:cover;"><span class="card-badge">Weekly Deal</span></div>
         <div class="card-body">
-          <h3>i20 Sunroof 2025</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> Climate Control</span>
-            <span class="spec-tag"><i class="fas fa-sun"></i> Sunroof</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹14,000</span> <span class="amount">₹11,900</span></div>
-              <div class="duration">for 7 Days (₹1,700/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('i20 Sunroof 2025', 11900, 'Weekly Car (7 Days)', 'images/hundyai.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹11,900</button>
-        </div>
-      </div>
-
-      <!-- Hyundai Venue SX -->
-      <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/venue.jpeg" alt="Hyundai Venue SX" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 20%</span>
-          <span class="card-badge">Manual</span>
-        </div>
-        <div class="card-body">
-          <h3>Hyundai Venue SX</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-            <span class="spec-tag"><i class="fas fa-car-side"></i> SUV</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹16,100</span> <span class="amount">₹13,300</span></div>
-              <div class="duration">for 7 Days (₹1,900/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Hyundai Venue SX', 13300, 'Weekly Car (7 Days)', 'images/venue.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹13,300</button>
-        </div>
-      </div>
-
-      <!-- Kia Carens -->
-      <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/Kia Carens.jpeg" alt="Kia Carens" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 20%</span>
-          <span class="card-badge">Manual</span>
-        </div>
-        <div class="card-body">
-          <h3>Kia Carens (7 Seater)</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> Rear AC Vent</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 7 Seats</span>
-            <span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹21,000</span> <span class="amount">₹16,800</span></div>
-              <div class="duration">for 7 Days (₹2,400/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Kia Carens (7 Seater)', 16800, 'Weekly Car (7 Days)', 'images/Kia Carens.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹16,800</button>
-        </div>
-      </div>
-
-      <!-- Mahindra Thar ROX -->
-      <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/thar.jpeg" alt="Mahindra Thar ROX 2025" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 18%</span>
-          <span class="card-badge">Manual</span>
-        </div>
-        <div class="card-body">
-          <h3>Mahindra Thar ROX 2025</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-mountain"></i> 4x4 Offroad</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹28,000</span> <span class="amount">₹23,100</span></div>
-              <div class="duration">for 7 Days (₹3,300/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Mahindra Thar ROX 2025', 23100, 'Weekly Car (7 Days)', 'images/thar.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹23,100</button>
-        </div>
-      </div>
-
-      <!-- Baleno Automatic -->
-      <div class="vehicle-card">
-        <div class="card-img">
-          <img src="images/baleno automatic.jpeg" alt="Baleno Automatic" style="width:100%;height:100%;object-fit:cover;">
-          <span class="discount-tag">Save 20%</span>
-          <span class="card-badge">Automatic</span>
-        </div>
-        <div class="card-body">
-          <h3>Baleno Automatic</h3>
-          <div class="card-specs">
-            <span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span>
-            <span class="spec-tag"><i class="fas fa-cog"></i> Automatic</span>
-            <span class="spec-tag"><i class="fas fa-users"></i> 5 Seats</span>
-          </div>
-          <div class="card-price">
-            <div class="price-item">
-              <div><span class="original-price">₹14,000</span> <span class="amount">₹11,200</span></div>
-              <div class="duration">for 7 Days (₹1,600/day)</div>
-            </div>
-          </div>
-          <button class="book-btn" onclick="bookPackage('Baleno Automatic', 11200, 'Weekly Car (7 Days)', 'images/baleno automatic.jpeg')"><i class="fas fa-calendar-check"></i> Book Weekly ₹11,200</button>
+          <h3>Kia Carens 7 Seater (7 Days)</h3>
+          <div class="card-specs"><span class="spec-tag"><i class="fas fa-users"></i> 7 Seater</span><span class="spec-tag"><i class="fas fa-snowflake"></i> A/C</span><span class="spec-tag"><i class="fas fa-gas-pump"></i> Petrol</span></div>
+          <button class="book-btn" onclick="subscribeWeekly('Kia Carens (7 Seater)', 'images/Kia Carens.jpeg', 16999, 'Manual', 'Petrol', 7)">Book 7 Days @ ₹16,999</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ FOOTER ══════════════ -->
-<footer id="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <span class="footer-logo-name" style="font-family:'Montserrat',sans-serif;font-size:24px;font-weight:900;color:#fff;margin-bottom:16px;display:block;">Travo<span style="color:var(--primary-light,#378ADD);">Rents</span>.com</span>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);">Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);"><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);"><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+918455065107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 84550 65107</a></p>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);"><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:travorents.com@gmail.com" style="color:rgba(255,255,255,0.6);text-decoration:none">travorents.com@gmail.com</a></p>
-        <div class="social-links" style="display:flex;gap:12px;margin-top:20px;">
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-instagram"></i></a>
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-twitter"></i></a>
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-whatsapp"></i></a>
-        </div>
-      </div>
-      <div>
-        <h4 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;">Quick Links</h4>
-        <ul style="list-style:none;">
-          <li style="margin-bottom:10px;"><a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Home</a></li>
-          <li style="margin-bottom:10px;"><a href="about.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> About Us</a></li>
-          <li style="margin-bottom:10px;"><a href="privacy-policy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Privacy Policy</a></li>
-          <li style="margin-bottom:10px;"><a href="terms-and-conditions.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Terms & Conditions</a></li>
-          <li style="margin-bottom:10px;"><a href="refund-policy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Refund Policy</a></li>
-          <li style="margin-bottom:10px;"><a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Contact Us</a></li>
-          <li style="margin-bottom:10px;"><a href="admin.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Admin</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;">Weekly & Monthly</h4>
-        <ul style="list-style:none;">
-          <li style="margin-bottom:10px;"><a href="weekly-bikes.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Weekly Bikes</a></li>
-          <li style="margin-bottom:10px;"><a href="weekly-cars.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Weekly Cars</a></li>
-          <li style="margin-bottom:10px;"><a href="monthly-bikes.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Monthly Bikes</a></li>
-          <li style="margin-bottom:10px;"><a href="monthly-cars.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Monthly Cars</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;">Newsletter</h4>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);">Subscribe for latest offers and updates.</p>
-        <div class="newsletter-form" style="display:flex;gap:10px;margin-top:16px;">
-          <input type="email" id="nlEmail" placeholder="Your email address" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.07);color:#fff;font-size:13px;font-family:'Poppins',sans-serif;">
-          <button onclick="alert('Thank you for subscribing!')" style="background:var(--primary,#0C447C);color:#fff;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom" style="border-top:1px solid rgba(255,255,255,0.08);padding:24px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
-      <p style="font-size:13px;color:rgba(255,255,255,0.6);">© 2026 <a href="index.html" style="color:var(--primary-light,#378ADD);text-decoration:none;">TravoRents.com</a> | All Rights Reserved.</p>
-      <p style="font-size:13px;color:rgba(255,255,255,0.6);">Made by <a href="https://www.aapnawebsite.com" target="_blank" style="color:var(--primary-light,#378ADD);text-decoration:none;">❤️AapnaWebsite.com</a></p>
-    </div>
-  </div>
-</footer>
-
-<a href="tel:+918455065107" class="float-call"><i class="fas fa-phone-alt"></i></a>
-
-<!-- ══════════════ DATE, TIME & LOCATION POPUP MODAL ══════════════ -->
-<style>
-.booking-modal-overlay {
-  display: none;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: rgba(10, 15, 30, 0.82) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  z-index: 999999 !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 15px !important;
-  box-sizing: border-box !important;
-}
-.booking-modal-overlay.active {
-  display: flex !important;
-}
-.booking-modal-card {
-  background: #ffffff !important;
-  border-radius: 16px !important;
-  max-width: 520px !important;
-  width: 100% !important;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.45) !important;
-  overflow: hidden !important;
-  border: 1px solid rgba(12,68,124,0.2) !important;
-  margin: auto !important;
-  font-family: 'Poppins', sans-serif !important;
-  color: #1a1a2e !important;
-  animation: modalPopIn 0.3s ease-out !important;
-}
-@keyframes modalPopIn {
-  from { opacity: 0; transform: scale(0.92) translateY(15px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-.booking-modal-header {
-  padding: 18px 24px !important;
-  background: #0C447C !important;
-  color: #ffffff !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-.modal-close-btn {
-  background: rgba(255,255,255,0.15) !important;
-  border: none !important;
-  font-size: 18px !important;
-  color: #ffffff !important;
-  cursor: pointer !important;
-  width: 32px !important;
-  height: 32px !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: background 0.2s !important;
-}
-.modal-close-btn:hover {
-  background: rgba(255,255,255,0.3) !important;
-}
-.booking-modal-body {
-  padding: 22px 24px !important;
-}
-.modal-form-group {
-  margin-bottom: 16px !important;
-}
-.modal-form-group label {
-  display: block !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: #1a1a2e !important;
-  margin-bottom: 6px !important;
-}
-.modal-form-group input, .modal-form-group select {
-  width: 100% !important;
-  padding: 11px 14px !important;
-  border-radius: 10px !important;
-  border: 1.5px solid #d0d7de !important;
-  font-size: 14px !important;
-  font-family: 'Poppins', sans-serif !important;
-  background: #ffffff !important;
-  color: #1a1a2e !important;
-  box-sizing: border-box !important;
-}
-.modal-form-group input:focus, .modal-form-group select:focus {
-  border-color: #0C447C !important;
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(12,68,124,0.12) !important;
-}
-.modal-form-grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 14px !important;
-}
-@media(max-width:480px){
-  .modal-form-grid { grid-template-columns: 1fr !important; }
-}
-.modal-info-box {
-  background: rgba(12,68,124,0.06) !important;
-  border-left: 4px solid #0C447C !important;
-  padding: 12px 16px !important;
-  border-radius: 8px !important;
-  margin-top: 10px !important;
-  font-size: 13px !important;
-  color: #1a1a2e !important;
-}
-.booking-modal-footer {
-  padding: 16px 24px !important;
-  background: #f8f9fa !important;
-  border-top: 1px solid #e1e8ed !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  gap: 12px !important;
-}
-.btn-cancel {
-  background: #e1e8ed !important;
-  color: #1a1a2e !important;
-  border: none !important;
-  padding: 11px 20px !important;
-  border-radius: 10px !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-}
-.btn-cancel:hover {
-  background: #d0d7de !important;
-}
-.btn-confirm {
-  background: #0C447C !important;
-  color: #ffffff !important;
-  border: none !important;
-  padding: 11px 24px !important;
-  border-radius: 10px !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-.btn-confirm:hover {
-  background: #185FA5 !important;
-}
-</style>
-
-<div id="bookingModal" class="booking-modal-overlay">
-  <div class="booking-modal-card">
-    <div class="booking-modal-header">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <img id="modalVehicleImage" src="" alt="Vehicle" style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:2px solid #ffffff;">
-        <div>
-          <h3 id="modalVehicleTitle" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:800;color:#ffffff;margin:0;">Select Booking Details</h3>
-          <span id="modalPackageBadge" style="background:#EF9F27;color:#3a1f00;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:50px;display:inline-block;margin-top:4px;">Weekly / Monthly Package</span>
-        </div>
-      </div>
-      <button type="button" class="modal-close-btn" onclick="closeBookingModal()"><i class="fas fa-times"></i></button>
-    </div>
-    
-    <form id="modalBookingForm" onsubmit="confirmModalBooking(event)">
-      <div class="booking-modal-body">
-        
-        <!-- Pick-up Location -->
-        <div class="modal-form-group">
-          <label><i class="fas fa-map-marker-alt" style="color:#0C447C;"></i> Pick-Up Location *</label>
-          <select id="modalLocation" required>
-            <option value="">-- Choose Pick-Up Location --</option>
-            <option value="Nayapalli (Main Office)">Nayapalli (Main Office)</option>
-            <option value="Railway Station, Bhubaneswar">Railway Station, Bhubaneswar</option>
-            <option value="Airport (Biju Patnaik International)">Airport (Biju Patnaik International)</option>
-            <option value="Patia (KIIT Square)">Patia (KIIT Square)</option>
-            <option value="Jaydev Vihar Square">Jaydev Vihar Square</option>
-            <option value="Master Canteen Square">Master Canteen Square</option>
-            <option value="Doorstep Delivery (Bhubaneswar)">Doorstep Delivery (Bhubaneswar)</option>
-          </select>
-        </div>
-
-        <!-- Dates & Times Grid -->
-        <div class="modal-form-grid">
-          <div class="modal-form-group">
-            <label><i class="fas fa-calendar-alt" style="color:#0C447C;"></i> Pick-Up Date *</label>
-            <input type="date" id="modalPickupDate" required onchange="autoUpdateReturnDate()">
-          </div>
-
-          <div class="modal-form-group">
-            <label><i class="fas fa-clock" style="color:#0C447C;"></i> Pick-Up Time *</label>
-            <input type="time" id="modalPickupTime" value="09:30" required>
-          </div>
-
-          <div class="modal-form-group">
-            <label><i class="fas fa-calendar-check" style="color:#BA7517;"></i> Return Date *</label>
-            <input type="date" id="modalReturnDate" required>
-          </div>
-
-          <div class="modal-form-group">
-            <label><i class="fas fa-clock" style="color:#BA7517;"></i> Return Time *</label>
-            <input type="time" id="modalReturnTime" value="09:30" required>
-          </div>
-        </div>
-
-        <!-- Duration info -->
-        <div class="modal-info-box">
-          <p style="margin:0;"><i class="fas fa-info-circle" style="color:#0C447C;"></i> Duration: <strong id="modalDurationLabel">7 Days</strong> &nbsp;|&nbsp; Payable Amount: <strong id="modalPriceLabel" style="color:#0C447C;">₹0</strong></p>
-        </div>
-      </div>
-
-      <div class="booking-modal-footer">
-        <button type="button" class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
-        <button type="submit" class="btn-confirm"><i class="fas fa-arrow-right"></i> Proceed to Checkout</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <script>
-function toggleMenu() {
-  const navLinks = document.getElementById('navLinks') || document.querySelector('.nav-links');
-  const hamburger = document.querySelector('.hamburger');
-  if (navLinks) {
-    navLinks.classList.toggle('open');
-    if (hamburger) {
-      const icon = hamburger.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-      }
-    }
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-  dropdownToggles.forEach(function(toggle) {
-    toggle.addEventListener('click', function(e) {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        const parentLi = this.closest('.dropdown');
-        if (parentLi) {
-          parentLi.classList.toggle('active');
-        }
-      }
-    });
-  });
-});
-
-let currentPackageData = null;
-
-function bookPackage(vehicleName, amount, packageType, imagePath) {
-  openDateLocationModal(vehicleName, amount, packageType, imagePath, "Manual", "Petrol", "5");
-}
-
-function payNow(amount, vehicleName, imagePath) {
-  openDateLocationModal(vehicleName || "Vehicle", amount, "Daily Rental", imagePath || "images/main logo.png", "Manual", "Petrol", "5");
-}
-
-function openDateLocationModal(vehicleName, amount, packageType, imagePath, transmission, fuel, seats) {
-  try {
-    const pkgLower = (packageType || '').toLowerCase();
-    const isMonthly = pkgLower.includes('monthly');
-    const isWeekly = pkgLower.includes('weekly');
-    const durationDays = isMonthly ? 30 : (isWeekly ? 7 : 1);
-    
-    currentPackageData = {
-      vehicleName: vehicleName || "Selected Vehicle",
-      packageType: packageType || "Rental Package",
-      amount: amount || 0,
-      imagePath: imagePath || "images/main logo.png",
-      durationDays: durationDays,
-      seats: seats || (vehicleName && vehicleName.toLowerCase().includes('car') ? "5" : "2"),
-      transmission: transmission || (vehicleName && vehicleName.toLowerCase().includes('automatic') ? "Automatic" : "Manual"),
-      fuel: fuel || "Petrol"
-    };
-
-    const titleEl = document.getElementById('modalVehicleTitle');
-    const imgEl = document.getElementById('modalVehicleImage');
-    const badgeEl = document.getElementById('modalPackageBadge');
-    const durEl = document.getElementById('modalDurationLabel');
-    const priceEl = document.getElementById('modalPriceLabel');
-
-    if (titleEl) titleEl.textContent = currentPackageData.vehicleName;
-    if (imgEl) imgEl.src = currentPackageData.imagePath;
-    if (badgeEl) badgeEl.textContent = currentPackageData.packageType + " (₹" + Number(currentPackageData.amount).toLocaleString() + ")";
-    if (durEl) durEl.textContent = currentPackageData.durationDays + (currentPackageData.durationDays > 1 ? " Days" : " Day");
-    if (priceEl) priceEl.textContent = "₹" + Number(currentPackageData.amount).toLocaleString();
-
-    // Default dates
-    const today = new Date();
-    const pickupStr = today.toISOString().split('T')[0];
-    const returnDateObj = new Date(today.getTime() + currentPackageData.durationDays * 24 * 60 * 60 * 1000);
-    const returnStr = returnDateObj.toISOString().split('T')[0];
-
-    const pDateInput = document.getElementById('modalPickupDate');
-    const rDateInput = document.getElementById('modalReturnDate');
-    
-    if (pDateInput) {
-      pDateInput.min = pickupStr;
-      pDateInput.value = pickupStr;
-    }
-    if (rDateInput) {
-      rDateInput.value = returnStr;
-    }
-
-    const modal = document.getElementById('bookingModal');
-    if (modal) {
-      modal.style.display = 'flex';
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-  } catch (err) {
-    console.error("Error opening booking modal:", err);
-  }
-}
-
-function autoUpdateReturnDate() {
-  if (!currentPackageData) return;
-  const pDateInput = document.getElementById('modalPickupDate');
-  const rDateInput = document.getElementById('modalReturnDate');
-  if (pDateInput && pDateInput.value && rDateInput) {
-    const pickupObj = new Date(pDateInput.value);
-    const returnObj = new Date(pickupObj.getTime() + currentPackageData.durationDays * 24 * 60 * 60 * 1000);
-    rDateInput.value = returnObj.toISOString().split('T')[0];
-  }
-}
-
-function closeBookingModal() {
-  const modal = document.getElementById('bookingModal');
-  if (modal) {
-    modal.style.display = 'none';
-    modal.classList.remove('active');
-  }
-  document.body.style.overflow = '';
-}
-
-function confirmModalBooking(e) {
-  if (e) e.preventDefault();
-  if (!currentPackageData) return;
-
-  const loc = document.getElementById('modalLocation')?.value;
-  const pickupDate = document.getElementById('modalPickupDate')?.value;
-  const pickupTime = document.getElementById('modalPickupTime')?.value;
-  const returnDate = document.getElementById('modalReturnDate')?.value;
-  const returnTime = document.getElementById('modalReturnTime')?.value;
-
-  if (!loc || !pickupDate || !pickupTime || !returnDate || !returnTime) {
-    alert('Please select location, pickup date & time, and return date & time.');
-    return;
-  }
-
-  const bookingObj = {
-    vehicleName: currentPackageData.vehicleName + (currentPackageData.packageType ? " (" + currentPackageData.packageType + ")" : ""),
-    vehicleImage: currentPackageData.imagePath,
-    amount: currentPackageData.amount,
-    location: loc,
-    pickupDate: pickupDate,
-    pickupTime: pickupTime,
-    returnDate: returnDate,
-    returnTime: returnTime,
-    transmission: currentPackageData.transmission,
-    fuel: currentPackageData.fuel,
-    seats: currentPackageData.seats
+function subscribeWeekly(name, image, price, transmission, fuel, seats) {
+  const today = new Date();
+  const nextWeek = new Date(today.getTime() + 7 * 86400000);
+  const booking = {
+    vehicleName: name + ' (Weekly)',
+    vehicleImage: image,
+    amount: price,
+    transmission: transmission,
+    fuel: fuel,
+    seats: seats,
+    pickupDate: today.toISOString().split('T')[0],
+    returnDate: nextWeek.toISOString().split('T')[0],
+    pickupTime: '09:30',
+    returnTime: '09:30',
+    location: 'Nayapalli (Main Office)'
   };
-
-  localStorage.setItem("booking", JSON.stringify(bookingObj));
-  window.location.href = "booking-summary.html";
+  localStorage.setItem('booking', JSON.stringify(booking));
+  window.location.href = 'booking-summary.html';
 }
 </script>
+
 </body>
 </html>
