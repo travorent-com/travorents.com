@@ -324,6 +324,75 @@ footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
 
 <a href="tel:+918455065107" class="float-call"><i class="fas fa-phone-alt"></i></a>
 
+<!-- ══════════════ DATE, TIME & LOCATION POPUP MODAL ══════════════ -->
+<div id="bookingModal" class="booking-modal-overlay">
+  <div class="booking-modal-card">
+    <div class="booking-modal-header">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img id="modalVehicleImage" src="" alt="Vehicle" style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #e1e8ed;">
+        <div>
+          <h3 id="modalVehicleTitle" style="font-family:'Montserrat',sans-serif;font-size:17px;font-weight:800;color:var(--dark);margin:0;">Select Booking Details</h3>
+          <span id="modalPackageBadge" style="background:var(--accent);color:#3a1f00;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:50px;display:inline-block;margin-top:4px;">Weekly / Monthly Package</span>
+        </div>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeBookingModal()"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <form id="modalBookingForm" onsubmit="confirmModalBooking(event)">
+      <div class="booking-modal-body">
+        
+        <!-- Pick-up Location -->
+        <div class="modal-form-group">
+          <label><i class="fas fa-map-marker-alt" style="color:var(--primary);"></i> Pick-Up Location *</label>
+          <select id="modalLocation" required>
+            <option value="">-- Choose Pick-Up Location --</option>
+            <option value="Nayapalli (Main Office)">Nayapalli (Main Office)</option>
+            <option value="Railway Station, Bhubaneswar">Railway Station, Bhubaneswar</option>
+            <option value="Airport (Biju Patnaik International)">Airport (Biju Patnaik International)</option>
+            <option value="Patia (KIIT Square)">Patia (KIIT Square)</option>
+            <option value="Jaydev Vihar Square">Jaydev Vihar Square</option>
+            <option value="Master Canteen Square">Master Canteen Square</option>
+            <option value="Doorstep Delivery (Bhubaneswar)">Doorstep Delivery (Bhubaneswar)</option>
+          </select>
+        </div>
+
+        <!-- Dates & Times Grid -->
+        <div class="modal-form-grid">
+          <div class="modal-form-group">
+            <label><i class="fas fa-calendar-alt" style="color:var(--primary);"></i> Pick-Up Date *</label>
+            <input type="date" id="modalPickupDate" required onchange="autoUpdateReturnDate()">
+          </div>
+
+          <div class="modal-form-group">
+            <label><i class="fas fa-clock" style="color:var(--primary);"></i> Pick-Up Time *</label>
+            <input type="time" id="modalPickupTime" value="09:30" required>
+          </div>
+
+          <div class="modal-form-group">
+            <label><i class="fas fa-calendar-check" style="color:var(--accent-dark);"></i> Return Date *</label>
+            <input type="date" id="modalReturnDate" required>
+          </div>
+
+          <div class="modal-form-group">
+            <label><i class="fas fa-clock" style="color:var(--accent-dark);"></i> Return Time *</label>
+            <input type="time" id="modalReturnTime" value="09:30" required>
+          </div>
+        </div>
+
+        <!-- Duration info -->
+        <div class="modal-info-box">
+          <p><i class="fas fa-info-circle" style="color:var(--primary);"></i> Duration: <strong id="modalDurationLabel">30 Days</strong> &nbsp;|&nbsp; Payable Amount: <strong id="modalPriceLabel" style="color:var(--primary);">₹0</strong></p>
+        </div>
+      </div>
+
+      <div class="booking-modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeBookingModal()">Cancel</button>
+        <button type="submit" class="btn-confirm"><i class="fas fa-arrow-right"></i> Proceed to Checkout</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
 function toggleMenu() {
   const navLinks = document.getElementById('navLinks') || document.querySelector('.nav-links');
@@ -355,20 +424,95 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+let currentPackageData = null;
+
 function bookPackage(vehicleName, amount, packageType, imagePath) {
-  const bookingObj = {
-    vehicleName: vehicleName + " (" + packageType + ")",
-    vehicleImage: imagePath || "images/main logo.png",
+  const isMonthly = packageType.toLowerCase().includes('monthly');
+  const durationDays = isMonthly ? 30 : 7;
+  
+  currentPackageData = {
+    vehicleName: vehicleName,
+    packageType: packageType,
     amount: amount,
-    location: "Bhubaneswar, Odisha",
-    pickupDate: new Date().toISOString().split('T')[0],
-    pickupTime: "09:30",
-    returnDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
-    returnTime: "09:30",
-    transmission: "Standard",
-    fuel: "Petrol",
-    seats: "2"
+    imagePath: imagePath || "images/main logo.png",
+    durationDays: durationDays,
+    seats: vehicleName.toLowerCase().includes('car') || packageType.toLowerCase().includes('car') ? "5" : "2",
+    transmission: vehicleName.toLowerCase().includes('automatic') ? "Automatic" : "Manual",
+    fuel: "Petrol"
   };
+
+  document.getElementById('modalVehicleTitle').textContent = vehicleName;
+  document.getElementById('modalVehicleImage').src = currentPackageData.imagePath;
+  document.getElementById('modalPackageBadge').textContent = packageType + " (₹" + Number(amount).toLocaleString() + ")";
+  document.getElementById('modalDurationLabel').textContent = durationDays + " Days";
+  document.getElementById('modalPriceLabel').textContent = "₹" + Number(amount).toLocaleString();
+
+  // Set default dates
+  const today = new Date();
+  const pickupStr = today.toISOString().split('T')[0];
+  
+  const returnDateObj = new Date(today.getTime() + durationDays * 24 * 60 * 60 * 1000);
+  const returnStr = returnDateObj.toISOString().split('T')[0];
+
+  const pDateInput = document.getElementById('modalPickupDate');
+  const rDateInput = document.getElementById('modalReturnDate');
+  
+  if (pDateInput) {
+    pDateInput.min = pickupStr;
+    pDateInput.value = pickupStr;
+  }
+  if (rDateInput) {
+    rDateInput.value = returnStr;
+  }
+
+  document.getElementById('bookingModal').classList.add('active');
+}
+
+function autoUpdateReturnDate() {
+  if (!currentPackageData) return;
+  const pDateInput = document.getElementById('modalPickupDate');
+  const rDateInput = document.getElementById('modalReturnDate');
+  if (pDateInput && pDateInput.value && rDateInput) {
+    const pickupObj = new Date(pDateInput.value);
+    const returnObj = new Date(pickupObj.getTime() + currentPackageData.durationDays * 24 * 60 * 60 * 1000);
+    rDateInput.value = returnObj.toISOString().split('T')[0];
+  }
+}
+
+function closeBookingModal() {
+  const modal = document.getElementById('bookingModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function confirmModalBooking(e) {
+  e.preventDefault();
+  if (!currentPackageData) return;
+
+  const loc = document.getElementById('modalLocation').value;
+  const pickupDate = document.getElementById('modalPickupDate').value;
+  const pickupTime = document.getElementById('modalPickupTime').value;
+  const returnDate = document.getElementById('modalReturnDate').value;
+  const returnTime = document.getElementById('modalReturnTime').value;
+
+  if (!loc || !pickupDate || !pickupTime || !returnDate || !returnTime) {
+    alert('Please select location, pickup date & time, and return date & time.');
+    return;
+  }
+
+  const bookingObj = {
+    vehicleName: currentPackageData.vehicleName + " (" + currentPackageData.packageType + ")",
+    vehicleImage: currentPackageData.imagePath,
+    amount: currentPackageData.amount,
+    location: loc,
+    pickupDate: pickupDate,
+    pickupTime: pickupTime,
+    returnDate: returnDate,
+    returnTime: returnTime,
+    transmission: currentPackageData.transmission,
+    fuel: currentPackageData.fuel,
+    seats: currentPackageData.seats
+  };
+
   localStorage.setItem("booking", JSON.stringify(bookingObj));
   window.location.href = "booking-summary.html";
 }
