@@ -272,10 +272,59 @@
       background: white; border-radius: 12px;
       padding: 1rem; display: inline-block;
       box-shadow: var(--shadow); border: 1px solid var(--border);
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
     .qr-image-wrapper img {
       width: 180px; height: 180px; display: block;
+    }
+    .upi-direct-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      max-width: 320px;
+      margin: 0.8rem auto;
+      padding: 0.85rem 1.2rem;
+      background: #5F259F;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(95, 37, 159, 0.3);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .upi-direct-btn:hover {
+      background: #4A1C7F;
+      transform: translateY(-2px);
+      color: #FFFFFF;
+    }
+    .upi-apps-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .upi-app-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .upi-app-chip:hover {
+      border-color: var(--primary-hover);
+      background: rgba(250, 191, 44, 0.08);
+      color: var(--text);
     }
 
     /* ─── Sidebar ─── */
@@ -546,13 +595,29 @@
           
           <!-- Option B Box -->
           <div id="qrPaymentArea" class="qr-payment-box">
-            <p style="font-size: 0.95rem; margin-bottom: 1rem; color: var(--text-muted);">
-              Scan this QR using **GPay, PhonePe, Paytm, or BHIM** to pay.
+            <p style="font-size: 0.95rem; margin-bottom: 0.8rem; color: var(--text-muted);">
+              Scan QR code on Desktop <strong>OR</strong> tap below on Mobile to open your UPI app:
             </p>
             <div class="qr-image-wrapper">
-              <img id="qrCodeImage" src="phonepe-qr.png" alt="PhonePe Merchant QR">
+              <a id="qrLink" href="#" title="Click to open UPI App directly">
+                <img id="qrCodeImage" src="phonepe-qr.png" alt="PhonePe Merchant QR">
+              </a>
             </div>
-            <p style="font-size: 0.85rem; color: var(--primary-hover); font-weight: 600; margin-top: 0.5rem;">
+            
+            <div style="margin: 0.5rem 0;">
+              <a id="openUpiAppBtn" href="#" class="upi-direct-btn">
+                <i class="fa-solid fa-mobile-screen-button"></i> 📲 Open UPI App & Pay Now
+              </a>
+            </div>
+
+            <div class="upi-apps-row">
+              <a id="gpayBtn" href="#" class="upi-app-chip">📱 Google Pay</a>
+              <a id="phonepeBtn" href="#" class="upi-app-chip">💜 PhonePe</a>
+              <a id="paytmBtn" href="#" class="upi-app-chip">💙 Paytm</a>
+              <a id="bhimBtn" href="#" class="upi-app-chip">🇮🇳 BHIM</a>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--primary-hover); font-weight: 600; margin-top: 1rem;">
               ⚠️ Pay exactly <strong style="color: var(--text);">₹<span id="qrTotalAmount">0</span></strong> before completing the booking!
             </p>
           </div>

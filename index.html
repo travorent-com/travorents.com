@@ -920,9 +920,20 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="app.js"></script>
 <script>
-function payNow(amount){ window.pendingAmount=amount; document.getElementById('bookingId').innerText='TRV'+Date.now(); document.getElementById('reviewAmount').innerText=amount; document.getElementById('reviewVehicle').innerText=(window.currentVehicle&&currentVehicle.name)?currentVehicle.name:document.querySelector('h3')?.innerText||'Vehicle'; document.getElementById('bookingReviewModal').style.display='flex'; return; }
-function startPayment(){ payNowOriginal(window.pendingAmount);} 
-function closeReviewModal(){document.getElementById('bookingReviewModal').style.display='none';}
+function payNow(amount, vehicleName, imagePath){
+  if (vehicleName || imagePath) {
+    openDateLocationModal(vehicleName || "Vehicle", amount, "Daily Rental", imagePath || "images/main logo.png", "Manual", "Petrol", "2");
+  } else {
+    window.pendingAmount = amount;
+    if(document.getElementById('bookingId')) document.getElementById('bookingId').innerText = 'TRV' + Date.now();
+    if(document.getElementById('reviewAmount')) document.getElementById('reviewAmount').innerText = amount;
+    if(document.getElementById('reviewVehicle')) document.getElementById('reviewVehicle').innerText = (window.currentVehicle && currentVehicle.name) ? currentVehicle.name : 'Vehicle';
+    if(document.getElementById('bookingReviewModal')) document.getElementById('bookingReviewModal').style.display = 'flex';
+  }
+}
+function startPayment(){ if (typeof payNowOriginal === 'function') payNowOriginal(window.pendingAmount || 0); else window.location.href = 'booking-summary.html'; } 
+function closeReviewModal(){ if(document.getElementById('bookingReviewModal')) document.getElementById('bookingReviewModal').style.display = 'none';}
+function makePayment(){ if (typeof confirmModalBooking === 'function') confirmModalBooking(); else window.location.href = 'booking-summary.html'; }
 function payNowOriginal(amount){
 
 var options = {
@@ -1869,34 +1880,47 @@ function closeBookingModal() {
 
 function confirmModalBooking(e) {
   if (e) e.preventDefault();
-  if (!currentPackageData) return;
 
-  const loc = document.getElementById('modalLocation')?.value;
-  const pickupDate = document.getElementById('modalPickupDate')?.value;
-  const pickupTime = document.getElementById('modalPickupTime')?.value;
-  const returnDate = document.getElementById('modalReturnDate')?.value;
-  const returnTime = document.getElementById('modalReturnTime')?.value;
-
-  if (!loc || !pickupDate || !pickupTime || !returnDate || !returnTime) {
-    alert('Please select location, pickup date & time, and return date & time.');
-    return;
+  const submitBtn = document.querySelector('.booking-modal-footer .btn-confirm');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Proceeding...';
   }
 
+  const pkg = currentPackageData || {
+    vehicleName: "Self Drive Vehicle",
+    imagePath: "images/main logo.png",
+    amount: 500,
+    transmission: "Manual",
+    fuel: "Petrol",
+    seats: "2"
+  };
+
+  const loc = document.getElementById('modalLocation')?.value || "Nayapalli";
+  const pickupDate = document.getElementById('modalPickupDate')?.value || new Date().toISOString().split('T')[0];
+  const pickupTime = document.getElementById('modalPickupTime')?.value || "09:30";
+  const returnDate = document.getElementById('modalReturnDate')?.value || new Date().toISOString().split('T')[0];
+  const returnTime = document.getElementById('modalReturnTime')?.value || "09:30";
+
   const bookingObj = {
-    vehicleName: currentPackageData.vehicleName + (currentPackageData.packageType ? " (" + currentPackageData.packageType + ")" : ""),
-    vehicleImage: currentPackageData.imagePath,
-    amount: currentPackageData.amount,
+    vehicleName: pkg.vehicleName + (pkg.packageType ? " (" + pkg.packageType + ")" : ""),
+    vehicleImage: pkg.imagePath,
+    amount: pkg.amount,
     location: loc,
     pickupDate: pickupDate,
     pickupTime: pickupTime,
     returnDate: returnDate,
     returnTime: returnTime,
-    transmission: currentPackageData.transmission,
-    fuel: currentPackageData.fuel,
-    seats: currentPackageData.seats
+    transmission: pkg.transmission,
+    fuel: pkg.fuel,
+    seats: pkg.seats
   };
 
-  localStorage.setItem("booking", JSON.stringify(bookingObj));
+  try {
+    localStorage.setItem("booking", JSON.stringify(bookingObj));
+  } catch(err) {
+    console.error("Storage error:", err);
+  }
   window.location.href = "booking-summary.html";
 }
 </script>
