@@ -3,77 +3,294 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery & Blog - TravoRents.com</title>
+<title>Gallery & Travel Stories - TravoRents.com</title>
+<link rel="icon" type="image/png" href="images/favicon.png.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
 <style>
-:root{--primary:#0C447C;--primary-mid:#185FA5;--primary-light:#378ADD;--accent:#EF9F27;--accent-dark:#BA7517;--dark:#1a1a2e;--darker:#0a0f1e;--light:#f8f9fa;--gray:#6c757d;--light-gray:#f1f3f5;--white:#fff;--shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 8px 40px rgba(0,0,0,0.18);--radius:12px;--transition:all 0.3s ease;}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Poppins',sans-serif;color:var(--dark);background:var(--white);overflow-x:hidden;}
-header{position:fixed;top:0;width:100%;z-index:1000;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);box-shadow:0 2px 20px rgba(0,0,0,0.08);}
-.header-top{background:var(--primary);color:white;text-align:right;padding:6px 40px;font-size:13px;}
-.header-top a{color:#fff;text-decoration:none;}
-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 40px;max-width:1300px;margin:0 auto;}
-.logo-wrap{display:flex;align-items:center;text-decoration:none;}
-.nav-links{display:flex;list-style:none;gap:6px;align-items:center;}
-.nav-links a{text-decoration:none;color:var(--dark);font-size:14px;font-weight:500;padding:8px 13px;border-radius:8px;transition:var(--transition);}
-.nav-links a:hover{color:var(--primary);background:rgba(12,68,124,0.07);}
-.nav-call{background:var(--primary)!important;color:white!important;border-radius:50px!important;padding:8px 20px!important;font-weight:600!important;}
-section{padding:90px 0;padding-top:120px;}
-.container{max-width:1300px;margin:0 auto;padding:0 40px;}
-.section-header{text-align:center;margin-bottom:60px;}
-.section-label{display:inline-flex;align-items:center;gap:10px;color:var(--primary);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
-.section-label::before,.section-label::after{content:'';width:28px;height:2px;background:currentColor;flex-shrink:0;}
-.section-header h2{font-family:'Montserrat',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;color:var(--dark);}
-.section-header p{color:var(--gray);max-width:550px;margin:14px auto 0;font-size:15px;line-height:1.75;}
-.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px;}
-.blog-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);}
-.blog-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);}
-.blog-img{height:200px;background:linear-gradient(135deg,#e8f1fb,#d0e4f7);display:flex;align-items:center;justify-content:center;font-size:80px;}
-.blog-body{padding:25px;}
-.blog-date{font-size:12px;color:var(--primary);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
-.blog-card h3{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;color:var(--dark);margin-bottom:12px;line-height:1.4;}
-.blog-excerpt{color:var(--gray);font-size:14px;line-height:1.6;margin-bottom:16px;}
-.read-more{display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-weight:600;text-decoration:none;font-size:13px;transition:var(--transition);}
-.read-more:hover{gap:10px;}
-footer{background:var(--darker);color:rgba(255,255,255,0.65);padding:80px 0 0;}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:50px;margin-bottom:60px;}
-.footer-logo-name{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:900;color:#fff;margin-bottom:16px;display:block;}
-.footer-logo-name span{color:var(--primary-light);}
-footer p{font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);}
-footer h4{font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;}
-footer ul{list-style:none;}
-footer ul li a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;transition:var(--transition);}
-footer ul li a:hover{color:var(--primary-light);}
-.social-links{display:flex;gap:12px;margin-top:20px;}
-.social-links a{width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;}
-.newsletter-form{display:flex;gap:10px;margin-top:16px;}
-.newsletter-form input{flex:1;padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.07);color:#fff;font-size:13px;font-family:'Poppins',sans-serif;}
-.newsletter-form button{background:var(--primary-mid);color:#fff;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding:24px 0;display:flex;justify-content:space-between;align-items:center;}
-.float-call{position:fixed;bottom:30px;right:30px;z-index:999;background:var(--primary);color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 25px rgba(12,68,124,0.5);animation:pulse 2s infinite;text-decoration:none;}
-@keyframes pulse{0%,100%{box-shadow:0 6px 25px rgba(12,68,124,0.5);}50%{box-shadow:0 6px 40px rgba(12,68,124,0.8);}}
-@media(max-width:768px){
-  nav{padding:14px 20px;}
-  .container{padding:0 20px;}
-  section{padding:60px 0;}
-}
+  /* Premium Hero Banner */
+  .gallery-hero {
+    background: linear-gradient(135deg, #07213f 0%, #0a2d56 50%, #0C447C 100%);
+    color: #fff;
+    padding: 140px 0 75px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(55,138,221,0.22) 0%, transparent 70%);
+  }
+  .gallery-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .gallery-hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(239,159,39,0.18);
+    border: 1px solid rgba(239,159,39,0.4);
+    color: #f8c96b;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .gallery-hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(32px, 4.5vw, 54px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+  .gallery-hero h1 span { color: var(--accent); }
+  .gallery-hero p {
+    color: rgba(255,255,255,0.82);
+    font-size: 16.5px;
+    line-height: 1.75;
+  }
+
+  /* Gallery Filter Tabs */
+  .gallery-section {
+    padding: 80px 0;
+    background: #f8fafc;
+  }
+  .gallery-filter-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 45px;
+  }
+  .g-filter-btn {
+    padding: 10px 24px;
+    border-radius: 50px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: var(--dark);
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .g-filter-btn:hover, .g-filter-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 6px 20px rgba(12,68,124,0.2);
+  }
+
+  /* Gallery Grid */
+  .g-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 32px;
+  }
+  .g-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+  }
+  .g-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(12,68,124,0.12);
+    border-color: var(--primary-light);
+  }
+  .g-img-wrap {
+    height: 230px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .g-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .g-card:hover .g-img-wrap img {
+    transform: scale(1.08);
+  }
+  .g-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(12,68,124,0.85);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .g-body {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .g-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .g-body h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .g-body p {
+    color: var(--gray);
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .g-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 13.5px;
+    text-decoration: none;
+    transition: gap 0.2s ease;
+  }
+  .g-action:hover { gap: 10px; color: var(--accent-dark); }
+
+  /* Lightbox Modal */
+  .g-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(10, 15, 30, 0.9);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .g-modal.active { display: flex; animation: fadeIn 0.3s ease; }
+  .g-modal-content {
+    max-width: 900px;
+    width: 100%;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .g-modal-img {
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+  }
+  .g-modal-info {
+    padding: 24px 30px;
+  }
+  .g-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    .g-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ══════════════ HEADER ══════════════ -->
-<header>
+<!-- SPLASH SCREEN -->
+<div class="splash-overlay" id="splashOverlay">
+  <div class="splash-container">
+    <div class="logo-wrapper">
+      <img src="mainlogo2.jpeg" alt="Travo Rents Logo" class="logo-image">
+    </div>
+    <div class="transaction-flow">
+      <div class="transaction-step"><span>$</span></div>
+      <div class="step-connector"></div>
+      <div class="transaction-step"><span>✓</span></div>
+      <div class="step-connector"></div>
+      <div class="transaction-step"><span>🚗</span></div>
+    </div>
+    <div class="splash-text">
+      <h1>Travo Rents</h1>
+      <p>Loading Gallery &amp; Stories...</p>
+    </div>
+    <div class="loading-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const splash = document.getElementById('splashOverlay');
+    if(splash) {
+      setTimeout(function() {
+        splash.classList.add('splash-fade-out');
+        setTimeout(function() {
+          splash.style.display = 'none';
+        }, 800);
+      }, 1200);
+    }
+  });
+</script>
+
+<!-- HEADER -->
+<header id="mainHeader">
   <div class="header-top">
-    <a href="tel:8455065107">+91 8455065107</a> &nbsp;|&nbsp;
+    <i class="fas fa-phone-alt"></i> Call Anytime:
+    <a href="tel:8455065107">+91 84550 65107</a> &nbsp;|&nbsp;
     <a href="mailto:travorents.com@gmail.com">travorents.com@gmail.com</a>
   </div>
   <nav>
     <a href="index.html" class="logo-wrap">
-      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height:55px;width:auto;">
+      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height:55px;width:auto;object-fit:contain;">
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
       <li class="dropdown">
@@ -85,131 +302,213 @@ footer ul li a:hover{color:var(--primary-light);}
           <li><a href="monthly-cars.html"><i class="fas fa-car" style="color:var(--accent-dark);"></i> Monthly Cars</a></li>
         </ul>
       </li>
-      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="gallery.html" style="color:var(--primary);font-weight:700;">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i> Call</a></li>
+      <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i>+91 84550 65107</a></li>
     </ul>
+    <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
   </nav>
 </header>
 
-<!-- ══════════════ GALLERY & BLOG ══════════════ -->
-<section>
-  <div class="container">
-    <div class="section-header">
-      <div class="section-label">Gallery & Blog</div>
-      <h2>Travel Stories & Updates</h2>
-      <p>Explore our latest adventures, travel tips, and customer stories from across Odisha.</p>
-    </div>
-    <div class="blog-grid">
-      <div class="blog-card">
-        <div class="blog-img" style="font-size:0;padding:0;overflow:hidden;"><img src="images/chilika-lake.jpg" alt="Exploring the Beauty of Chilika Lake" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="blog-body">
-          <div class="blog-date">Dec 15, 2024</div>
-          <h3>Exploring the Beauty of Chilika Lake</h3>
-          <p class="blog-excerpt">Discover the stunning Chilika Lake with our premium car rental service. Perfect for weekend getaways and family trips.</p>
-          <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <div class="blog-card">
-        <div class="blog-img" style="font-size:0;padding:0;overflow:hidden;"><img src="images/puri-beach.jpg" alt="Puri Beach Adventure Guide" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="blog-body">
-          <div class="blog-date">Dec 10, 2024</div>
-          <h3>Puri Beach Adventure Guide</h3>
-          <p class="blog-excerpt">Plan your perfect beach holiday in Puri. Our fleet is ready to take you there with comfort and style.</p>
-          <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <div class="blog-card">
-        <div class="blog-img" style="font-size:0;padding:0;overflow:hidden;"><img src="images/konark-temple.jpg" alt="Konark Sun Temple Road Trip" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="blog-body">
-          <div class="blog-date">Dec 5, 2024</div>
-          <h3>Konark Sun Temple Road Trip</h3>
-          <p class="blog-excerpt">Experience the architectural marvel of Konark with our bike and car rental options. Create memories that last forever.</p>
-          <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <div class="blog-card">
-        <div class="blog-img" style="font-size:0;padding:0;overflow:hidden;"><img src="images/khandagiri-biking.jpg" alt="Mountain Biking in Khandagiri" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="blog-body">
-          <div class="blog-date">Nov 28, 2024</div>
-          <h3>Mountain Biking in Khandagiri</h3>
-          <p class="blog-excerpt">Get your adrenaline pumping with our high-performance bikes. Perfect for adventure seekers and nature lovers.</p>
-          <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <div class="blog-card">
-        <div class="blog-img" style="font-size:0;padding:0;overflow:hidden;"><img src="images/chandipur-trail.jpg" alt="Nature Trail at Chandipur" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="blog-body">
-          <div class="blog-date">Nov 20, 2024</div>
-          <h3>Nature Trail at Chandipur</h3>
-          <p class="blog-excerpt">Explore the scenic nature trails of Chandipur. Book our cars today for an unforgettable nature experience.</p>
-          <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <div class="blog-card">
-        <div class="blog-img" style="font-size:0;padding:0;overflow:hidden;"><img src="images/raghurajpur-village.jpg" alt="Sunrise at Raghurajpur Village" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="blog-body">
-          <div class="blog-date">Nov 15, 2024</div>
-          <h3>Sunrise at Raghurajpur Village</h3>
-          <p class="blog-excerpt">Experience the golden sunrise at the artistic village of Raghurajpur. Travel in comfort with TravoRents.</p>
-          <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </div>
+<!-- HERO -->
+<section class="gallery-hero">
+  <div class="gallery-hero-content">
+    <div class="gallery-hero-tag"><i class="fas fa-camera-retro"></i> Travel Showcase &amp; Journal</div>
+    <h1>Explore Odisha with <span>TravoRents</span></h1>
+    <p>Discover scenic road trip getaways, coastal drives, historical monuments, and real customer moments across Bhubaneswar, Puri, and Konark.</p>
   </div>
 </section>
 
-<!-- ══════════════ FOOTER ══════════════ -->
-<!-- ══════════════ FOOTER ══════════════ -->
+<!-- MAIN GALLERY GRID -->
+<section class="gallery-section">
+  <div class="container">
+    
+    <!-- Filter Tabs -->
+    <div class="gallery-filter-wrap">
+      <button class="g-filter-btn active" onclick="filterGallery('all', this)">All Showcase</button>
+      <button class="g-filter-btn" onclick="filterGallery('destinations', this)">Road Trips &amp; Getaways</button>
+      <button class="g-filter-btn" onclick="filterGallery('bikes', this)">Biking Trails</button>
+      <button class="g-filter-btn" onclick="filterGallery('heritage', this)">Heritage &amp; Culture</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="g-grid">
+      
+      <!-- Card 1 -->
+      <div class="g-card" data-cat="destinations">
+        <div class="g-img-wrap" onclick="openLightbox('images/chilika-lake.jpg', 'Exploring the Beauty of Chilika Lake', 'Discover the stunning Chilika Lake with our self-drive SUV rentals. Perfect for weekend road trips.')">
+          <img src="images/chilika-lake.jpg" alt="Chilika Lake Getaway">
+          <span class="g-badge">Road Trip</span>
+        </div>
+        <div class="g-body">
+          <div>
+            <div class="g-meta"><i class="far fa-calendar-alt"></i> Dec 15, 2024 • 5 Min Read</div>
+            <h3>Exploring the Beauty of Chilika Lake</h3>
+            <p>Discover Asia's largest brackish water lagoon. Rent a spacious car and enjoy a scenic 2-hour drive from Bhubaneswar.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="openLightbox('images/chilika-lake.jpg', 'Exploring the Beauty of Chilika Lake', 'Discover Asia\'s largest brackish water lagoon. Rent a spacious car and enjoy a scenic 2-hour drive from Bhubaneswar.')" class="g-action">
+            View Full Photo &amp; Guide <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="g-card" data-cat="destinations">
+        <div class="g-img-wrap" onclick="openLightbox('images/puri-beach.jpg', 'Puri Golden Beach Adventure Guide', 'Plan your ultimate coastal drive along the Puri-Konark Marine Drive with TravoRents vehicles.')">
+          <img src="images/puri-beach.jpg" alt="Puri Beach Drive">
+          <span class="g-badge">Coastal Drive</span>
+        </div>
+        <div class="g-body">
+          <div>
+            <div class="g-meta"><i class="far fa-calendar-alt"></i> Dec 10, 2024 • 4 Min Read</div>
+            <h3>Puri Golden Beach &amp; Marine Drive</h3>
+            <p>Cruise down the famous Puri Marine Drive. Rent an automatic hatchback or sedan for maximum oceanfront comfort.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="openLightbox('images/puri-beach.jpg', 'Puri Golden Beach & Marine Drive', 'Cruise down the famous Puri Marine Drive. Rent an automatic hatchback or sedan for maximum oceanfront comfort.')" class="g-action">
+            View Full Photo &amp; Guide <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="g-card" data-cat="heritage">
+        <div class="g-img-wrap" onclick="openLightbox('images/konark-temple.jpg', 'Konark Sun Temple Heritage Route', 'Experience the ancient architectural masterpiece of Konark Sun Temple with our self-drive cars.')">
+          <img src="images/konark-temple.jpg" alt="Konark Sun Temple">
+          <span class="g-badge">Heritage</span>
+        </div>
+        <div class="g-body">
+          <div>
+            <div class="g-meta"><i class="far fa-calendar-alt"></i> Dec 05, 2024 • 6 Min Read</div>
+            <h3>Konark Sun Temple Heritage Expedition</h3>
+            <p>Experience the 13th-century architectural marvel of Konark. A smooth 65km drive through lush green canopy roads.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="openLightbox('images/konark-temple.jpg', 'Konark Sun Temple Heritage Expedition', 'Experience the 13th-century architectural marvel of Konark. A smooth 65km drive through lush green canopy roads.')" class="g-action">
+            View Full Photo &amp; Guide <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="g-card" data-cat="bikes">
+        <div class="g-img-wrap" onclick="openLightbox('images/khandagiri-biking.jpg', 'Mountain Biking at Khandagiri Caves', 'Get your adrenaline pumping on high-performance Royal Enfield and KTM bikes.')">
+          <img src="images/khandagiri-biking.jpg" alt="Khandagiri Biking Trail">
+          <span class="g-badge">Biking Trail</span>
+        </div>
+        <div class="g-body">
+          <div>
+            <div class="g-meta"><i class="far fa-calendar-alt"></i> Nov 28, 2024 • 3 Min Read</div>
+            <h3>Mountain Biking around Khandagiri Caves</h3>
+            <p>Feel the thrill of riding a Royal Enfield Bullet 350 or KTM 200 around historical rock-cut caves and hills.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="openLightbox('images/khandagiri-biking.jpg', 'Mountain Biking around Khandagiri Caves', 'Feel the thrill of riding a Royal Enfield Bullet 350 or KTM 200 around historical rock-cut caves and hills.')" class="g-action">
+            View Full Photo &amp; Guide <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="g-card" data-cat="destinations">
+        <div class="g-img-wrap" onclick="openLightbox('images/chandipur-trail.jpg', 'Chandipur Vanishing Sea Exploration', 'Witness the unique vanishing sea phenomenon at Chandipur with TravoRents rentals.')">
+          <img src="images/chandipur-trail.jpg" alt="Chandipur Vanishing Sea">
+          <span class="g-badge">Nature Escape</span>
+        </div>
+        <div class="g-body">
+          <div>
+            <div class="g-meta"><i class="far fa-calendar-alt"></i> Nov 20, 2024 • 5 Min Read</div>
+            <h3>Nature &amp; Vanishing Sea at Chandipur</h3>
+            <p>Witness the rare phenomenon where the sea recedes up to 5km during low tide. Ideal for extended weekend rentals.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="openLightbox('images/chandipur-trail.jpg', 'Nature & Vanishing Sea at Chandipur', 'Witness the rare phenomenon where the sea recedes up to 5km during low tide. Ideal for extended weekend rentals.')" class="g-action">
+            View Full Photo &amp; Guide <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="g-card" data-cat="heritage">
+        <div class="g-img-wrap" onclick="openLightbox('images/raghurajpur-village.jpg', 'Raghurajpur Crafts Village Trail', 'Immerse yourself in Pattachitra art and heritage in Raghurajpur.')">
+          <img src="images/raghurajpur-village.jpg" alt="Raghurajpur Heritage Village">
+          <span class="g-badge">Culture &amp; Art</span>
+        </div>
+        <div class="g-body">
+          <div>
+            <div class="g-meta"><i class="far fa-calendar-alt"></i> Nov 15, 2024 • 4 Min Read</div>
+            <h3>Raghurajpur Heritage Crafts Village</h3>
+            <p>Immerse yourself in traditional Pattachitra painters' village. Travel in comfort with our insured self-drive cars.</p>
+          </div>
+          <a href="javascript:void(0)" onclick="openLightbox('images/raghurajpur-village.jpg', 'Raghurajpur Heritage Crafts Village', 'Immerse yourself in traditional Pattachitra painters\' village. Travel in comfort with our insured self-drive cars.')" class="g-action">
+            View Full Photo &amp; Guide <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX MODAL -->
+<div class="g-modal" id="lightboxModal">
+  <div class="g-modal-content">
+    <button class="g-modal-close" onclick="closeLightbox()">&times;</button>
+    <img id="modalImg" src="" alt="Full view" class="g-modal-img">
+    <div class="g-modal-info">
+      <h3 id="modalTitle" style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--dark);margin-bottom:8px;">Title</h3>
+      <p id="modalDesc" style="font-size:14px;color:var(--gray);line-height:1.6;margin:0;">Description</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer id="footer">
   <div class="container">
     <div class="footer-grid">
       <div>
-        <span class="footer-logo-name" style="font-family:'Montserrat',sans-serif;font-size:24px;font-weight:900;color:#fff;margin-bottom:16px;display:block;">Travo<span style="color:var(--primary-light,#378ADD);">Rents</span>.com</span>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);">Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);"><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);"><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+918455065107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 84550 65107</a></p>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);"><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:travorents.com@gmail.com" style="color:rgba(255,255,255,0.6);text-decoration:none">travorents.com@gmail.com</a></p>
-        <div class="social-links" style="display:flex;gap:12px;margin-top:20px;">
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-instagram"></i></a>
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-twitter"></i></a>
-          <a href="#" style="width:38px;height:38px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;text-decoration:none;"><i class="fab fa-whatsapp"></i></a>
+        <span class="footer-logo-name">Travo<span>Rents</span>.com</span>
+        <p>Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
+        <p><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
+        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+918455065107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 84550 65107</a></p>
+        <p><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:travorents.com@gmail.com" style="color:rgba(255,255,255,0.6);text-decoration:none">travorents.com@gmail.com</a></p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="https://wa.me/918455065107" target="_blank"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
       <div>
-        <h4 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;">Quick Links</h4>
-        <ul style="list-style:none;">
-          <li style="margin-bottom:10px;"><a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Home</a></li>
-          <li style="margin-bottom:10px;"><a href="about.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> About Us</a></li>
-          <li style="margin-bottom:10px;"><a href="privacy-policy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Privacy Policy</a></li>
-          <li style="margin-bottom:10px;"><a href="terms-and-conditions.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Terms & Conditions</a></li>
-          <li style="margin-bottom:10px;"><a href="refund-policy.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Refund Policy</a></li>
-          <li style="margin-bottom:10px;"><a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Contact Us</a></li>
-          <li style="margin-bottom:10px;"><a href="admin.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Admin</a></li>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="privacy-policy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+          <li><a href="terms-and-conditions.html"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
+          <li><a href="refund-policy.html"><i class="fas fa-chevron-right"></i> Refund Policy</a></li>
+          <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+          <li><a href="admin.html"><i class="fas fa-chevron-right"></i> Admin</a></li>
         </ul>
       </div>
       <div>
-        <h4 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;">Weekly & Monthly</h4>
-        <ul style="list-style:none;">
-          <li style="margin-bottom:10px;"><a href="weekly-bikes.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Weekly Bikes</a></li>
-          <li style="margin-bottom:10px;"><a href="weekly-cars.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Weekly Cars</a></li>
-          <li style="margin-bottom:10px;"><a href="monthly-bikes.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Monthly Bikes</a></li>
-          <li style="margin-bottom:10px;"><a href="monthly-cars.html" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;"><i class="fas fa-chevron-right" style="font-size:12px;margin-right:6px;"></i> Monthly Cars</a></li>
+        <h4>Weekly & Monthly</h4>
+        <ul>
+          <li><a href="weekly-bikes.html"><i class="fas fa-chevron-right"></i> Weekly Bikes</a></li>
+          <li><a href="weekly-cars.html"><i class="fas fa-chevron-right"></i> Weekly Cars</a></li>
+          <li><a href="monthly-bikes.html"><i class="fas fa-chevron-right"></i> Monthly Bikes</a></li>
+          <li><a href="monthly-cars.html"><i class="fas fa-chevron-right"></i> Monthly Cars</a></li>
         </ul>
       </div>
       <div>
-        <h4 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;">Newsletter</h4>
-        <p style="font-size:14px;line-height:1.8;margin:0 0 10px;color:rgba(255,255,255,0.6);">Subscribe for latest offers and updates.</p>
-        <div class="newsletter-form" style="display:flex;gap:10px;margin-top:16px;">
-          <input type="email" id="nlEmail" placeholder="Your email address" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.07);color:#fff;font-size:13px;font-family:'Poppins',sans-serif;">
-          <button onclick="alert('Thank you for subscribing!')" style="background:var(--primary,#0C447C);color:#fff;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;"><i class="fas fa-paper-plane"></i></button>
+        <h4>Newsletter</h4>
+        <p>Subscribe for latest offers and updates.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email address">
+          <button onclick="alert('Thank you for subscribing!')"><i class="fas fa-paper-plane"></i></button>
         </div>
       </div>
     </div>
-    <div class="footer-bottom" style="border-top:1px solid rgba(255,255,255,0.08);padding:24px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
-      <p style="font-size:13px;color:rgba(255,255,255,0.6);">© 2026 <a href="index.html" style="color:var(--primary-light,#378ADD);text-decoration:none;">TravoRents.com</a> | All Rights Reserved.</p>
-      <p style="font-size:13px;color:rgba(255,255,255,0.6);">Made by <a href="https://www.aapnawebsite.com" target="_blank" style="color:var(--primary-light,#378ADD);text-decoration:none;">❤️AapnaWebsite.com</a></p>
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">TravoRents.com</a> | All Rights Reserved.</p>
+      <p>Made by <a href="https://www.aapnawebsite.com" target="_blank">❤️AapnaWebsite.com</a></p>
     </div>
   </div>
 </footer>
@@ -218,36 +517,34 @@ footer ul li a:hover{color:var(--primary-light);}
 
 <script>
 function toggleMenu() {
-  const navLinks = document.getElementById('navLinks') || document.querySelector('.nav-links');
-  const hamburger = document.querySelector('.hamburger');
-  if (navLinks) {
-    navLinks.classList.toggle('open');
-    if (hamburger) {
-      const icon = hamburger.querySelector('i');
-      if (icon) {
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-      }
-    }
-  }
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) navLinks.classList.toggle('open');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-  dropdownToggles.forEach(function(toggle) {
-    toggle.addEventListener('click', function(e) {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        const parentLi = this.closest('.dropdown');
-        if (parentLi) {
-          parentLi.classList.toggle('active');
-        }
-      }
-    });
+function filterGallery(category, btn) {
+  document.querySelectorAll('.g-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.g-card');
+  cards.forEach(card => {
+    if (category === 'all' || card.getAttribute('data-cat') === category) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
   });
-});
+}
+
+function openLightbox(imgSrc, title, desc) {
+  document.getElementById('modalImg').src = imgSrc;
+  document.getElementById('modalTitle').innerText = title;
+  document.getElementById('modalDesc').innerText = desc;
+  document.getElementById('lightboxModal').classList.add('active');
+}
+
+function closeLightbox() {
+  document.getElementById('lightboxModal').classList.remove('active');
+}
 </script>
 </body>
 </html>
-
-
