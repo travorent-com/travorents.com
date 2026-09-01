@@ -1,54 +1,271 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Contact Us - TravoRents</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - TravoRents.com | Self Drive Car & Bike Rental</title>
+<link rel="icon" type="image/png" href="images/favicon.png.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
 <style>
-body{font-family:'Poppins',sans-serif;margin:0;background:#f5f7fb;color:#222}
-header{background:#0C447C;color:white;padding:20px;text-align:center}
-.container{max-width:1000px;margin:40px auto;background:white;padding:40px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.1)}
-h1,h2{color:#0C447C}
-p,li{line-height:1.8}
-a{color:#0C447C;text-decoration:none}
-a:hover{color:#EF9F27}
-footer{background:#0C447C;color:white;text-align:center;padding:20px;margin-top:40px}
-.btn{background:#EF9F27;color:white;padding:12px 25px;border-radius:8px;display:inline-block;margin-top:15px;font-weight:bold}
+  .contact-hero {
+    background: linear-gradient(135deg, #07213f 0%, #0a2d56 50%, #0C447C 100%);
+    color: #fff;
+    padding: 140px 0 70px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(55,138,221,0.2) 0%, transparent 70%);
+  }
+  .contact-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .contact-hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(239,159,39,0.18);
+    border: 1px solid rgba(239,159,39,0.4);
+    color: #f8c96b;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .contact-hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(32px, 4.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .contact-hero h1 span { color: var(--accent); }
+  .contact-hero p {
+    color: rgba(255,255,255,0.8);
+    font-size: 16px;
+    line-height: 1.7;
+  }
 
-/* ═════════ SPLASH SCREEN ═════════ */
-.splash-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#07213f 0%,#0a2d56 50%,#0C447C 100%);display:flex;align-items:center;justify-content:center;z-index:9999;animation:fadeInSplash 1s ease-in-out;}
-.splash-container{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;animation:fadeIn 1s ease-in-out;}
-.logo-wrapper{animation:slideDown 1.2s cubic-bezier(0.34,1.56,0.64,1);}
-.logo-image{width:280px;height:auto;max-height:140px;animation:logoPulseAnim 2s ease-in-out infinite;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.2));}
-.transaction-flow{display:flex;gap:20px;align-items:center;animation:fadeInUp 1.5s ease-in-out 0.3s both;}
-.transaction-step{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(24,95,165,0.8);display:flex;align-items:center;justify-content:center;color:#378ADD;font-size:24px;font-weight:600;}
-.transaction-step:nth-child(1){animation:stepBounce 0.8s ease-in-out 0.5s infinite;}
-.transaction-step:nth-child(2){animation:stepBounce 0.8s ease-in-out 0.7s infinite;}
-.transaction-step:nth-child(3){animation:stepBounce 0.8s ease-in-out 0.9s infinite;}
-.step-connector{width:30px;height:3px;background:linear-gradient(90deg,transparent,#378ADD,transparent);animation:connectorGrow 0.8s ease-in-out 1.2s infinite;}
-.splash-text{text-align:center;animation:fadeInUp 1.5s ease-in-out 0.6s both;}
-.splash-text h1{color:#fff;font-size:28px;font-weight:700;margin-bottom:10px;letter-spacing:-0.5px;}
-.splash-text p{color:rgba(255,255,255,0.7);font-size:14px;font-weight:500;}
-.loading-dots{display:flex;gap:6px;animation:fadeInUp 1.5s ease-in-out 0.9s both;}
-.dot{width:8px;height:8px;border-radius:50%;background:#378ADD;animation:dotBounce 1.4s infinite;}
-.dot:nth-child(1){animation-delay:0s;}
-.dot:nth-child(2){animation-delay:0.2s;}
-.dot:nth-child(3){animation-delay:0.4s;}
-@keyframes fadeInSplash{from{opacity:0;}to{opacity:1;}}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-@keyframes slideDown{from{opacity:0;transform:translateY(-50px) scale(0.9);}to{opacity:1;transform:translateY(0) scale(1);}}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
-@keyframes logoPulseAnim{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(55,138,221,0.5));} 50%{transform:scale(1.05);filter:drop-shadow(0 0 20px rgba(55,138,221,0.7));}}
-@keyframes stepBounce{0%,100%{transform:scale(1);} 50%{transform:scale(1.15);}}
-@keyframes connectorGrow{0%,100%{opacity:0.3;width:20px;} 50%{opacity:1;width:40px;}}
-@keyframes dotBounce{0%,100%{opacity:0.3;transform:translateY(0);} 50%{opacity:1;transform:translateY(-10px);}}
-.splash-fade-out{animation:fadeOutSplash 0.8s ease-in-out forwards;}
-@keyframes fadeOutSplash{to{opacity:0;transform:scale(0.98);}}
-@media(max-width:768px){.logo-image{width:200px;max-height:100px;}.splash-text h1{font-size:22px;}.transaction-step{width:50px;height:50px;font-size:18px;}}
+  /* Contact Main Section */
+  .contact-section {
+    padding: 80px 0;
+    background: #f8fafc;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* Info Cards Sidebar */
+  .contact-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .info-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    transition: all 0.3s ease;
+  }
+  .info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(12,68,124,0.1);
+    border-color: var(--primary-light);
+  }
+  .info-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(12,68,124,0.1), rgba(55,138,221,0.2));
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .info-details h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+  .info-details p {
+    font-size: 13.5px;
+    color: var(--gray);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .info-details a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .info-details a:hover { color: var(--accent-dark); }
+  .btn-quick-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #25D366;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 8px;
+  }
+  .btn-quick-call:hover { background: #1eb854; }
+
+  /* Contact Form Container */
+  .contact-form-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 36px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  }
+  .contact-form-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .contact-form-card p {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 28px;
+  }
+  .c-form-group {
+    margin-bottom: 20px;
+  }
+  .c-form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .c-form-group input, .c-form-group select, .c-form-group textarea {
+    width: 100%;
+    padding: 13px 18px;
+    border-radius: 12px;
+    border: 1.5px solid #e2e8f0;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    background: #f8fafc;
+    outline: none;
+    transition: all 0.25s ease;
+  }
+  .c-form-group input:focus, .c-form-group select:focus, .c-form-group textarea:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(12,68,124,0.1);
+  }
+  .c-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .c-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(12,68,124,0.25);
+  }
+  .c-submit-btn:hover {
+    background: linear-gradient(135deg, var(--primary-mid) 0%, var(--primary-light) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(12,68,124,0.35);
+  }
+
+  /* Location Highlights Section */
+  .locations-bar {
+    margin-top: 60px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 32px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+  .locations-bar h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .loc-pill {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--dark);
+    transition: all 0.25s ease;
+  }
+  .loc-pill i { color: var(--primary); font-size: 16px; }
+  .loc-pill:hover {
+    border-color: var(--primary);
+    background: rgba(12,68,124,0.04);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; }
+    .c-form-row { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
+
 <!-- SPLASH SCREEN -->
 <div class="splash-overlay" id="splashOverlay">
   <div class="splash-container">
@@ -64,7 +281,7 @@ footer{background:#0C447C;color:white;text-align:center;padding:20px;margin-top:
     </div>
     <div class="splash-text">
       <h1>Travo Rents</h1>
-      <p>Processing Your Booking...</p>
+      <p>Loading Contact Portal...</p>
     </div>
     <div class="loading-dots">
       <div class="dot"></div>
@@ -83,18 +300,248 @@ footer{background:#0C447C;color:white;text-align:center;padding:20px;margin-top:
         setTimeout(function() {
           splash.style.display = 'none';
         }, 800);
-      }, 3500);
+      }, 1200);
     }
   });
 </script>
 
-<header><h2>TravoRents.com</h2></header>
-<div class="container">
-<h1>Contact Us</h1>
-<p><strong>Phone:</strong>+91 84550 65107</p><p><strong>Email:</strong> info@travorents.com</p><p><strong>UPI:</strong> 8984330609@jupiteraxis</p><p><strong>Location:</strong> Bhubaneswar, Odisha</p>
-<a href="index.html" class="btn">Back To Home</a>
-</div>
-<footer>© 2026 TravoRents.com | All Rights Reserved</footer>
+<!-- HEADER -->
+<header id="mainHeader">
+  <div class="header-top">
+    <i class="fas fa-phone-alt"></i> Call Anytime:
+    <a href="tel:8455065107">+91 84550 65107</a> &nbsp;|&nbsp;
+    <a href="mailto:travorents.com@gmail.com">travorents.com@gmail.com</a>
+  </div>
+  <nav>
+    <a href="index.html" class="logo-wrap">
+      <img src="mainlogo2.jpeg" alt="TravoRents Logo" style="height:55px;width:auto;object-fit:contain;">
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">Monthly/Weekly <i class="fas fa-chevron-down" style="font-size:11px;"></i></a>
+        <ul class="dropdown-menu">
+          <li><a href="weekly-bikes.html"><i class="fas fa-motorcycle" style="color:var(--primary);"></i> Weekly Bikes</a></li>
+          <li><a href="weekly-cars.html"><i class="fas fa-car" style="color:var(--primary);"></i> Weekly Cars</a></li>
+          <li><a href="monthly-bikes.html"><i class="fas fa-motorcycle" style="color:var(--accent-dark);"></i> Monthly Bikes</a></li>
+          <li><a href="monthly-cars.html"><i class="fas fa-car" style="color:var(--accent-dark);"></i> Monthly Cars</a></li>
+        </ul>
+      </li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html" style="color:var(--primary);font-weight:700;">Contact</a></li>
+      <li><a href="tel:+918455065107" class="nav-call"><i class="fas fa-phone-alt"></i>+91 84550 65107</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="contact-hero">
+  <div class="contact-hero-content">
+    <div class="contact-hero-tag"><i class="fas fa-headset"></i> 24/7 Concierge Support</div>
+    <h1>Get in Touch with <span>TravoRents</span></h1>
+    <p>Have questions about car or bike rentals, monthly subscriptions, or pickup locations? We're available round the clock to help you hit the road!</p>
+  </div>
+</section>
+
+<!-- MAIN CONTACT CONTENT -->
+<section class="contact-section">
+  <div class="container">
+    
+    <div class="contact-grid">
+      
+      <!-- Info Column -->
+      <div class="contact-info-col">
+        
+        <!-- Card 1: Phone -->
+        <div class="info-card">
+          <div class="info-icon-wrap">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          <div class="info-details">
+            <h4>Phone & Instant Support</h4>
+            <p><a href="tel:+918455065107">+91 84550 65107</a> (Helpline)</p>
+            <p><a href="tel:+916372465107">+91 63724 65107</a> (Booking Queries)</p>
+            <a href="https://wa.me/918455065107?text=Hi%20TravoRents,%20I%20have%20a%20rental%20query!" target="_blank" class="btn-quick-call">
+              <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Email -->
+        <div class="info-card">
+          <div class="info-icon-wrap">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="info-details">
+            <h4>Official Email Addresses</h4>
+            <p><a href="mailto:travorents.com@gmail.com">travorents.com@gmail.com</a></p>
+            <p><a href="mailto:info@travorents.com">info@travorents.com</a></p>
+          </div>
+        </div>
+
+        <!-- Card 3: Location -->
+        <div class="info-card">
+          <div class="info-icon-wrap">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="info-details">
+            <h4>Main Office & Hub</h4>
+            <p><strong>IRC Village, Nayapalli</strong></p>
+            <p>Bhubaneswar, Odisha — 751015</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Payments -->
+        <div class="info-card">
+          <div class="info-icon-wrap">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <div class="info-details">
+            <h4>Official Payment UPI ID</h4>
+            <p><strong style="color:var(--primary);font-family:monospace;font-size:14px;">8984330609@jupiteraxis</strong></p>
+            <p style="font-size:12px;color:var(--gray)">Accepts GPay, PhonePe, Paytm & BHIM UPI</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Form Column -->
+      <div class="contact-form-card">
+        <h3>Send Us a Message</h3>
+        <p>Fill out the form below and our operations team will respond within 15 minutes.</p>
+
+        <form onsubmit="handleFormSubmit(event)">
+          <div class="c-form-row">
+            <div class="c-form-group">
+              <label>Full Name *</label>
+              <input type="text" id="cfName" required placeholder="e.g. Rahul Sharma">
+            </div>
+            <div class="c-form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="cfPhone" required placeholder="e.g. +91 9876543210">
+            </div>
+          </div>
+
+          <div class="c-form-row">
+            <div class="c-form-group">
+              <label>Email Address</label>
+              <input type="email" id="cfEmail" placeholder="e.g. rahul@example.com">
+            </div>
+            <div class="c-form-group">
+              <label>Interested Vehicle</label>
+              <select id="cfVehicle">
+                <option value="General Query">Select Vehicle (Optional)</option>
+                <option value="Self Drive Car">Self Drive Car</option>
+                <option value="Bike / Scooter">Bike / Scooter</option>
+                <option value="Weekly Car Subscription">Weekly Car Rental</option>
+                <option value="Monthly Car Subscription">Monthly Car Rental</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="c-form-group">
+            <label>Your Message *</label>
+            <textarea id="cfMessage" rows="4" required placeholder="Tell us your pickup dates, preferred vehicle model, or rental duration..."></textarea>
+          </div>
+
+          <button type="submit" class="c-submit-btn">
+            <i class="fas fa-paper-plane"></i> Send Message via WhatsApp
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Pick-up Locations Banner -->
+    <div class="locations-bar">
+      <h3><i class="fas fa-building" style="color:var(--primary)"></i> Key Pickup Points Across Bhubaneswar</h3>
+      <div class="locations-grid">
+        <div class="loc-pill"><i class="fas fa-map-pin"></i> Nayapalli (Main Office)</div>
+        <div class="loc-pill"><i class="fas fa-plane"></i> Biju Patnaik Airport</div>
+        <div class="loc-pill"><i class="fas fa-train"></i> Railway Station Hub</div>
+        <div class="loc-pill"><i class="fas fa-hospital"></i> SUM Hospital Spot</div>
+        <div class="loc-pill"><i class="fas fa-parking"></i> Patia IT Park Parking</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <span class="footer-logo-name">Travo<span>Rents</span>.com</span>
+        <p>Providing reliable, affordable and premium vehicle rentals across Bhubaneswar. Your trusted travel partner since 2014.</p>
+        <p><i class="fas fa-map-marker-alt" style="color:#378ADD"></i> IRC Village, Nayapalli, Bhubaneswar, Odisha</p>
+        <p><i class="fas fa-phone" style="color:#378ADD"></i> <a href="tel:+918455065107" style="color:rgba(255,255,255,0.6);text-decoration:none">+91 84550 65107</a></p>
+        <p><i class="fas fa-envelope" style="color:#378ADD"></i> <a href="mailto:travorents.com@gmail.com" style="color:rgba(255,255,255,0.6);text-decoration:none">travorents.com@gmail.com</a></p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="https://wa.me/918455065107" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="privacy-policy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+          <li><a href="terms-and-conditions.html"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
+          <li><a href="refund-policy.html"><i class="fas fa-chevron-right"></i> Refund Policy</a></li>
+          <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+          <li><a href="admin.html"><i class="fas fa-chevron-right"></i> Admin</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Weekly & Monthly</h4>
+        <ul>
+          <li><a href="weekly-bikes.html"><i class="fas fa-chevron-right"></i> Weekly Bikes</a></li>
+          <li><a href="weekly-cars.html"><i class="fas fa-chevron-right"></i> Weekly Cars</a></li>
+          <li><a href="monthly-bikes.html"><i class="fas fa-chevron-right"></i> Monthly Bikes</a></li>
+          <li><a href="monthly-cars.html"><i class="fas fa-chevron-right"></i> Monthly Cars</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Newsletter</h4>
+        <p>Subscribe for latest offers and updates.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Your email address">
+          <button onclick="alert('Thank you for subscribing!')"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <a href="index.html">TravoRents.com</a> | All Rights Reserved.</p>
+      <p>Made by <a href="https://www.aapnawebsite.com" target="_blank">❤️AapnaWebsite.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<a href="tel:+918455065107" class="float-call"><i class="fas fa-phone-alt"></i></a>
+
+<script>
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) navLinks.classList.toggle('open');
+}
+
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('cfName').value;
+  const phone = document.getElementById('cfPhone').value;
+  const vehicle = document.getElementById('cfVehicle').value;
+  const msg = document.getElementById('cfMessage').value;
+
+  const text = `Hi TravoRents! My name is ${name} (${phone}).\nQuery for: ${vehicle}\nMessage: ${msg}`;
+  const url = `https://wa.me/918455065107?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+}
+</script>
 </body>
 </html>
-
