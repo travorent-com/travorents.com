@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travorent - Modern Financial & Rental Dashboard</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .glass-panel {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen flex flex-col font-sans selection:bg-teal-500 selection:text-white">
+
+  <!-- Main Container -->
+  <div class="flex-1 flex flex-col max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 space-y-6">
+
+    <!-- Top Navigation & Brand Header -->
+    <header class="glass-panel border border-[var(--border)] rounded-2xl p-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+      <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 via-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teal-500/20">
+            T
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h1 class="text-xl font-bold tracking-tight text-[var(--foreground)]">Travorent</h1>
+              <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full bg-teal-500/10 text-teal-600 border border-teal-500/20">Pro v2.4</span>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)]">Payments & Rental Operations Suite</p>
+          </div>
+        </div>
+        
+        <!-- Mobile menu badge -->
+        <span class="sm:hidden flex h-2.5 w-2.5 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
+        </span>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] w-full sm:w-auto overflow-x-auto">
+        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-[var(--card)] text-[var(--foreground)] shadow-xs">
+          <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </button>
+
+        <button onclick="switchTab('payments')" id="tab-payments" class="tab-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Payment Verification</span>
+        </button>
+
+        <button onclick="switchTab('fleet')" id="tab-fleet" class="tab-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          <span>Rentals & Fleet</span>
+        </button>
+      </nav>
+
+      <!-- Action Button -->
+      <div class="hidden md:flex items-center space-x-3">
+        <button onclick="openNewPaymentModal()" class="flex items-center space-x-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-medium text-xs px-4 py-2 rounded-xl transition-all duration-200 shadow-md shadow-teal-500/20 active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>Quick Payout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- SECTION 1: DASHBOARD TAB CONTENT -->
+    <main id="content-dashboard" class="animate-fade-in space-y-6">
+      
+      <!-- Metrics Overview Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Metric 1 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group hover:border-teal-500/50 transition-all duration-300 shadow-xs">
+          <div class="flex items-center justify-between text-xs text-[var(--muted-foreground)] font-medium">
+            <span>Total Gross Revenue</span>
+            <span class="text-teal-600 bg-teal-500/10 px-2 py-0.5 rounded-md text-[11px] font-semibold">+14.2%</span>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span class="text-2xl font-extrabold text-[var(--foreground)] tracking-tight">$48,250.00</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Aug 2026</span>
+          </div>
+          <div class="mt-3 w-full bg-[var(--border)] h-1.5 rounded-full overflow-hidden">
+            <div class="bg-gradient-to-r from-teal-500 to-cyan-500 h-full w-[78%] rounded-full"></div>
+          </div>
+        </div>
+
+        <!-- Metric 2 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-300 shadow-xs">
+          <div class="flex items-center justify-between text-xs text-[var(--muted-foreground)] font-medium">
+            <span>Verified Payments</span>
+            <span class="text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-md text-[11px] font-semibold">98.4% Success</span>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span class="text-2xl font-extrabold text-[var(--foreground)] tracking-tight">324 Transactions</span>
+          </div>
+          <div class="mt-3 flex items-center space-x-2 text-[11px] text-[var(--muted-foreground)]">
+            <span class="flex items-center text-emerald-500">
+              <svg class="w-3.5 h-3.5 mr-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Auto-verified
+            </span>
+            <span>• 0 Fraud flags</span>
+          </div>
+        </div>
+
+        <!-- Metric 3 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group hover:border-amber-500/50 transition-all duration-300 shadow-xs">
+          <div class="flex items-center justify-between text-xs text-[var(--muted-foreground)] font-medium">
+            <span>Pending Payouts</span>
+            <span class="text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded-md text-[11px] font-semibold">4 Action Reqd</span>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span class="text-2xl font-extrabold text-[var(--foreground)] tracking-tight">$3,890.50</span>
+          </div>
+          <div class="mt-3 flex items-center space-x-1.5">
+            <div class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></div>
+            <span class="text-[11px] text-[var(--muted-foreground)]">Next batch: Today, 18:00 UTC</span>
+          </div>
+        </div>
+
+        <!-- Metric 4 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl p-5 relative overflow-hidden group hover:border-blue-500/50 transition-all duration-300 shadow-xs">
+          <div class="flex items-center justify-between text-xs text-[var(--muted-foreground)] font-medium">
+            <span>Active Rentals</span>
+            <span class="text-blue-600 bg-blue-500/10 px-2 py-0.5 rounded-md text-[11px] font-semibold">88% Occupancy</span>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span class="text-2xl font-extrabold text-[var(--foreground)] tracking-tight">18 Units Live</span>
+          </div>
+          <div class="mt-3 flex items-center justify-between text-[11px] text-[var(--muted-foreground)]">
+            <span>12 Cars • 6 Villas</span>
+            <span class="text-teal-600 font-medium">+3 starting tomorrow</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Payment Ledger & Interactive Table -->
+      <div class="glass-panel border border-[var(--border)] rounded-2xl p-5 space-y-4 shadow-sm">
+        
+        <!-- Table Controls & Filter -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-[var(--border)]">
+          <div>
+            <h2 class="text-base font-bold text-[var(--foreground)]">Real-time Payments Ledger</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">Monitor incoming tenant & customer transactions, automated receipts, and settlement statuses.</p>
+          </div>
+
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <!-- Search bar -->
+            <div class="relative flex-1 sm:w-64">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input type="text" id="search-input" onkeyup="filterLedger()" placeholder="Search Txn ID, Customer, Service..." class="w-full bg-[var(--background)] text-[var(--foreground)] placeholder-[var(--muted-foreground)] text-xs rounded-xl pl-9 pr-3 py-2 border border-[var(--border)] focus:outline-none focus:border-teal-500 transition-colors">
+            </div>
+
+            <!-- Filter Status -->
+            <select id="status-filter" onchange="filterLedger()" class="bg-[var(--background)] text-[var(--foreground)] text-xs rounded-xl px-3 py-2 border border-[var(--border)] focus:outline-none focus:border-teal-500 transition-colors">
+              <option value="ALL">All Statuses</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="PENDING">Pending</option>
+              <option value="PROCESSING">Processing</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-[var(--foreground)]">
+            <thead class="bg-[var(--background)] text-[var(--muted-foreground)] uppercase text-[10px] font-semibold tracking-wider rounded-xl">
+              <tr>
+                <th class="px-4 py-3 rounded-l-xl">Transaction ID</th>
+                <th class="px-4 py-3">Customer / Client</th>
+                <th class="px-4 py-3">Rental Item</th>
+                <th class="px-4 py-3">Amount</th>
+                <th class="px-4 py-3">Payment Method</th>
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3 text-right rounded-r-xl">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-body" class="divide-y divide-[var(--border)] font-medium">
+              <!-- Row 1 -->
+              <tr class="hover:bg-[var(--background)]/60 transition-colors group" data-status="COMPLETED" data-search="TXN-902482 SARAH JENKINS TESLA MODEL 3">
+                <td class="px-4 py-3.5 font-mono text-teal-600 font-bold">#TXN-902482</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-600 flex items-center justify-center font-bold text-[10px]">SJ</div>
+                    <span>Sarah Jenkins</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5">Tesla Model 3 Long Range</td>
+                <td class="px-4 py-3.5 font-bold">$420.00</td>
+                <td class="px-4 py-3.5 text-[var(--muted-foreground)]">Visa •••• 4821</td>
+                <td class="px-4 py-3.5">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                    Completed
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 text-right">
+                  <button onclick="viewReceipt('TXN-902482', 'Sarah Jenkins', '$420.00', 'Tesla Model 3 Long Range', 'Completed', 'Visa •••• 4821')" class="text-teal-600 hover:text-teal-700 hover:underline text-xs">Receipt</button>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="hover:bg-[var(--background)]/60 transition-colors group" data-status="PENDING" data-search="TXN-902483 MARCUS CHEN LUXURY VILLA SUITE">
+                <td class="px-4 py-3.5 font-mono text-teal-600 font-bold">#TXN-902483</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-600 flex items-center justify-center font-bold text-[10px]">MC</div>
+                    <span>Marcus Chen</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5">Luxury Beachside Villa #4</td>
+                <td class="px-4 py-3.5 font-bold">$1,850.00</td>
+                <td class="px-4 py-3.5 text-[var(--muted-foreground)]">MasterCard •••• 9102</td>
+                <td class="px-4 py-3.5">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-600 border border-amber-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>
+                    Pending Payout
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 text-right">
+                  <button onclick="viewReceipt('TXN-902483', 'Marcus Chen', '$1,850.00', 'Luxury Beachside Villa #4', 'Pending Payout', 'MasterCard •••• 9102')" class="text-teal-600 hover:text-teal-700 hover:underline text-xs">Verify</button>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="hover:bg-[var(--background)]/60 transition-colors group" data-status="COMPLETED" data-search="TXN-902484 ELENA ROSTOVA BMW X5">
+                <td class="px-4 py-3.5 font-mono text-teal-600 font-bold">#TXN-902484</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-600 flex items-center justify-center font-bold text-[10px]">ER</div>
+                    <span>Elena Rostova</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5">BMW X5 xDrive40i</td>
+                <td class="px-4 py-3.5 font-bold">$680.00</td>
+                <td class="px-4 py-3.5 text-[var(--muted-foreground)]">Apple Pay</td>
+                <td class="px-4 py-3.5">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                    Completed
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 text-right">
+                  <button onclick="viewReceipt('TXN-902484', 'Elena Rostova', '$680.00', 'BMW X5 xDrive40i', 'Completed', 'Apple Pay')" class="text-teal-600 hover:text-teal-700 hover:underline text-xs">Receipt</button>
+                </td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr class="hover:bg-[var(--background)]/60 transition-colors group" data-status="PROCESSING" data-search="TXN-902485 DAVID MILLER OCEAN CONDO">
+                <td class="px-4 py-3.5 font-mono text-teal-600 font-bold">#TXN-902485</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-600 flex items-center justify-center font-bold text-[10px]">DM</div>
+                    <span>David Miller</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5">Oceanfront Condo #12B</td>
+                <td class="px-4 py-3.5 font-bold">$940.00</td>
+                <td class="px-4 py-3.5 text-[var(--muted-foreground)]">Bank Wire Transfer</td>
+                <td class="px-4 py-3.5">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/10 text-blue-600 border border-blue-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5 animate-spin"></span>
+                    Processing
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 text-right">
+                  <button onclick="viewReceipt('TXN-902485', 'David Miller', '$940.00', 'Oceanfront Condo #12B', 'Processing', 'Bank Wire Transfer')" class="text-teal-600 hover:text-teal-700 hover:underline text-xs">Check Status</button>
+                </td>
+              </tr>
+
+              <!-- Row 5 -->
+              <tr class="hover:bg-[var(--background)]/60 transition-colors group" data-status="COMPLETED" data-search="TXN-902486 AYESHA KHAN MERCEDES C-CLASS">
+                <td class="px-4 py-3.5 font-mono text-teal-600 font-bold">#TXN-902486</td>
+                <td class="px-4 py-3.5">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-600 flex items-center justify-center font-bold text-[10px]">AK</div>
+                    <span>Ayesha Khan</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3.5">Mercedes C-Class AMG</td>
+                <td class="px-4 py-3.5 font-bold">$510.00</td>
+                <td class="px-4 py-3.5 text-[var(--muted-foreground)]">Google Pay</td>
+                <td class="px-4 py-3.5">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                    Completed
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 text-right">
+                  <button onclick="viewReceipt('TXN-902486', 'Ayesha Khan', '$510.00', 'Mercedes C-Class AMG', 'Completed', 'Google Pay')" class="text-teal-600 hover:text-teal-700 hover:underline text-xs">Receipt</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 text-xs text-[var(--muted-foreground)] border-t border-[var(--border)]">
+          <span>Showing <strong class="text-[var(--foreground)]">5</strong> of 324 records</span>
+          <div class="flex items-center space-x-2">
+            <button class="px-3 py-1 rounded-lg border border-[var(--border)] hover:bg-[var(--background)] transition-colors opacity-50 cursor-not-allowed">Previous</button>
+            <button class="px-3 py-1 rounded-lg border border-[var(--border)] hover:bg-[var(--background)] transition-colors text-[var(--foreground)]">Next</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SECTION 2: PAYMENT VERIFICATION TAB CONTENT -->
+    <main id="content-payments" class="hidden animate-fade-in space-y-6">
+      
+      <!-- Instant Checker Card -->
+      <div class="glass-panel border border-[var(--border)] rounded-2xl p-6 space-y-6 max-w-2xl mx-auto shadow-md">
+        
+        <div class="text-center space-y-2">
+          <div class="inline-flex p-3 rounded-2xl bg-teal-500/10 text-teal-600 mb-1">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          </div>
+          <h2 class="text-xl font-bold text-[var(--foreground)]">Instant Payment & Transaction Verifier</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">Check payment gateway verification hash, bank authorization logs, and settlement confirmation for any rental transaction.</p>
+        </div>
+
+        <form onsubmit="handlePaymentCheck(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-[var(--foreground)] mb-1.5">Transaction ID or Reference Code</label>
+            <div class="relative">
+              <input type="text" id="checker-id" required value="TXN-902482" placeholder="e.g. TXN-902482 or STRIPE_CH_3N8291" class="w-full bg-[var(--background)] text-[var(--foreground)] font-mono text-sm rounded-xl px-4 py-3 border border-[var(--border)] focus:outline-none focus:border-teal-500 transition-colors uppercase">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-[var(--foreground)] mb-1.5">Payment Network</label>
+              <select id="checker-network" class="w-full bg-[var(--background)] text-[var(--foreground)] text-xs rounded-xl px-3 py-2.5 border border-[var(--border)] focus:outline-none focus:border-teal-500 transition-colors">
+                <option value="stripe">Stripe Connect (Auto-settled)</option>
+                <option value="razorpay">Razorpay Gateway</option>
+                <option value="paypal">PayPal Commerce</option>
+                <option value="wire">Direct SWIFT/ACH Bank Wire</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[var(--foreground)] mb-1.5">Rental Property/Fleet ID</label>
+              <input type="text" value="FLT-TESLA-381" class="w-full bg-[var(--background)] text-[var(--foreground)] text-xs rounded-xl px-3 py-2.5 border border-[var(--border)] focus:outline-none focus:border-teal-500 transition-colors">
+            </div>
+          </div>
+
+          <button type="submit" id="check-btn" class="w-full bg-gradient-to-r from-teal-500 via-cyan-600 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-bold text-sm py-3 rounded-xl transition-all duration-200 shadow-lg shadow-teal-500/25 flex items-center justify-center space-x-2">
+            <span>Verify Transaction Now</span>
+          </button>
+        </form>
+
+        <!-- Result Box (Hidden by default) -->
+        <div id="checker-result" class="hidden p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 space-y-3 animate-fade-in">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2 text-emerald-600 font-bold text-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              <span>Transaction Verified & Authenticated</span>
+            </div>
+            <span class="text-[10px] font-mono bg-emerald-500/20 text-emerald-700 px-2 py-0.5 rounded-full font-bold">200 OK</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs border-t border-emerald-500/20 pt-3">
+            <div>
+              <span class="text-[var(--muted-foreground)] block">Verification Hash</span>
+              <span class="font-mono text-[11px] text-[var(--foreground)] font-semibold">0x7f8a...992b</span>
+            </div>
+            <div>
+              <span class="text-[var(--muted-foreground)] block">Gateway Clearance</span>
+              <span class="text-[var(--foreground)] font-semibold">Instant Auth Secured</span>
+            </div>
+            <div>
+              <span class="text-[var(--muted-foreground)] block">Payout Eligible</span>
+              <span class="text-emerald-600 font-semibold">Yes (Ready for Release)</span>
+            </div>
+            <div>
+              <span class="text-[var(--muted-foreground)] block">Timestamp</span>
+              <span class="text-[var(--foreground)] font-mono text-[11px]">2026-08-31 15:24 UTC</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- SECTION 3: RENTALS & FLEET TAB CONTENT -->
+    <main id="content-fleet" class="hidden animate-fade-in space-y-6">
+      
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-bold text-[var(--foreground)]">Active Fleet & Property Inventory</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">Manage vehicles and rental properties linked to automatic payment collections.</p>
+        </div>
+
+        <span class="text-xs text-teal-600 bg-teal-500/10 px-3 py-1 rounded-full font-medium border border-teal-500/20">18 Managed Assets</span>
+      </div>
+
+      <!-- Fleet Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <!-- Card 1 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl overflow-hidden hover:border-teal-500/50 transition-all duration-300 shadow-sm flex flex-col">
+          <div class="h-36 bg-gradient-to-r from-slate-800 to-slate-900 p-4 flex flex-col justify-between relative">
+            <span class="self-start px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">BOOKED • ACTIVE</span>
+            <div>
+              <h3 class="text-white font-bold text-base">Tesla Model 3 Long Range</h3>
+              <p class="text-slate-400 text-xs">Fleet ID: FLT-EV-001</p>
+            </div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Current Tenant</span>
+                <span class="font-medium text-[var(--foreground)]">Sarah Jenkins</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Rental Rate</span>
+                <span class="font-bold text-teal-600">$140 / day</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Payment Security Deposit</span>
+                <span class="text-emerald-600 font-medium">$500 (Held in Escrow)</span>
+              </div>
+            </div>
+            <button onclick="switchTab('payments')" class="w-full py-2 bg-[var(--background)] hover:bg-teal-500/10 hover:text-teal-600 text-[var(--foreground)] border border-[var(--border)] text-xs font-semibold rounded-xl transition-colors">Inspect Payment Ledger</button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl overflow-hidden hover:border-teal-500/50 transition-all duration-300 shadow-sm flex flex-col">
+          <div class="h-36 bg-gradient-to-r from-teal-900 to-cyan-950 p-4 flex flex-col justify-between relative">
+            <span class="self-start px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">PAYMENT PENDING</span>
+            <div>
+              <h3 class="text-white font-bold text-base">Luxury Beachside Villa #4</h3>
+              <p class="text-cyan-200/70 text-xs">Property ID: PROP-VILLA-04</p>
+            </div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Current Guest</span>
+                <span class="font-medium text-[var(--foreground)]">Marcus Chen</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Nightly Rate</span>
+                <span class="font-bold text-teal-600">$462.50 / night</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Next Payout Release</span>
+                <span class="text-amber-500 font-semibold">$1,850.00 (Pending Auth)</span>
+              </div>
+            </div>
+            <button onclick="switchTab('payments')" class="w-full py-2 bg-[var(--background)] hover:bg-amber-500/10 hover:text-amber-600 text-[var(--foreground)] border border-[var(--border)] text-xs font-semibold rounded-xl transition-colors">Release Payout</button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-panel border border-[var(--border)] rounded-2xl overflow-hidden hover:border-teal-500/50 transition-all duration-300 shadow-sm flex flex-col">
+          <div class="h-36 bg-gradient-to-r from-blue-900 to-indigo-950 p-4 flex flex-col justify-between relative">
+            <span class="self-start px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">BOOKED • ACTIVE</span>
+            <div>
+              <h3 class="text-white font-bold text-base">BMW X5 xDrive40i</h3>
+              <p class="text-indigo-200/70 text-xs">Fleet ID: FLT-SUV-009</p>
+            </div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Current Tenant</span>
+                <span class="font-medium text-[var(--foreground)]">Elena Rostova</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Rental Rate</span>
+                <span class="font-bold text-teal-600">$170 / day</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[var(--muted-foreground)]">Auto-Renewal</span>
+                <span class="text-emerald-600 font-medium">Enabled (Apple Pay)</span>
+              </div>
+            </div>
+            <button onclick="switchTab('payments')" class="w-full py-2 bg-[var(--background)] hover:bg-teal-500/10 hover:text-teal-600 text-[var(--foreground)] border border-[var(--border)] text-xs font-semibold rounded-xl transition-colors">View Contract Details</button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between text-xs text-[var(--muted-foreground)] gap-2">
+      <div class="flex items-center space-x-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Travorent Payments API: <strong class="text-emerald-600">Operational (99.99%)</strong></span>
+      </div>
+      <div>
+        <span>Design & System UX • Built for Travorent Operations</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- RECEIPT / TRANSACTION MODAL -->
+  <div id="receipt-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel border border-[var(--border)] rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl animate-fade-in relative">
+      
+      <button onclick="closeReceiptModal()" class="absolute top-4 right-4 text-[var(--muted-foreground)] hover:text-[var(--foreground)] text-lg">✕</button>
+
+      <div class="flex items-center space-x-3 pb-3 border-b border-[var(--border)]">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 flex items-center justify-center font-bold">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-base text-[var(--foreground)]" id="modal-txn-id">#TXN-902482</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">Official Travorent Electronic Payment Slip</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="flex justify-between py-1 border-b border-[var(--border)]/50">
+          <span class="text-[var(--muted-foreground)]">Customer</span>
+          <span class="font-semibold text-[var(--foreground)]" id="modal-customer">-</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[var(--border)]/50">
+          <span class="text-[var(--muted-foreground)]">Rental Item</span>
+          <span class="font-semibold text-[var(--foreground)]" id="modal-item">-</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[var(--border)]/50">
+          <span class="text-[var(--muted-foreground)]">Method</span>
+          <span class="font-semibold text-[var(--foreground)]" id="modal-method">-</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[var(--border)]/50">
+          <span class="text-[var(--muted-foreground)]">Status</span>
+          <span class="font-bold text-emerald-600" id="modal-status">-</span>
+        </div>
+        <div class="flex justify-between py-2 text-sm">
+          <span class="font-bold text-[var(--foreground)]">Total Amount Paid</span>
+          <span class="font-extrabold text-teal-600 text-base" id="modal-amount">-</span>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center space-x-3">
+        <button onclick="closeReceiptModal()" class="flex-1 py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-teal-500/20">Download PDF Receipt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT FOR INTERACTIVITY -->
+  <script>
+    // Tab Switcher Logic
+    function switchTab(tabName) {
+      // Hide all contents
+      document.getElementById('content-dashboard').classList.add('hidden');
+      document.getElementById('content-payments').classList.add('hidden');
+      document.getElementById('content-fleet').classList.add('hidden');
+
+      // Reset all tab button styles
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-[var(--card)]', 'text-[var(--foreground)]', 'shadow-xs');
+        btn.classList.add('text-[var(--muted-foreground)]');
+      });
+
+      // Show selected tab
+      document.getElementById('content-' + tabName).classList.remove('hidden');
+
+      // Highlight active button
+      const activeBtn = document.getElementById('tab-' + tabName);
+      activeBtn.classList.add('bg-[var(--card)]', 'text-[var(--foreground)]', 'shadow-xs');
+      activeBtn.classList.remove('text-[var(--muted-foreground)]');
+    }
+
+    // Filter Ledger Table
+    function filterLedger() {
+      const searchVal = document.getElementById('search-input').value.toUpperCase();
+      const statusVal = document.getElementById('status-filter').value;
+      const rows = document.querySelectorAll('#ledger-body tr');
+
+      rows.forEach(row => {
+        const rowDataSearch = row.getAttribute('data-search');
+        const rowStatus = row.getAttribute('data-status');
+
+        const matchesSearch = rowDataSearch.includes(searchVal);
+        const matchesStatus = (statusVal === 'ALL' || rowStatus === statusVal);
+
+        if (matchesSearch && matchesStatus) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    // Payment Checker Form Simulator
+    function handlePaymentCheck(e) {
+      e.preventDefault();
+      const btn = document.getElementById('check-btn');
+      const resultBox = document.getElementById('checker-result');
+
+      btn.disabled = true;
+      btn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Verifying with Payment Gateway...</span>
+      `;
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Verify Transaction Now</span>`;
+        resultBox.classList.remove('hidden');
+      }, 700);
+    }
+
+    // Modal view
+    function viewReceipt(txnId, customer, amount, item, status, method) {
+      document.getElementById('modal-txn-id').innerText = '#' + txnId;
+      document.getElementById('modal-customer').innerText = customer;
+      document.getElementById('modal-amount').innerText = amount;
+      document.getElementById('modal-item').innerText = item;
+      document.getElementById('modal-status').innerText = status;
+      document.getElementById('modal-method').innerText = method;
+
+      const modal = document.getElementById('receipt-modal');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+      }, 10);
+    }
+
+    function closeReceiptModal() {
+      const modal = document.getElementById('receipt-modal');
+      modal.classList.add('opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    function openNewPaymentModal() {
+      switchTab('payments');
+    }
+  </script>
+</body>
+</html>
