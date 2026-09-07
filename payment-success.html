@@ -343,9 +343,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateUI(booking);
     }
 
-    // WhatsApp Button
-    document.getElementById("whatsappBtn").addEventListener("click", () => {
-        const phone = "918455065107";
+    // Auto Launch WhatsApp Confirmation function
+    function launchWhatsApp(targetPhone) {
+        const phone = targetPhone || "918455065107";
         const bId = booking.booking_ref || booking.bookingRef || 'TR-UNKNOWN';
         const cName = booking.customer_name || booking.customerName || "Guest";
         const cPhone = booking.customer_phone || booking.customerPhone || "";
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const message =
-`🎉 TravoRents.com — Booking Confirmation
+`🎉 TRAVORENTS.COM — BOOKING CONFIRMATION
 
 ${statusMsg}
 
@@ -377,18 +377,35 @@ ${statusMsg}
 📌 Customer Name: ${cName}
 📌 Customer Phone: ${cPhone}
 📌 Vehicle: ${vName}
-📌 Pickup: ${loc}
-📌 From: ${pDate}  →  ${rDate}
+📌 Pickup Location: ${loc}
+📌 Rental Period: ${pDate} → ${rDate}
 📌 ${paymentLabel}
 
 Thank you for choosing TravoRents! 🙏
-918455065107`;
+Customer Support: +91 8455065107`;
 
-        window.open(
-            `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
-            "_blank"
-        );
-    });
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, "_blank");
+    }
+
+    // Attach click handler to primary WhatsApp button
+    const waBtn = document.getElementById("whatsappBtn");
+    if (waBtn) {
+        waBtn.style.background = "#25D366";
+        waBtn.style.color = "#FFFFFF";
+        waBtn.style.fontWeight = "800";
+        waBtn.style.boxShadow = "0 6px 20px rgba(37, 211, 102, 0.4)";
+        waBtn.innerHTML = '<i class="fab fa-whatsapp" style="font-size:1.2rem;"></i> 📱 Open WhatsApp Instant Invoice';
+        waBtn.addEventListener("click", () => launchWhatsApp("918455065107"));
+    }
+
+    // Auto-trigger WhatsApp dispatch popup once after booking
+    const currentRef = ref || booking.booking_ref || booking.bookingRef;
+    if (currentRef && !sessionStorage.getItem('wa_autolaunched_' + currentRef)) {
+        sessionStorage.setItem('wa_autolaunched_' + currentRef, 'true');
+        setTimeout(() => {
+            launchWhatsApp("918455065107");
+        }, 1000);
+    }
 });
 </script>
 
