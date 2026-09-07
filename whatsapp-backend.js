@@ -473,6 +473,15 @@ async function sendWhatsAppToCustomer(booking) {
   if (!phone) return;
   const to = phone.length === 10 ? `91${phone}` : phone;
 
+  const templateName = process.env.WHATSAPP_TEMPLATE_NAME || 'papers_market_order_confirmation_v3';
+  const templateParams = [
+    { type: 'text', text: booking.customer_name || 'Customer' },
+    { type: 'text', text: booking.booking_ref || 'TR-BOOKING' },
+    { type: 'text', text: booking.vehicle_name || 'Vehicle' },
+    { type: 'text', text: booking.location || 'Bhubaneswar' },
+    { type: 'text', text: String(booking.total_amount || booking.amount || '0') },
+  ];
+
   const msg =
     `🎉 *TravoRents.com — Booking Confirmed!*\n\n` +
     `✅ Your TravoRents booking is confirmed!\n\n` +
@@ -483,7 +492,7 @@ async function sendWhatsAppToCustomer(booking) {
     `💰 *Amount Paid:* ₹${booking.total_amount}\n\n` +
     `Thank you for choosing TravoRents! 🙏`;
 
-  return sendWhatsAppMessage(to, msg);
+  return sendWhatsAppMessage(to, msg, templateName, templateParams);
 }
 
 async function sendWhatsAppToOwner(booking) {
@@ -635,7 +644,16 @@ app.post('/api/approve-qr-booking', async (req, res) => {
 async function sendWhatsAppToCustomerQR(booking) {
   const phone = (booking.customer_phone || '').replace(/\D/g, '');
   if (!phone) return;
-  const to = phone.startsWith('91') ? phone : `91${phone}`;
+  const to = phone.length === 10 ? `91${phone}` : phone;
+
+  const templateName = process.env.WHATSAPP_TEMPLATE_NAME || 'papers_market_order_confirmation_v3';
+  const templateParams = [
+    { type: 'text', text: booking.customer_name || 'Customer' },
+    { type: 'text', text: booking.booking_ref || 'TR-BOOKING' },
+    { type: 'text', text: booking.vehicle_name || 'Vehicle' },
+    { type: 'text', text: booking.location || 'Bhubaneswar' },
+    { type: 'text', text: String(booking.total_amount || booking.amount || '0') },
+  ];
 
   const msg =
     `🎉 *TravoRents.com — Booking Registered!*\n\n` +
@@ -647,7 +665,7 @@ async function sendWhatsAppToCustomerQR(booking) {
     `💰 *Amount Paid:* ₹${booking.total_amount} (via QR)\n\n` +
     `We will confirm your payment shortly! Thank you! 🙏`;
 
-  return sendWhatsAppMessage(to, msg);
+  return sendWhatsAppMessage(to, msg, templateName, templateParams);
 }
 
 async function sendWhatsAppToOwnerQR(booking) {
@@ -667,7 +685,16 @@ async function sendWhatsAppToOwnerQR(booking) {
 async function sendWhatsAppToCustomerCash(booking) {
   const phone = (booking.customer_phone || '').replace(/\D/g, '');
   if (!phone) return;
-  const to = phone.startsWith('91') ? phone : `91${phone}`;
+  const to = phone.length === 10 ? `91${phone}` : phone;
+
+  const templateName = process.env.WHATSAPP_TEMPLATE_NAME || 'papers_market_order_confirmation_v3';
+  const templateParams = [
+    { type: 'text', text: booking.customer_name || 'Customer' },
+    { type: 'text', text: booking.booking_ref || 'TR-BOOKING' },
+    { type: 'text', text: booking.vehicle_name || 'Vehicle' },
+    { type: 'text', text: booking.location || 'Bhubaneswar' },
+    { type: 'text', text: String(booking.total_amount || booking.amount || '0') },
+  ];
 
   const msg =
     `🎉 *TravoRents.com — Booking Confirmed!*\n\n` +
@@ -679,7 +706,7 @@ async function sendWhatsAppToCustomerCash(booking) {
     `💰 *Amount to Pay (on Visit):* ₹${booking.total_amount}\n\n` +
     `Please pay cash or UPI at the time of pickup. Thank you for choosing TravoRents! 🙏`;
 
-  return sendWhatsAppMessage(to, msg);
+  return sendWhatsAppMessage(to, msg, templateName, templateParams);
 }
 
 async function sendWhatsAppToOwnerCash(booking) {
