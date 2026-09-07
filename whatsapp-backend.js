@@ -383,36 +383,95 @@ app.post('/api/phonepe-webhook', async (req, res) => {
 // ════════════════════════════════════════
 // META WHATSAPP CLOUD API — SEND MESSAGE
 // ════════════════════════════════════════
-async function sendWhatsAppMessage(to, body) {
+async function sendWhatsAppMessage(to, body, templateName = null, templateParams = []) {
+  const cleanTo = (to || '').replace(/\D/g, '');
+  const formattedTo = cleanTo.length === 10 ? `91${cleanTo}` : cleanTo;
+
+  if (!formattedTo) {
+    console.warn('[WhatsApp ⚠️] Invalid recipient phone number:', to);
+    return { success: false, error: 'Invalid phone number' };
+  }
+
   if (!WA_TOKEN || !WA_PHONE_ID) {
-    console.log(`[WhatsApp] NOT CONFIGURED — simulating message to ${to}:\n${body}`);
+    console.log(`[WhatsApp] NOT CONFIGURED — simulating message to ${formattedTo}:\n${body}`);
     return { success: true, simulated: true };
   }
 
+  // 1. If explicit templateName provided, send as WhatsApp Template
+  if (templateName) {
+    try {
+      const templatePayload = {
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to: formattedTo,
+        type: 'template',
+        template: {
+          name: templateName,
+          language: { code: 'en_US' },
+        },
+      };
+      if (templateParams && templateParams.length > 0) {
+        templatePayload.template.components = [{ type: 'body', parameters: templateParams }];
+      }
+
+      const response = await axios.post(
+        `https://graph.facebook.com/${WA_VERSION}/${WA_PHONE_ID}/messages`,
+        templatePayload,
+        { headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' } }
+      );
+      console.log(`[WhatsApp Template ✓] Sent "${templateName}" to ${formattedTo} — ID: ${response.data.messages?.[0]?.id}`);
+      return { success: true, data: response.data };
+    } catch (err) {
+      console.error(`[WhatsApp Template ✗] Failed for ${formattedTo}:`, err.response?.data || err.message);
+    }
+  }
+
+  // 2. Try sending standard text message
   try {
     const response = await axios.post(
       `https://graph.facebook.com/${WA_VERSION}/${WA_PHONE_ID}/messages`,
       {
         messaging_product: 'whatsapp',
         recipient_type: 'individual',
-        to,
+        to: formattedTo,
         type: 'text',
         text: { preview_url: false, body },
       },
       { headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' } }
     );
-    console.log(`[WhatsApp ✓] Sent to ${to} — ID: ${response.data.messages?.[0]?.id}`);
+    console.log(`[WhatsApp Text ✓] Sent to ${formattedTo} — ID: ${response.data.messages?.[0]?.id}`);
     return { success: true, data: response.data };
   } catch (error) {
-    console.error(`[WhatsApp ✗] Failed for ${to}:`, error.response?.data || error.message);
-    return { success: false, error: error.message };
+    const errData = error.response?.data;
+    console.error(`[WhatsApp Text ✗] Direct text failed for ${formattedTo}:`, JSON.stringify(errData || error.message));
+
+    // 3. Fallback: If freeform text was rejected (e.g. 24h window restriction Error 131047), fallback to Meta template
+    try {
+      console.log(`[WhatsApp Fallback] Attempting Meta hello_world template fallback for ${formattedTo}...`);
+      const fallbackResp = await axios.post(
+        `https://graph.facebook.com/${WA_VERSION}/${WA_PHONE_ID}/messages`,
+        {
+          messaging_product: 'whatsapp',
+          recipient_type: 'individual',
+          to: formattedTo,
+          type: 'template',
+          template: { name: 'hello_world', language: { code: 'en_US' } }
+        },
+        { headers: { Authorization: `Bearer ${WA_TOKEN}`, 'Content-Type': 'application/json' } }
+      );
+      console.log(`[WhatsApp Fallback ✓] Sent template to ${formattedTo} — ID: ${fallbackResp.data.messages?.[0]?.id}`);
+      return { success: true, data: fallbackResp.data, fallback: true };
+    } catch (fbErr) {
+      console.error(`[WhatsApp Fallback ✗] Template fallback failed for ${formattedTo}:`, JSON.stringify(fbErr.response?.data || fbErr.message));
+      return { success: false, error: error.message, details: errData };
+    }
   }
 }
 
 async function sendWhatsAppToCustomer(booking) {
   const phone = (booking.customer_phone || '').replace(/\D/g, '');
   if (!phone) return;
-  const to = phone.startsWith('91') ? phone : `91${phone}`;
+  const to = phone.length === 10 ? `91${phone}` : phone;
 
   const msg =
     `🎉 *TravoRents.com — Booking Confirmed!*\n\n` +
@@ -440,6 +499,24 @@ async function sendWhatsAppToOwner(booking) {
 
   return sendWhatsAppMessage(OWNER_PHONE, msg);
 }
+
+// TEST ROUTE FOR META WHATSAPP CLOUD API
+app.get('/api/test-whatsapp', async (req, res) => {
+  const { to = OWNER_PHONE, template } = req.query;
+  const testMsg = `🧪 *TravoRents.com — Meta WhatsApp Integration Test*\n\nTimestamp: ${new Date().toLocaleString()}\nStatus: System Operational ✅`;
+  
+  const result = template
+    ? await sendWhatsAppMessage(to, testMsg, template)
+    : await sendWhatsAppMessage(to, testMsg);
+
+  res.json({
+    success: result.success,
+    target: to,
+    details: result,
+    whatsappConfigured: Boolean(WA_TOKEN && WA_PHONE_ID),
+    phoneId: WA_PHONE_ID ? `${WA_PHONE_ID.slice(0, 4)}...${WA_PHONE_ID.slice(-4)}` : 'MISSING',
+  });
+});
 
 // ════════════════════════════════════════
 // LEGACY: /api/send-whatsapp (kept for compatibility)
