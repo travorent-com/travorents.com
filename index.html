@@ -514,7 +514,8 @@
   </div>
 </footer>
 
-<a href="tel:+91 84550 65107" class="float-call"><i class="fas fa-phone-alt"></i></a>
+<a href="https://wa.me/918455065107?text=Hi%20TravoRents,%20I%20want%20to%20inquire%20about%20vehicle%20rentals!" target="_blank" class="float-wa" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+<a href="tel:+918455065107" class="float-call" title="Call TravoRents Support"><i class="fas fa-phone-alt"></i></a>
 
 <!-- ══════════════════════════════════════
      BOOKING SUMMARY OVERLAY
@@ -1308,15 +1309,15 @@ document.getElementById('successModal').addEventListener('click',function(e){if(
 
 // ── CONFIG: set your 3 WhatsApp numbers here (country code + number, no +)
 const WA_CONTACTS = [
-  { label: 'Customer',         phone: '7609831901', role: 'customer'  },
-  { label: 'TravoRents Agent', phone: '+91 84550 65107', role: 'agent'     },
-  { label: 'Vehicle Host',     phone: '8984330609', role: 'host'      },
+  { label: 'Customer Support', phone: '918455065107', role: 'customer' },
+  { label: 'TravoRents Agent', phone: '918455065107', role: 'agent'    },
+  { label: 'Vehicle Host',     phone: '918984330609', role: 'host'     },
 ];
 
 // ── Backend endpoint (Node.js server — see whatsapp-backend.js)
 const WA_BACKEND = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://127.0.0.1:3000/api/send-whatsapp'
-  : `${window.location.origin}/api/send-whatsapp`;
+  : 'https://travorents-com.onrender.com/api/send-whatsapp';
 
 // ── Build message text per role
 function waMessage(bookId, role) {
