@@ -569,10 +569,24 @@
                   badge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Completed</span>`;
                 }
 
-                let actionBtn = `<button onclick="viewReceipt('${escapeHtml(ref)}', '${escapeHtml(name)}', '${escapeHtml(amount)}', '${escapeHtml(vehicle)}', '${escapeHtml(status)}', '${escapeHtml(dates)}')" class="text-teal-700 hover:text-teal-800 font-bold hover:underline text-xs">Receipt</button>`;
+                let actionBtn = `
+                  <div class="flex items-center justify-end space-x-2">
+                    <button onclick="sendCustomerWhatsApp('${escapeHtml(ref)}', '${escapeHtml(name)}', '${escapeHtml(phone)}', '${escapeHtml(vehicle)}', '${escapeHtml(amount)}', '${escapeHtml(dates)}')" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] px-2.5 py-1 rounded-lg shadow-sm" title="Send WhatsApp Ticket to Customer">
+                      <i class="fab fa-whatsapp text-xs"></i> WhatsApp
+                    </button>
+                    <button onclick="viewReceipt('${escapeHtml(ref)}', '${escapeHtml(name)}', '${escapeHtml(amount)}', '${escapeHtml(vehicle)}', '${escapeHtml(status)}', '${escapeHtml(dates)}')" class="text-teal-700 hover:text-teal-800 font-bold hover:underline text-xs">Receipt</button>
+                  </div>
+                `;
                 
                 if (status === 'qr_pending') {
-                  actionBtn = `<button onclick="approveQRBooking('${escapeHtml(ref)}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm">Approve QR</button>`;
+                  actionBtn = `
+                    <div class="flex items-center justify-end space-x-1.5">
+                      <button onclick="approveQRBooking('${escapeHtml(ref)}')" class="bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold px-2 py-1 rounded-lg shadow-sm">Approve QR</button>
+                      <button onclick="sendCustomerWhatsApp('${escapeHtml(ref)}', '${escapeHtml(name)}', '${escapeHtml(phone)}', '${escapeHtml(vehicle)}', '${escapeHtml(amount)}', '${escapeHtml(dates)}')" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] px-2 py-1 rounded-lg shadow-sm" title="Send WhatsApp Ticket">
+                        <i class="fab fa-whatsapp text-xs"></i> WhatsApp
+                      </button>
+                    </div>
+                  `;
                 }
 
                 const searchMeta = (ref + ' ' + name + ' ' + vehicle + ' ' + phone).toUpperCase();
@@ -694,6 +708,13 @@
       } catch (err) {
         alert('Could not add vehicle: ' + err.message);
       }
+    }
+
+    function sendCustomerWhatsApp(ref, name, phone, vehicle, amount, dates) {
+      const cleanPhone = (phone || '').replace(/\D/g, '');
+      const formattedPhone = cleanPhone.length === 10 ? '91' + cleanPhone : (cleanPhone || '918455065107');
+      const msg = `🎉 *TRAVORENTS.COM — BOOKING CONFIRMATION*\n\n✅ Your TravoRents booking is confirmed!\n\n📋 *Booking Ref:* ${ref}\n👤 *Customer Name:* ${name}\n🚗 *Vehicle:* ${vehicle}\n📅 *Rental Period:* ${dates}\n💰 *Amount:* ${amount}\n\nThank you for choosing TravoRents! 🙏\nCustomer Support: +91 8455065107`;
+      window.open(`https://wa.me/${formattedPhone}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     async function approveQRBooking(bookingRef) {
