@@ -1008,12 +1008,26 @@ window.addEventListener('scroll',()=>{
   h.style.boxShadow=window.scrollY>80?'0 4px 30px rgba(0,0,0,0.15)':'0 2px 20px rgba(0,0,0,0.08)';
 });
 
-// ── Set today as min date
+// ── Set today as min date & default values
 (function(){
-  const t=new Date().toISOString().split('T')[0];
-  const p=document.getElementById('bkPickupDate'),r=document.getElementById('bkReturnDate');
-  if(p)p.min=t;if(r)r.min=t;
-  if(p)p.addEventListener('change',()=>{if(r)r.min=p.value;});
+  const today = new Date();
+  const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+  const tStr = today.toISOString().split('T')[0];
+  const tmStr = tomorrow.toISOString().split('T')[0];
+
+  const p = document.getElementById('bkPickupDate');
+  const r = document.getElementById('bkReturnDate');
+  const pt = document.getElementById('bkPickupTime');
+  const rt = document.getElementById('bkReturnTime');
+  const loc = document.getElementById('bkLocation');
+
+  if(p) { p.min = tStr; if(!p.value) p.value = tStr; }
+  if(r) { r.min = tStr; if(!r.value) r.value = tmStr; }
+  if(pt && !pt.value) pt.value = "09:30";
+  if(rt && !rt.value) rt.value = "09:30";
+  if(loc && (!loc.value || loc.value.includes('--'))) loc.value = "Nayapalli (Main Office)";
+
+  if(p) p.addEventListener('change', () => { if(r) r.min = p.value; });
 })();
 
 // ── Format date
@@ -1023,35 +1037,28 @@ function fmtDate(d){
   return new Date(d).toLocaleDateString('en-IN',opts);
 }
 
-// ── Open Booking Summary (Redirect to booking-summary.html)
+// ── Open Booking Summary (Redirect directly to booking-summary.html)
 function openBookingSummary(vehicleName, vehicleImage, amount, transmission, fuel, seats){
-  const loc = document.getElementById('bkLocation')?.value;
-  const pDate = document.getElementById('bkPickupDate')?.value;
-  const pTime = document.getElementById('bkPickupTime')?.value;
-  const rDate = document.getElementById('bkReturnDate')?.value;
-  const rTime = document.getElementById('bkReturnTime')?.value;
+  let loc = document.getElementById('bkLocation')?.value;
+  let pDate = document.getElementById('bkPickupDate')?.value;
+  let pTime = document.getElementById('bkPickupTime')?.value || "09:30";
+  let rDate = document.getElementById('bkReturnDate')?.value;
+  let rTime = document.getElementById('bkReturnTime')?.value || "09:30";
 
-  if (!loc || !pDate || !pTime || !rDate || !rTime) {
-    openDateLocationModal(vehicleName, amount, "Daily Rental", vehicleImage, transmission, fuel, seats);
-    return;
-  }
-
-  // Verify dates validity
-  const pickup = new Date(pDate + 'T' + pTime);
-  const dropoff = new Date(rDate + 'T' + rTime);
-  if (dropoff <= pickup) {
-    openDateLocationModal(vehicleName, amount, "Daily Rental", vehicleImage, transmission, fuel, seats);
-    return;
-  }
+  const today = new Date();
+  const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+  if (!pDate) pDate = today.toISOString().split('T')[0];
+  if (!rDate) rDate = tomorrow.toISOString().split('T')[0];
+  if (!loc || loc.includes('--')) loc = "Nayapalli (Main Office)";
 
   // Store vehicle data in localStorage
   const booking = {
-    vehicleName: vehicleName,
-    vehicleImage: vehicleImage,
-    amount: amount,
-    transmission: transmission,
-    fuel: fuel,
-    seats: seats,
+    vehicleName: vehicleName || "Selected Vehicle",
+    vehicleImage: vehicleImage || "images/main logo.png",
+    amount: amount || 0,
+    transmission: transmission || "Manual",
+    fuel: fuel || "Petrol",
+    seats: seats || 2,
     pickupDate: pDate,
     returnDate: rDate,
     pickupTime: pTime,
@@ -1059,7 +1066,7 @@ function openBookingSummary(vehicleName, vehicleImage, amount, transmission, fue
     location: loc
   };
   
-  // Save to localStorage and redirect
+  // Save to localStorage and redirect directly to checkout
   localStorage.setItem('booking', JSON.stringify(booking));
   window.location.href = 'booking-summary.html';
 }
@@ -1839,6 +1846,7 @@ function openDateLocationModal(vehicleName, amount, packageType, imagePath, tran
 
     const pDateInput = document.getElementById('modalPickupDate');
     const rDateInput = document.getElementById('modalReturnDate');
+    const locInput = document.getElementById('modalLocation');
     
     if (pDateInput) {
       pDateInput.min = pickupStr;
@@ -1846,6 +1854,9 @@ function openDateLocationModal(vehicleName, amount, packageType, imagePath, tran
     }
     if (rDateInput) {
       rDateInput.value = returnStr;
+    }
+    if (locInput && (!locInput.value || locInput.value.includes('--'))) {
+      locInput.value = "Nayapalli (Main Office)";
     }
 
     const modal = document.getElementById('bookingModal');

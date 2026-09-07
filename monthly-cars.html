@@ -671,6 +671,7 @@ function openDateLocationModal(vehicleName, amount, packageType, imagePath, tran
 
     const pDateInput = document.getElementById('modalPickupDate');
     const rDateInput = document.getElementById('modalReturnDate');
+    const locInput = document.getElementById('modalLocation');
     
     if (pDateInput) {
       pDateInput.min = pickupStr;
@@ -678,6 +679,9 @@ function openDateLocationModal(vehicleName, amount, packageType, imagePath, tran
     }
     if (rDateInput) {
       rDateInput.value = returnStr;
+    }
+    if (locInput && (!locInput.value || locInput.value.includes('--'))) {
+      locInput.value = "Nayapalli (Main Office)";
     }
 
     const modal = document.getElementById('bookingModal');
