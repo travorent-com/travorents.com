@@ -799,5 +799,29 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
 .dropdown-item.text-danger:hover {
   background: #fef2f2;
 }
+.auth-secondary-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.auth-secondary-btn:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.auth-secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 
 
