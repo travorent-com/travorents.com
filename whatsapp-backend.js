@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const nodemailer = require('nodemailer');
 const crypto = require('node:crypto');
 const path = require('path');
 const db = require('./db');
@@ -532,10 +533,59 @@ app.get('/api/test-whatsapp', async (req, res) => {
 // ════════════════════════════════════════
 const otpStore = new Map(); // phone -> { code, expiresAt, name, email }
 
+// Configure SMTP transporter if SMTP env variables are set
+let mailTransporter = null;
+if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  mailTransporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
+
 async function sendEmailOTP(email, name, otpCode) {
   if (!email) return false;
   try {
-    console.log(`[Email OTP Dispatch] Sent OTP ${otpCode} to ${email} for customer ${name}`);
+    console.log(`[Email OTP Dispatch] Sending real-time OTP ${otpCode} to ${email} for customer ${name}`);
+
+    if (mailTransporter) {
+      const mailOptions = {
+        from: `"TravoRents Verification" <${process.env.SMTP_USER}>`,
+        to: email,
+        subject: `🔐 Your TravoRents Verification Code: ${otpCode}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 540px; margin: 0 auto; border: 1px solid #e1e8ed; border-radius: 16px; overflow: hidden;">
+            <div style="background: #0C447C; color: #ffffff; padding: 24px; text-align: center;">
+              <h2 style="margin: 0; font-size: 22px; font-weight: 800;">TravoRents.com</h2>
+              <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.9;">Self-Drive Car & Bike Rental</p>
+            </div>
+            <div style="padding: 28px 24px; background: #ffffff;">
+              <h3 style="color: #1a1a2e; margin-top: 0;">Hello ${name || 'Customer'},</h3>
+              <p style="color: #4a5568; font-size: 14.5px; line-height: 1.6;">
+                Use the following 4-digit verification code to log in and confirm your vehicle booking with <strong>TravoRents</strong>:
+              </p>
+              <div style="background: #f8fafc; border: 2px dashed #0C447C; padding: 18px; text-align: center; border-radius: 12px; margin: 20px 0;">
+                <span style="font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #0C447C;">${otpCode}</span>
+              </div>
+              <p style="color: #718096; font-size: 12.5px;">
+                ⏱️ This verification code is valid for <strong>10 minutes</strong>. Do not share this code with anyone.
+              </p>
+            </div>
+            <div style="background: #f1f5f9; padding: 14px; text-align: center; font-size: 12px; color: #64748b;">
+              Customer Support: +91 84550 65107 | <a href="https://travorents.com" style="color: #0C447C; font-weight: bold; text-decoration: none;">www.travorents.com</a>
+            </div>
+          </div>
+        `
+      };
+      await mailTransporter.sendMail(mailOptions);
+      console.log(`[Email OTP Sent ✅] Real-time email delivered to ${email}`);
+    } else {
+      console.log(`[Email OTP Logged] OTP ${otpCode} generated for ${email}. (Set SMTP_USER & SMTP_PASS in Render env for direct email inbox delivery)`);
+    }
     return true;
   } catch (err) {
     console.error(`[Email OTP Error]:`, err.message);
