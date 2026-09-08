@@ -744,7 +744,17 @@
 
     // Terms Modal triggers
     function triggerTermsModal() {
-      // Validate customer details form first
+      // 1. Strict Login Check
+      if (typeof TravoAuth !== 'undefined' && !TravoAuth.isLoggedIn()) {
+        alert("Please log in to complete your vehicle booking.");
+        TravoAuth.openLoginModal(function() {
+          autofillCustomerDetails();
+          triggerTermsModal();
+        });
+        return;
+      }
+
+      // 2. Validate customer details form
       const customerName = document.getElementById("customerName")?.value || "";
       const customerPhone = document.getElementById("customerPhone")?.value || "";
       const customerEmail = document.getElementById("customerEmail")?.value || "";
@@ -768,11 +778,17 @@
     }
 
     function executeBookingPayment() {
+      // Re-verify login before payment
+      if (typeof TravoAuth !== 'undefined' && !TravoAuth.isLoggedIn()) {
+        alert("Please log in to complete your booking.");
+        TravoAuth.openLoginModal();
+        return;
+      }
       closeTermsModal();
       makePayment();
     }
 
-    // Auto-fill customer details from TravoAuth session
+    // Auto-fill customer details & enforce login requirement
     function autofillCustomerDetails() {
       if (typeof TravoAuth !== 'undefined') {
         const u = TravoAuth.getUser();
@@ -783,6 +799,13 @@
           if (nameEl && u.name) nameEl.value = u.name;
           if (phoneEl && u.phone) phoneEl.value = u.phone;
           if (emailEl && u.email) emailEl.value = u.email;
+        } else {
+          // Open login modal automatically if accessing checkout without login
+          setTimeout(() => {
+            TravoAuth.openLoginModal(function() {
+              autofillCustomerDetails();
+            });
+          }, 400);
         }
       }
     }
