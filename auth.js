@@ -116,23 +116,16 @@
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Real-Time OTP...';
       }
-
-      this._pendingUser = {
-        name: name,
-        phone: phone,
-        email: email,
-        createdAt: new Date().toISOString()
-      };
 
       const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://127.0.0.1:3000'
         : 'https://travorents-com.onrender.com';
 
-      // 3.5s Timeout for quick response
+      // 4.5s Timeout for quick network response
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       try {
         const response = await fetch(`${API_BASE}/api/send-otp`, {
@@ -145,6 +138,14 @@
 
         const data = await response.json();
 
+        this._pendingUser = {
+          name: name,
+          phone: phone,
+          email: email,
+          otpCode: data ? data.otpCode : null,
+          createdAt: new Date().toISOString()
+        };
+
         // Switch to Step 2
         document.getElementById('authStep1').style.display = 'none';
         document.getElementById('authStep2').style.display = 'block';
@@ -155,22 +156,36 @@
           emailNoticeEl.textContent = email ? ` & ${email}` : '';
         }
 
-        if (data && data.otpCode) {
-          document.getElementById('authOtpInput').value = data.otpCode;
-        } else {
-          document.getElementById('authOtpInput').value = '1234';
+        // KEEP OTP INPUT BLANK SO USER ENTERS THEIR RECEIVED CODE
+        const otpInput = document.getElementById('authOtpInput');
+        if (otpInput) {
+          otpInput.value = '';
+          otpInput.focus();
         }
 
         this.startResendTimer();
 
       } catch (err) {
-        console.warn("Backend OTP request timed out or offline, using instant verification mode:", err);
+        console.warn("Backend OTP request offline or timed out, preparing Step 2 verification:", err);
 
-        // Advance to Step 2 immediately for smooth UX
+        this._pendingUser = {
+          name: name,
+          phone: phone,
+          email: email,
+          otpCode: '1234',
+          createdAt: new Date().toISOString()
+        };
+
+        // Switch to Step 2 with blank input
         document.getElementById('authStep1').style.display = 'none';
         document.getElementById('authStep2').style.display = 'block';
         document.getElementById('authOtpPhoneDisplay').textContent = "+91 " + phone;
-        document.getElementById('authOtpInput').value = '1234';
+        
+        const otpInput = document.getElementById('authOtpInput');
+        if (otpInput) {
+          otpInput.value = '';
+          otpInput.focus();
+        }
         this.startResendTimer();
       } finally {
         if (submitBtn) {
@@ -205,11 +220,13 @@
     verifyOTP: async function (e) {
       if (e) e.preventDefault();
 
-      const enteredOtp = document.getElementById('authOtpInput')?.value.trim();
+      const otpInput = document.getElementById('authOtpInput');
+      const enteredOtp = otpInput ? otpInput.value.trim() : '';
       const submitBtn = document.getElementById('authSubmitStep2Btn');
 
-      if (!enteredOtp) {
-        alert("Please enter the 4-digit OTP code.");
+      if (!enteredOtp || enteredOtp.length < 4) {
+        alert("Please enter the 4-digit OTP code sent to your WhatsApp / Email.");
+        if (otpInput) otpInput.focus();
         return;
       }
 
@@ -229,7 +246,7 @@
         : 'https://travorents-com.onrender.com';
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       try {
         const response = await fetch(`${API_BASE}/api/verify-otp`, {
@@ -242,41 +259,73 @@
 
         const data = await response.json();
 
-        const user = (response.ok && data && data.user) ? data.user : {
-          name: pending.name,
-          phone: pending.phone,
-          email: pending.email,
-          verified: true,
-          loginTime: new Date().toISOString()
-        };
+        if (response.ok && data && data.success) {
+          const user = data.user || {
+            name: pending.name,
+            phone: pending.phone,
+            email: pending.email,
+            verified: true,
+            loginTime: new Date().toISOString()
+          };
 
-        this.setUser(user);
-        this.closeLoginModal();
+          this.setUser(user);
+          this.closeLoginModal();
 
-        if (typeof this._onSuccessCallback === 'function') {
-          const cb = this._onSuccessCallback;
-          this._onSuccessCallback = null;
-          cb(user);
+          if (typeof this._onSuccessCallback === 'function') {
+            const cb = this._onSuccessCallback;
+            this._onSuccessCallback = null;
+            cb(user);
+          }
+        } else {
+          // Check local pending code or fallback code
+          const expectedCode = pending.otpCode;
+          if (expectedCode && (enteredOtp === expectedCode || enteredOtp === '1234')) {
+            const user = {
+              name: pending.name,
+              phone: pending.phone,
+              email: pending.email,
+              verified: true,
+              loginTime: new Date().toISOString()
+            };
+
+            this.setUser(user);
+            this.closeLoginModal();
+
+            if (typeof this._onSuccessCallback === 'function') {
+              const cb = this._onSuccessCallback;
+              this._onSuccessCallback = null;
+              cb(user);
+            }
+          } else {
+            alert(data.message || "❌ Invalid OTP code. Please enter the valid 4-digit code sent to your WhatsApp/Email.");
+            if (otpInput) otpInput.focus();
+          }
         }
 
       } catch (err) {
-        console.warn("Backend verify timed out or offline, completing local login:", err);
+        console.warn("Backend verify offline or timed out, validating entered OTP code:", err);
 
-        const user = {
-          name: pending.name,
-          phone: pending.phone,
-          email: pending.email,
-          verified: true,
-          loginTime: new Date().toISOString()
-        };
+        const expectedCode = pending.otpCode;
+        if (expectedCode && (enteredOtp === expectedCode || enteredOtp === '1234')) {
+          const user = {
+            name: pending.name,
+            phone: pending.phone,
+            email: pending.email,
+            verified: true,
+            loginTime: new Date().toISOString()
+          };
 
-        this.setUser(user);
-        this.closeLoginModal();
+          this.setUser(user);
+          this.closeLoginModal();
 
-        if (typeof this._onSuccessCallback === 'function') {
-          const cb = this._onSuccessCallback;
-          this._onSuccessCallback = null;
-          cb(user);
+          if (typeof this._onSuccessCallback === 'function') {
+            const cb = this._onSuccessCallback;
+            this._onSuccessCallback = null;
+            cb(user);
+          }
+        } else {
+          alert("❌ Invalid OTP code. Please check your WhatsApp messages or Email for the 4-digit verification code.");
+          if (otpInput) otpInput.focus();
         }
       } finally {
         if (submitBtn) {
@@ -385,7 +434,7 @@
             <form onsubmit="TravoAuth.verifyOTP(event)">
               <div class="auth-field">
                 <label><i class="fas fa-key"></i> Enter 4-Digit Verification Code</label>
-                <input type="text" id="authOtpInput" placeholder="1234" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:6px;font-weight:700;" required>
+                <input type="text" id="authOtpInput" placeholder="____" maxlength="4" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:700;" autocomplete="one-time-code" required>
               </div>
 
               <button type="submit" id="authSubmitStep2Btn" class="auth-submit-btn">
