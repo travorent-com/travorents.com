@@ -227,15 +227,15 @@ function showBookingModal(vehicleName) {
       <p style="color:#6c757d;font-size:14px;line-height:1.7;margin-bottom:24px;">
         To complete your booking, please call us or WhatsApp us directly. Our team is available 24/7!
       </p>
-      <a href="tel:+919090610116" style="
+      <a href="tel:+918455065107" style="
         display:block; background:#e8261a; color:#fff;
         padding:14px; border-radius:12px; font-size:16px;
         font-weight:700; text-decoration:none; margin-bottom:12px;
         transition:all 0.3s ease;
       ">
-        📞 Call: +91 9090610116
+        📞 Call: +91 84550 65107
       </a>
-      <a href="https://wa.me/919090610116?text=Hi, I want to book ${encodeURIComponent(vehicleName)}" target="_blank" style="
+      <a href="https://wa.me/918455065107?text=Hi, I want to book ${encodeURIComponent(vehicleName)}" target="_blank" style="
         display:block; background:#25D366; color:#fff;
         padding:14px; border-radius:12px; font-size:16px;
         font-weight:700; text-decoration:none; margin-bottom:20px;
