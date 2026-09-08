@@ -536,6 +536,268 @@ footer ul li a:hover{color:var(--primary-light);gap:12px;}
 .btn-cancel:hover{background:#d0d7de;}
 .btn-confirm{background:var(--primary);color:#fff;border:none;padding:11px 24px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;}
 .btn-confirm:hover{background:var(--primary-mid);}
-@keyframes fadeInModal{from{opacity:0;}to{opacity:1;}}
-@keyframes slideUpModal{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+/* ===== CUSTOMER AUTH & LOGIN MODAL STYLES ===== */
+.auth-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 999999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.auth-modal-overlay.active {
+  display: flex !important;
+  animation: fadeInModal 0.3s ease;
+}
+.auth-modal-card {
+  background: #ffffff;
+  border-radius: 24px;
+  max-width: 440px;
+  width: 100%;
+  padding: 32px 28px 24px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  position: relative;
+  animation: slideUpModal 0.3s ease;
+  border: 1px solid rgba(12, 68, 124, 0.15);
+}
+.auth-close-btn {
+  position: absolute;
+  top: 18px; right: 18px;
+  background: #f1f5f9;
+  border: none;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  color: #64748b;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.auth-close-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.auth-logo {
+  height: 48px;
+  width: auto;
+  margin-bottom: 12px;
+}
+.auth-header h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0C447C;
+  margin: 0 0 6px;
+}
+.auth-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+.auth-field {
+  margin-bottom: 18px;
+  text-align: left;
+}
+.auth-field label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+.auth-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+.auth-field input:focus {
+  border-color: #0C447C;
+  outline: none;
+  box-shadow: 0 0 0 3.5px rgba(12, 68, 124, 0.12);
+}
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.phone-input-wrap .country-code {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-right: 1.5px solid #cbd5e1;
+  font-weight: 700;
+  color: #0C447C;
+  font-size: 14px;
+}
+.phone-input-wrap input {
+  border: none;
+  border-radius: 0;
+}
+.phone-input-wrap input:focus {
+  box-shadow: none;
+}
+.auth-submit-btn {
+  width: 100%;
+  background: #0C447C;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.auth-submit-btn:hover {
+  background: #185ea0;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(12, 68, 124, 0.25);
+}
+.otp-notice {
+  background: #e0f2fe;
+  border-left: 4px solid #0284c7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #0369a1;
+  margin-bottom: 18px;
+  text-align: left;
+}
+.auth-back-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+.auth-back-btn:hover { color: #0C447C; }
+.auth-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* ===== NAV BAR AUTH USER BADGE & BUTTON ===== */
+.nav-login-btn {
+  background: #0C447C;
+  color: #ffffff !important;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 12px rgba(12,68,124,0.2);
+}
+.nav-login-btn:hover {
+  background: #EF9F27;
+  color: #3a1f00 !important;
+  transform: translateY(-1px);
+}
+.user-pill-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.user-pill-btn {
+  background: rgba(12, 68, 124, 0.08);
+  color: #0C447C !important;
+  border: 1.5px solid rgba(12, 68, 124, 0.2);
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.user-pill-btn:hover {
+  background: #0C447C;
+  color: #ffffff !important;
+}
+.user-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #ffffff;
+  min-width: 220px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  z-index: 9999;
+}
+.user-dropdown-menu.show {
+  display: block;
+  animation: fadeInModal 0.2s ease;
+}
+.dropdown-header {
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+.dropdown-header strong {
+  display: block;
+  font-size: 13.5px;
+  color: #0f172a;
+}
+.dropdown-header span {
+  font-size: 12px;
+  color: #64748b;
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  font-size: 13px;
+  color: #334155;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.dropdown-item:hover {
+  background: #f1f5f9;
+  color: #0C447C;
+}
+.dropdown-item.text-danger {
+  color: #dc2626;
+  border-top: 1px solid #f1f5f9;
+}
+.dropdown-item.text-danger:hover {
+  background: #fef2f2;
+}
+
 

@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="styles.css">
+<script src="auth.js"></script>
 </head>
 <body>
 
@@ -1066,9 +1067,15 @@ function openBookingSummary(vehicleName, vehicleImage, amount, transmission, fue
     location: loc
   };
   
-  // Save to localStorage and redirect directly to checkout
+  // Save to localStorage and require login before redirecting
   localStorage.setItem('booking', JSON.stringify(booking));
-  window.location.href = 'booking-summary.html';
+  if (typeof TravoAuth !== 'undefined' && !TravoAuth.isLoggedIn()) {
+    TravoAuth.openLoginModal(function() {
+      window.location.href = 'booking-summary.html';
+    });
+  } else {
+    window.location.href = 'booking-summary.html';
+  }
 }
 
 function findVehicle() {
@@ -1933,7 +1940,14 @@ function confirmModalBooking(e) {
   } catch(err) {
     console.error("Storage error:", err);
   }
-  window.location.href = "booking-summary.html";
+
+  if (typeof TravoAuth !== 'undefined' && !TravoAuth.isLoggedIn()) {
+    TravoAuth.openLoginModal(function() {
+      window.location.href = "booking-summary.html";
+    });
+  } else {
+    window.location.href = "booking-summary.html";
+  }
 }
 </script>
 

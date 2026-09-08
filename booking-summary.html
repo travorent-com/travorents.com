@@ -12,6 +12,8 @@
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
   <style>
     /* ─── Premium Styling System ─── */
     *, *::before, *::after {
@@ -769,6 +771,24 @@
       closeTermsModal();
       makePayment();
     }
+
+    // Auto-fill customer details from TravoAuth session
+    function autofillCustomerDetails() {
+      if (typeof TravoAuth !== 'undefined') {
+        const u = TravoAuth.getUser();
+        if (u) {
+          const nameEl = document.getElementById("customerName");
+          const phoneEl = document.getElementById("customerPhone");
+          const emailEl = document.getElementById("customerEmail");
+          if (nameEl && u.name) nameEl.value = u.name;
+          if (phoneEl && u.phone) phoneEl.value = u.phone;
+          if (emailEl && u.email) emailEl.value = u.email;
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", autofillCustomerDetails);
+    window.addEventListener("load", autofillCustomerDetails);
   </script>
 </body>
 </html>

@@ -6,6 +6,8 @@
 <title>Weekly Car Rentals in Bhubaneswar - TravoRents.com</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+<script src="auth.js"></script>
 <style>
 :root{--primary:#0C447C;--primary-mid:#185FA5;--primary-light:#378ADD;--accent:#EF9F27;--accent-dark:#BA7517;--dark:#1a1a2e;--darker:#0a0f1e;--light:#f8f9fa;--gray:#6c757d;--light-gray:#f1f3f5;--white:#fff;--shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 8px 40px rgba(0,0,0,0.18);--radius:12px;--transition:all 0.3s ease;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -759,7 +761,14 @@ function confirmModalBooking(e) {
   } catch(err) {
     console.error("Storage error:", err);
   }
-  window.location.href = "booking-summary.html";
+
+  if (typeof TravoAuth !== 'undefined' && !TravoAuth.isLoggedIn()) {
+    TravoAuth.openLoginModal(function() {
+      window.location.href = "booking-summary.html";
+    });
+  } else {
+    window.location.href = "booking-summary.html";
+  }
 }
 </script>
 </body>
