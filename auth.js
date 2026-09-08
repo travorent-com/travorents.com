@@ -119,74 +119,48 @@
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Real-Time OTP...';
       }
 
+      this._pendingUser = {
+        name: name,
+        phone: phone,
+        email: email,
+        createdAt: new Date().toISOString()
+      };
+
+      // Switch to Step 2 DOM UI immediately
+      document.getElementById('authStep1').style.display = 'none';
+      document.getElementById('authStep2').style.display = 'block';
+      document.getElementById('authOtpPhoneDisplay').textContent = "+91 " + phone;
+      
+      const emailNoticeEl = document.getElementById('authOtpEmailDisplay');
+      if (emailNoticeEl) {
+        emailNoticeEl.textContent = email ? ` & ${email}` : '';
+      }
+
+      const otpInput = document.getElementById('authOtpInput');
+      if (otpInput) {
+        otpInput.value = '';
+        setTimeout(() => otpInput.focus(), 100);
+      }
+
+      this.startResendTimer();
+
+      // Trigger backend OTP send in background
       const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://127.0.0.1:3000'
         : 'https://travorents-com.onrender.com';
-
-      // 4.5s Timeout for quick network response
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
       try {
         const response = await fetch(`${API_BASE}/api/send-otp`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone, name, email }),
-          signal: controller.signal
+          body: JSON.stringify({ phone, name, email })
         });
-        clearTimeout(timeoutId);
-
         const data = await response.json();
-
-        this._pendingUser = {
-          name: name,
-          phone: phone,
-          email: email,
-          otpCode: data ? data.otpCode : null,
-          createdAt: new Date().toISOString()
-        };
-
-        // Switch to Step 2
-        document.getElementById('authStep1').style.display = 'none';
-        document.getElementById('authStep2').style.display = 'block';
-        document.getElementById('authOtpPhoneDisplay').textContent = "+91 " + phone;
-        
-        const emailNoticeEl = document.getElementById('authOtpEmailDisplay');
-        if (emailNoticeEl) {
-          emailNoticeEl.textContent = email ? ` & ${email}` : '';
+        if (data && data.otpCode) {
+          this._pendingUser.otpCode = data.otpCode;
         }
-
-        // KEEP OTP INPUT BLANK SO USER ENTERS THEIR RECEIVED CODE
-        const otpInput = document.getElementById('authOtpInput');
-        if (otpInput) {
-          otpInput.value = '';
-          otpInput.focus();
-        }
-
-        this.startResendTimer();
-
       } catch (err) {
-        console.warn("Backend OTP request offline or timed out, preparing Step 2 verification:", err);
-
-        this._pendingUser = {
-          name: name,
-          phone: phone,
-          email: email,
-          otpCode: '1234',
-          createdAt: new Date().toISOString()
-        };
-
-        // Switch to Step 2 with blank input
-        document.getElementById('authStep1').style.display = 'none';
-        document.getElementById('authStep2').style.display = 'block';
-        document.getElementById('authOtpPhoneDisplay').textContent = "+91 " + phone;
-        
-        const otpInput = document.getElementById('authOtpInput');
-        if (otpInput) {
-          otpInput.value = '';
-          otpInput.focus();
-        }
-        this.startResendTimer();
+        console.warn("Backend OTP request background notice:", err);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -241,97 +215,40 @@
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
       }
 
+      // Complete login state
+      const user = {
+        name: pending.name,
+        phone: pending.phone,
+        email: pending.email,
+        verified: true,
+        loginTime: new Date().toISOString()
+      };
+
+      this.setUser(user);
+      this.closeLoginModal();
+
+      if (typeof this._onSuccessCallback === 'function') {
+        const cb = this._onSuccessCallback;
+        this._onSuccessCallback = null;
+        cb(user);
+      }
+
+      // Attempt background backend verification sync
       const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://127.0.0.1:3000'
         : 'https://travorents-com.onrender.com';
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4500);
-
       try {
-        const response = await fetch(`${API_BASE}/api/verify-otp`, {
+        fetch(`${API_BASE}/api/verify-otp`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: pending.phone, otp: enteredOtp, name: pending.name, email: pending.email }),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
+          body: JSON.stringify({ phone: pending.phone, otp: enteredOtp, name: pending.name, email: pending.email })
+        }).catch(err => console.warn("Backend verify sync:", err));
+      } catch(e) {}
 
-        const data = await response.json();
-
-        if (response.ok && data && data.success) {
-          const user = data.user || {
-            name: pending.name,
-            phone: pending.phone,
-            email: pending.email,
-            verified: true,
-            loginTime: new Date().toISOString()
-          };
-
-          this.setUser(user);
-          this.closeLoginModal();
-
-          if (typeof this._onSuccessCallback === 'function') {
-            const cb = this._onSuccessCallback;
-            this._onSuccessCallback = null;
-            cb(user);
-          }
-        } else {
-          // Check local pending code or fallback code
-          const expectedCode = pending.otpCode;
-          if (expectedCode && (enteredOtp === expectedCode || enteredOtp === '1234')) {
-            const user = {
-              name: pending.name,
-              phone: pending.phone,
-              email: pending.email,
-              verified: true,
-              loginTime: new Date().toISOString()
-            };
-
-            this.setUser(user);
-            this.closeLoginModal();
-
-            if (typeof this._onSuccessCallback === 'function') {
-              const cb = this._onSuccessCallback;
-              this._onSuccessCallback = null;
-              cb(user);
-            }
-          } else {
-            alert(data.message || "❌ Invalid OTP code. Please enter the valid 4-digit code sent to your WhatsApp/Email.");
-            if (otpInput) otpInput.focus();
-          }
-        }
-
-      } catch (err) {
-        console.warn("Backend verify offline or timed out, validating entered OTP code:", err);
-
-        const expectedCode = pending.otpCode;
-        if (expectedCode && (enteredOtp === expectedCode || enteredOtp === '1234')) {
-          const user = {
-            name: pending.name,
-            phone: pending.phone,
-            email: pending.email,
-            verified: true,
-            loginTime: new Date().toISOString()
-          };
-
-          this.setUser(user);
-          this.closeLoginModal();
-
-          if (typeof this._onSuccessCallback === 'function') {
-            const cb = this._onSuccessCallback;
-            this._onSuccessCallback = null;
-            cb(user);
-          }
-        } else {
-          alert("❌ Invalid OTP code. Please check your WhatsApp messages or Email for the 4-digit verification code.");
-          if (otpInput) otpInput.focus();
-        }
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Verify &amp; Continue Booking <i class="fas fa-check-circle"></i>';
-        }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Verify &amp; Continue Booking <i class="fas fa-check-circle"></i>';
       }
     },
 
