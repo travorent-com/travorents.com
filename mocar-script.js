@@ -548,24 +548,30 @@ console.log('%cMOCAR 🚗 Website Loaded Successfully!', 'color:#e8261a;font-siz
 
 
 function openTermsModal() {
-  document.getElementById('termsModal').style.display = 'flex';
+  const modal = document.getElementById('termsModal');
+  if (modal) modal.style.display = 'flex';
 }
 
 function closeTermsModal() {
-  document.getElementById('termsModal').style.display = 'none';
+  const modal = document.getElementById('termsModal');
+  if (modal) modal.style.display = 'none';
 }
 
 function goToPaymentPage() {
   const agree = document.getElementById('agreeCheck');
-
-  if (!agree.checked) {
+  if (!agree || !agree.checked) {
     alert('Please agree to terms & conditions');
     return;
   }
 
-  document.getElementById('termsModal').style.display = 'none';
-  document.getElementById('bookingSummaryPage').style.display = 'none';
-  document.getElementById('paymentPage').style.display = 'grid';
+  const termsModal = document.getElementById('termsModal');
+  if (termsModal) termsModal.style.display = 'none';
+
+  const bookingSummaryPage = document.getElementById('bookingSummaryPage');
+  if (bookingSummaryPage) bookingSummaryPage.style.display = 'none';
+
+  const paymentPage = document.getElementById('paymentPage');
+  if (paymentPage) paymentPage.style.display = 'grid';
 }
 
 document.addEventListener('click', (e) => {
@@ -574,13 +580,17 @@ document.addEventListener('click', (e) => {
   if (bookBtn) {
     const vehicleName = bookBtn.dataset.vehicle || 'Vehicle';
 
-    document.getElementById('selectedVehicleName').innerText = vehicleName;
-    document.getElementById('bookingSummaryPage').style.display = 'grid';
+    const selectedNameEl = document.getElementById('selectedVehicleName');
+    if (selectedNameEl) selectedNameEl.innerText = vehicleName;
 
-    window.scrollTo({
-      top: document.getElementById('bookingSummaryPage').offsetTop,
-      behavior: 'smooth'
-    });
+    const summaryPageEl = document.getElementById('bookingSummaryPage');
+    if (summaryPageEl) {
+      summaryPageEl.style.display = 'grid';
+      window.scrollTo({
+        top: summaryPageEl.offsetTop,
+        behavior: 'smooth'
+      });
+    }
   }
 });
 

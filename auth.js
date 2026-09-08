@@ -260,7 +260,8 @@
       navUserContainers.forEach(container => {
         let btnEl = container.querySelector('.btn-travo-auth');
         if (!btnEl) {
-          btnEl = document.createElement('li');
+          const isUL = container.tagName && container.tagName.toLowerCase() === 'ul';
+          btnEl = document.createElement(isUL ? 'li' : 'div');
           btnEl.className = 'btn-travo-auth';
           container.appendChild(btnEl);
         }
@@ -284,8 +285,8 @@
           `;
         } else {
           btnEl.innerHTML = `
-            <button class="nav-login-btn" onclick="TravoAuth.openLoginModal()">
-              <i class="fas fa-lock"></i> Customer Login
+            <button class="auth-nav-login-btn" onclick="TravoAuth.openLoginModal()">
+              <i class="fas fa-sign-in-alt"></i> Login
             </button>
           `;
         }
@@ -310,7 +311,7 @@
           <button class="auth-close-btn" onclick="TravoAuth.closeLoginModal()"><i class="fas fa-times"></i></button>
 
           <div class="auth-header">
-            <img src="images/main logo.png" alt="TravoRents Logo" class="auth-logo" onerror="this.src='main logo.png'">
+            <img src="mainlogo2.jpeg" alt="TravoRents Logo" class="auth-logo">
             <h3>Customer Login</h3>
             <p>Login to confirm your vehicle booking with TravoRents</p>
           </div>

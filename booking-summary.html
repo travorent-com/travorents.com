@@ -6,7 +6,7 @@
   <title>Confirm Booking | TravoRents</title>
   <script>
     window.onerror = function(message, source, lineno, colno, error) {
-      alert("JS Error: " + message + " on line " + lineno);
+      console.error("JS Error: " + message + " on line " + lineno, error);
       return false;
     };
   </script>

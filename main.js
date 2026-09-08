@@ -391,9 +391,8 @@ JSON.stringify(booking)
 
 loadSummary();
 
-document
-.getElementById("summaryOverlay")
-.classList.add("active");
+const summaryOverlay = document.getElementById("summaryOverlay");
+if (summaryOverlay) summaryOverlay.classList.add("active");
 
 }function loadSummary(){
 
@@ -402,157 +401,59 @@ JSON.parse(localStorage.getItem("booking"));
 
 if(!booking) return;
 
-document.getElementById("summVehicleName")
-.innerText =
-booking.vehicleName;
+const setTxt = (id, val) => {
+  const el = document.getElementById(id);
+  if (el) el.innerText = val;
+};
 
-document.getElementById("summVehicleImg")
-.innerHTML =
-`<img src="${booking.vehicleImage}"
-style="width:100%;height:100%;object-fit:contain">`;
+setTxt("summVehicleName", booking.vehicleName);
+const imgEl = document.getElementById("summVehicleImg");
+if (imgEl) imgEl.innerHTML = `<img src="${booking.vehicleImage}" style="width:100%;height:100%;object-fit:contain">`;
+setTxt("summPickupDate", booking.pickupDate);
+setTxt("summPickupTime", booking.pickupTime);
+setTxt("summReturnDate", booking.returnDate);
+setTxt("summReturnTime", booking.returnTime);
+setTxt("summLocationName", booking.location);
+setTxt("summTransmission", booking.transmission);
+setTxt("summFuel", booking.fuel);
+setTxt("summSeats", booking.seats);
 
-document.getElementById("summPickupDate")
-.innerText =
-booking.pickupDate;
+const gst = Math.round(booking.amount * 0.18);
+const total = booking.amount + gst;
 
-document.getElementById("summPickupTime")
-.innerText =
-booking.pickupTime;
-
-document.getElementById("summReturnDate")
-.innerText =
-booking.returnDate;
-
-document.getElementById("summReturnTime")
-.innerText =
-booking.returnTime;
-
-document.getElementById("summLocationName")
-.innerText =
-booking.location;
-
-document.getElementById("summTransmission")
-.innerText =
-booking.transmission;
-
-document.getElementById("summFuel")
-.innerText =
-booking.fuel;
-
-document.getElementById("summSeats")
-.innerText =
-booking.seats;
-
-const gst =
-Math.round(booking.amount * 0.18);
-
-const total =
-booking.amount + gst + 29.5;
-
-document.getElementById("billingBase")
-.innerText =
-"₹"+booking.amount;
-
-document.getElementById("billingTax")
-.innerText =
-"₹"+gst;
-
-document.getElementById("billingSubtotal")
-.innerText =
-"₹"+(booking.amount+gst);
-
-document.getElementById("billingTotal")
-.innerText =
-"₹"+total;
+setTxt("billingBase", "₹" + booking.amount);
+setTxt("billingTax", "₹" + gst);
+setTxt("billingSubtotal", "₹" + total);
+setTxt("billingTotal", "₹" + total);
 
 }
 
 
 function updateHelmetCharge() {
-    const helmetQty = parseInt(document.getElementById("helmetCount").value) || 0;
+  const helmetEl = document.getElementById("helmetCount");
+  if (!helmetEl) return;
 
-    let helmetCharge = 0;
+  const helmetVal = parseInt(helmetEl.value) || 0;
+  let helmetCharge = 0;
+  if (helmetVal > 1) {
+    helmetCharge = (helmetVal - 1) * 50;
+  }
 
-    // First helmet free
-    if (helmetQty > 1) {
-        helmetCharge = (helmetQty - 1) * 50;
-    }
+  const helmetChargeEl = document.getElementById("helmetCharge");
+  if (helmetChargeEl) helmetChargeEl.textContent = helmetCharge;
 
-    const vehicleAmount = currentVehiclePrice; // your base rental amount
-    const gst = Math.round(vehicleAmount * 0.18);
+  const rentPriceEl = document.getElementById("rentPrice");
+  const rentPrice = rentPriceEl ? parseFloat(rentPriceEl.textContent.replace(/[^\d.]/g, '')) || 0 : 0;
 
-    const total = vehicleAmount + gst + helmetCharge;
+  const gstPriceEl = document.getElementById("gstPrice");
+  const gstPrice = gstPriceEl ? parseFloat(gstPriceEl.textContent.replace(/[^\d.]/g, '')) || 0 : 0;
 
-    document.getElementById("helmetCharge").innerText = `₹${helmetCharge}`;
-    document.getElementById("billingTotal").innerText = `₹${total}`;
-}
-function updateHelmetCharges() {
+  const total = rentPrice + gstPrice + helmetCharge;
 
-    const helmetCount =
-        parseInt(document.getElementById("helmetCount").value) || 0;
+  const totalPriceEl = document.getElementById("totalPrice");
+  if (totalPriceEl) totalPriceEl.textContent = Math.round(total);
 
-    let helmetCharge = 0;
-
-    // First helmet free
-    if (helmetCount > 1) {
-        helmetCharge = (helmetCount - 1) * 50;
-    }
-
-    // Read current values
-    const rentalCharge = parseFloat(
-        document.getElementById("rentalCharge").innerText.replace(/[^\d.]/g, '')
-    ) || 0;
-
-    const gst = parseFloat(
-        document.getElementById("gstAmount").innerText.replace(/[^\d.]/g, '')
-    ) || 0;
-
-    const total =
-        rentalCharge +
-        gst +
-        helmetCharge;
-
-    // Update right side billing
-    document.getElementById("helmetChargeAmount").innerText =
-        "₹" + helmetCharge;
-
-    document.getElementById("totalDueAmount").innerText =
-        "₹" + total;
-}
-function updateHelmetCharge() {
-
-    const helmetCount =
-        parseInt(document.getElementById("helmetCount").value);
-
-    let helmetCharge = 0;
-
-    // First helmet free
-    if (helmetCount > 1) {
-        helmetCharge = (helmetCount - 1) * 50;
-    }
-
-    // Update Helmet Charges row
-    document.getElementById("helmetCharge").textContent =
-        helmetCharge;
-
-    // Get rental price
-    const rentPrice =
-        parseFloat(
-            document.getElementById("rentPrice").textContent
-        ) || 0;
-
-    // Get GST
-    const gstPrice =
-        parseFloat(
-            document.getElementById("gstPrice").textContent
-        ) || 0;
-
-    // Calculate Total
-    const total =
-        rentPrice +
-        gstPrice +
-        helmetCharge;
-
-    updateQRAndTotal(total.toFixed(0));
+  const qrTotalEl = document.getElementById("qrTotalAmount");
+  if (qrTotalEl) qrTotalEl.textContent = Math.round(total);
 }
 

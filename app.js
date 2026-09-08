@@ -37,6 +37,8 @@
     const pickupTime = byId("bkPickupTime");
     const returnTime = byId("bkReturnTime");
 
+    if (!pickupDate || !returnDate || !pickupTime || !returnTime) return;
+
     pickupDate.min = dateValue(0);
     if (!pickupDate.value) pickupDate.value = dateValue(0);
     returnDate.min = pickupDate.value;
@@ -57,6 +59,7 @@
     const pickupTime = byId("bkPickupTime");
     const returnTime = byId("bkReturnTime");
 
+    if (!location || !pickupDate || !returnDate || !pickupTime || !returnTime) return false;
     if (!location.value || !pickupDate.value || !returnDate.value || !pickupTime.value || !returnTime.value) {
       if (showErrors) showToast("Choose a location, dates, and times before booking.", "warning");
       return false;
@@ -72,8 +75,13 @@
   }
 
   function rentalDays() {
-    const pickup = new Date(byId("bkPickupDate").value + "T" + byId("bkPickupTime").value);
-    const dropoff = new Date(byId("bkReturnDate").value + "T" + byId("bkReturnTime").value);
+    const pDate = byId("bkPickupDate");
+    const pTime = byId("bkPickupTime");
+    const rDate = byId("bkReturnDate");
+    const rTime = byId("bkReturnTime");
+    if (!pDate || !pTime || !rDate || !rTime) return 1;
+    const pickup = new Date((pDate.value || dateValue(0)) + "T" + (pTime.value || "09:30"));
+    const dropoff = new Date((rDate.value || dateValue(1)) + "T" + (rTime.value || "09:30"));
     return Math.max(1, Math.ceil((dropoff - pickup) / 86400000));
   }
 
@@ -258,11 +266,14 @@
   document.addEventListener("DOMContentLoaded", function () {
     setDefaults();
     restoreFleetSelection();
-    byId("signDate").textContent = new Date().toLocaleDateString("en-IN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
+    const signEl = byId("signDate");
+    if (signEl) {
+      signEl.textContent = new Date().toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
   });
 
   // ═══════════════════════════════════════
