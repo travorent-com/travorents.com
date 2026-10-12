@@ -271,6 +271,32 @@ function openRazorpay(booking) {
       theme: {
         color: "#0C447C"
       },
+      config: {
+        display: {
+          blocks: {
+            upi: {
+              name: "Pay using UPI / QR",
+              instruments: [
+                {
+                  method: "upi"
+                }
+              ]
+            },
+            other: {
+              name: "Other Payment Options",
+              instruments: [
+                { method: "card" },
+                { method: "netbanking" },
+                { method: "wallet" }
+              ]
+            }
+          },
+          sequence: ["block.upi", "block.other"],
+          preferences: {
+            show_default_blocks: true
+          }
+        }
+      },
       handler: function (response) {
         verifyRazorpayPayment(response, booking);
       },
