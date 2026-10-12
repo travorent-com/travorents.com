@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
         bookingIdElement.textContent = bId;
         localStorage.setItem('lastBookingId', bId);
 
-        const isQR = params.get('qr') === '1' || b.payment_status === 'qr_pending';
+        const isQR = params.get('qr') === '1' || params.get('upi') === '1' || b.payment_status === 'qr_pending' || b.payment_status === 'upi_submitted';
         const isCash = params.get('cash') === '1' || b.payment_status === 'cash_on_visit';
         const isRZP = params.get('rzp') === '1' || b.payment_status === 'completed';
         

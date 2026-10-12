@@ -181,7 +181,7 @@
     /* ─── Payment Methods ─── */
     .payment-tabs {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -570,41 +570,87 @@
         </div>
         
         <div class="payment-tabs">
-          <div id="tabOnline" class="payment-tab active" onclick="setPaymentMethod('online')">
+          <div id="tabUPI" class="payment-tab active" onclick="setPaymentMethod('upi')">
+            <i class="fa-solid fa-qrcode" style="color: #5F259F;"></i>
+            <div>
+              <p>UPI & QR Code</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">GPay, PhonePe, Paytm, QR</span>
+            </div>
+          </div>
+          <div id="tabOnline" class="payment-tab" onclick="setPaymentMethod('online')">
             <i class="fa-solid fa-bolt" style="color: #0C447C;"></i>
             <div>
-              <p>Razorpay (Fast & Secure)</p>
-              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">UPI, Debit/Credit Card, NetBanking</span>
+              <p>Razorpay</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Cards, NetBanking, Wallets</span>
             </div>
           </div>
           <div id="tabCash" class="payment-tab" onclick="setPaymentMethod('cash')">
-            <i class="fa-solid fa-hand-holding-dollar"></i>
+            <i class="fa-solid fa-hand-holding-dollar" style="color: #137333;"></i>
             <div>
               <p>Cash on Visit</p>
-              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Pay cash or UPI at pickup</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">Pay at vehicle pickup</span>
             </div>
           </div>
         </div>
 
         <div class="payment-content">
-          <!-- Razorpay Option Box -->
-          <div id="onlinePaymentDesc" style="font-size: 0.95rem; color: var(--text-muted); text-align: center; padding: 1.2rem 0;">
+          <!-- Option 1: Direct UPI & QR Code Box -->
+          <div id="upiPaymentArea" class="qr-payment-box active" style="text-align: center; padding: 1.2rem 0; display: block;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 0.6rem;">
+              <span style="font-size: 1.4rem; color: #5F259F; font-weight: 800;">UPI Instant Pay</span>
+              <span style="background: #e6f4ea; color: #137333; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;">FAST & ZERO FEE</span>
+            </div>
+            <p style="font-size: 0.92rem; margin-bottom: 0.8rem; color: var(--text-muted);">
+              Scan QR code on Desktop <strong>OR</strong> tap below on Mobile to open your UPI app:
+            </p>
+            <div class="qr-image-wrapper">
+              <a id="qrLink" href="#" title="Click to open UPI App directly">
+                <img id="qrCodeImage" src="phonepe-qr.png" alt="UPI Merchant QR">
+              </a>
+            </div>
+            
+            <div style="margin: 0.5rem 0 0.8rem;">
+              <span style="display: inline-block; background: #fff; border: 1px solid #ced4da; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; color: #333;">
+                UPI ID: <strong style="color: #5F259F;">8984330609@jupiteraxis</strong>
+                <button type="button" onclick="navigator.clipboard.writeText('8984330609@jupiteraxis'); alert('UPI ID copied to clipboard!');" style="margin-left: 8px; border: none; background: #eee; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Copy</button>
+              </span>
+            </div>
+
+            <div style="margin: 0.5rem 0;">
+              <a id="openUpiAppBtn" href="#" class="upi-direct-btn">
+                <i class="fa-solid fa-mobile-screen-button"></i> 📲 Open UPI App & Pay Now
+              </a>
+            </div>
+
+            <div class="upi-apps-row">
+              <a id="gpayBtn" href="#" class="upi-app-chip">📱 Google Pay</a>
+              <a id="phonepeBtn" href="#" class="upi-app-chip">💜 PhonePe</a>
+              <a id="paytmBtn" href="#" class="upi-app-chip">💙 Paytm</a>
+              <a id="bhimBtn" href="#" class="upi-app-chip">🇮🇳 BHIM</a>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--primary-hover); font-weight: 600; margin-top: 1rem;">
+              ⚠️ Pay exactly <strong style="color: var(--text);">₹<span id="qrTotalAmount">0</span></strong>, then click <strong>Confirm Booking</strong> below!
+            </p>
+          </div>
+
+          <!-- Option 2: Razorpay Option Box -->
+          <div id="onlinePaymentDesc" style="display: none; font-size: 0.95rem; color: var(--text-muted); text-align: center; padding: 1.2rem 0;">
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 0.8rem;">
               <span style="font-size: 1.8rem; color: #0C447C; font-weight: 800; letter-spacing: -0.5px;">Razorpay</span>
               <span style="background: #e6f4ea; color: #137333; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;">SECURE CHECKOUT</span>
             </div>
-            <h3 style="color: var(--text); margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Pay Online Instantly</h3>
-            <p style="margin-bottom: 0.8rem; font-weight: 500;">Pay using Google Pay, PhonePe, Paytm, BHIM UPI, Cards (Visa, MasterCard, RuPay), or NetBanking.</p>
+            <h3 style="color: var(--text); margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Pay with Cards & NetBanking</h3>
+            <p style="margin-bottom: 0.8rem; font-weight: 500;">Pay using Debit/Credit Cards (Visa, MasterCard, RuPay), NetBanking (SBI, HDFC, ICICI, etc.), or Wallets.</p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px;">
-              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;"><i class="fa-brands fa-google-pay"></i> Google Pay</span>
-              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;">PhonePe</span>
-              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;">Paytm</span>
-              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;"><i class="fa-regular fa-credit-card"></i> Cards</span>
+              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;"><i class="fa-regular fa-credit-card"></i> Visa / MasterCard</span>
+              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;">RuPay Cards</span>
               <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;"><i class="fa-solid fa-building-columns"></i> NetBanking</span>
+              <span style="background: #fff; border: 1px solid #ced4da; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;"><i class="fa-solid fa-wallet"></i> Wallets</span>
             </div>
           </div>
           
-          <!-- Cash Option Box -->
+          <!-- Option 3: Cash Option Box -->
           <div id="cashPaymentDesc" style="display: none; font-size: 0.95rem; color: var(--text-muted); text-align: center; padding: 1.2rem 0;">
             <i class="fa-solid fa-hand-holding-dollar" style="font-size: 3rem; color: var(--primary-hover); margin-bottom: 1rem; display: block;"></i>
             <h3 style="color: var(--text); margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif;">Cash on Visit (Pay at Pickup)</h3>
@@ -800,7 +846,12 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", autofillCustomerDetails);
+    document.addEventListener("DOMContentLoaded", function() {
+      autofillCustomerDetails();
+      if (typeof setPaymentMethod === 'function') {
+        setPaymentMethod('upi');
+      }
+    });
     window.addEventListener("load", autofillCustomerDetails);
   </script>
 </body>

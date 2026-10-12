@@ -72,7 +72,7 @@ if (booking) {
 }
 
 // Initialize payment method
-let paymentMethod = "online";
+let paymentMethod = "upi";
 
 function updateQRAndTotal(newTotal) {
   if (document.getElementById("totalPrice")) {
@@ -102,22 +102,31 @@ function updateQRAndTotal(newTotal) {
 
 function setPaymentMethod(method) {
   paymentMethod = method;
+  const tabUPI = document.getElementById("tabUPI");
   const tabOnline = document.getElementById("tabOnline");
   const tabCash = document.getElementById("tabCash");
+  const upiArea = document.getElementById("upiPaymentArea");
   const onlineDesc = document.getElementById("onlinePaymentDesc");
   const cashDesc = document.getElementById("cashPaymentDesc");
   const payBtn = document.querySelector(".payment-btn");
 
-  if (method === "online") {
+  if (tabUPI) tabUPI.classList.remove("active");
+  if (tabOnline) tabOnline.classList.remove("active");
+  if (tabCash) tabCash.classList.remove("active");
+  if (upiArea) upiArea.style.display = "none";
+  if (onlineDesc) onlineDesc.style.display = "none";
+  if (cashDesc) cashDesc.style.display = "none";
+
+  if (method === "upi") {
+    if (tabUPI) tabUPI.classList.add("active");
+    if (upiArea) upiArea.style.display = "block";
+    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span id="payBtnLabel">I Have Paid via UPI → Confirm</span>';
+  } else if (method === "online") {
     if (tabOnline) tabOnline.classList.add("active");
-    if (tabCash) tabCash.classList.remove("active");
     if (onlineDesc) onlineDesc.style.display = "block";
-    if (cashDesc) cashDesc.style.display = "none";
     if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> <span id="payBtnLabel">Pay Now with Razorpay</span>';
   } else {
     if (tabCash) tabCash.classList.add("active");
-    if (tabOnline) tabOnline.classList.remove("active");
-    if (onlineDesc) onlineDesc.style.display = "none";
     if (cashDesc) cashDesc.style.display = "block";
     if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-hand-holding-dollar"></i> <span id="payBtnLabel">Confirm Booking (Pay on Visit)</span>';
   }
@@ -157,7 +166,13 @@ function makePayment(){
   currentBooking.customerPhone = customerPhone;
   currentBooking.customerEmail = customerEmail;
   currentBooking.paymentMethod = paymentMethod;
-  currentBooking.paymentId = paymentMethod === "online" ? "RAZORPAY_PENDING" : "CASH_ON_VISIT";
+  if (paymentMethod === "online") {
+    currentBooking.paymentId = "RAZORPAY_PENDING";
+  } else if (paymentMethod === "upi") {
+    currentBooking.paymentId = "UPI_SUBMITTED";
+  } else {
+    currentBooking.paymentId = "CASH_ON_VISIT";
+  }
   localStorage.setItem("booking", JSON.stringify(currentBooking));
 
   createBookingInDb(currentBooking).then((saved) => {
@@ -167,6 +182,8 @@ function makePayment(){
       
       if (paymentMethod === "online") {
         openRazorpay(currentBooking);
+      } else if (paymentMethod === "upi") {
+        confirmUpiBooking(currentBooking);
       } else {
         confirmCashBooking(currentBooking);
       }
@@ -174,11 +191,13 @@ function makePayment(){
       console.warn("Backend server unreachable or timed out. Falling back to local checkout.");
       const offlineRef = "TR-" + Date.now();
       currentBooking.bookingRef = offlineRef;
-      currentBooking.payment_status = paymentMethod === "online" ? "pending" : "cash_on_visit";
+      currentBooking.payment_status = paymentMethod === "online" ? "pending" : (paymentMethod === "upi" ? "upi_submitted" : "cash_on_visit");
       localStorage.setItem("booking", JSON.stringify(currentBooking));
       
       if (paymentMethod === "online") {
         openRazorpay(currentBooking);
+      } else if (paymentMethod === "upi") {
+        window.location.href = `payment-success.html?ref=${offlineRef}&upi=1`;
       } else {
         window.location.href = `payment-success.html?ref=${offlineRef}&cash=1`;
       }
@@ -370,6 +389,16 @@ function verifyRazorpayPayment(paymentResponse, booking) {
   });
 }
 
+function confirmUpiBooking(booking) {
+  sendBookingConfirmation(booking);
+  updateBookingInDb(booking.bookingRef, {
+    payment_status: "upi_submitted",
+    payment_id: "UPI_" + Date.now(),
+  }).finally(() => {
+    window.location.href = `payment-success.html?ref=${booking.bookingRef}&upi=1`;
+  });
+}
+
 function confirmCashBooking(booking) {
   sendBookingConfirmation(booking);
   fetch(`${API_BASE}/api/confirm-cash-booking`, {
@@ -528,5 +557,8 @@ function updateHelmetCharge() {
 
   const qrTotalEl = document.getElementById("qrTotalAmount");
   if (qrTotalEl) qrTotalEl.textContent = Math.round(total);
+  if (typeof updateQRAndTotal === 'function') {
+    updateQRAndTotal(Math.round(total));
+  }
 }
 
