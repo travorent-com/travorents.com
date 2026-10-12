@@ -15,8 +15,8 @@ const PORT = originalPort || process.env.PORT || 3000;
 // ════════════════════════════════════════
 // RAZORPAY CONFIGURATION
 // ════════════════════════════════════════
-const RAZORPAY_KEY_ID     = process.env.RAZORPAY_KEY_ID     || '';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
+const RAZORPAY_KEY_ID     = process.env.RAZORPAY_KEY_ID     || 'rzp_test_T5X9hFgwLNRiar';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'JWXCdKIMDy2wj72BYO9PrWPz';
 
 let razorpay = null;
 if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET) {
