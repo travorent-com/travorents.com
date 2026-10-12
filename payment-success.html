@@ -286,27 +286,10 @@ document.addEventListener('DOMContentLoaded', function () {
         bookingIdElement.textContent = bId;
         localStorage.setItem('lastBookingId', bId);
 
-        const isQR = params.get('qr') === '1' || params.get('upi') === '1' || b.payment_status === 'qr_pending' || b.payment_status === 'upi_submitted';
+        const isQR = params.get('qr') === '1' || b.payment_status === 'qr_pending';
         const isCash = params.get('cash') === '1' || b.payment_status === 'cash_on_visit';
-        const isRZP = params.get('rzp') === '1' || b.payment_status === 'completed';
         
-        if (isRZP) {
-            // Update Indicator Banner
-            const banner = document.querySelector('body > div');
-            if (banner) banner.innerHTML = "✅ Step 5 Complete: Payment Received via Razorpay → WhatsApp Confirmation Sent";
-
-            // Update Card Title & Desc
-            const title = document.querySelector('.success-card h1');
-            if (title) title.innerText = "Payment Successful! 🎉";
-            const desc = document.querySelector('.success-card p');
-            if (desc) desc.innerText = "Your online payment via Razorpay was successful and booking is confirmed.";
-
-            // Update Next Steps
-            const steps = document.querySelectorAll('.next-steps li');
-            if (steps.length > 1) {
-                steps[1].innerHTML = "Digital invoice and confirmation sent to your WhatsApp";
-            }
-        } else if (isQR) {
+        if (isQR) {
             // Update Indicator Banner
             const banner = document.querySelector('body > div');
             if (banner) banner.innerHTML = "✅ Step 5 Complete: Booking Registered → Pending QR Verification";
@@ -374,14 +357,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const isQR = params.get('qr') === '1' || booking.payment_status === 'qr_pending';
         const isCash = params.get('cash') === '1' || booking.payment_status === 'cash_on_visit';
-        const isRZP = params.get('rzp') === '1' || booking.payment_status === 'completed';
         
         let paymentLabel = `Amount Paid: ₹${amt}`;
         let statusMsg = '✅ Your TravoRents booking is confirmed!';
-        if (isRZP) {
-            paymentLabel = `Amount Paid: ₹${amt} (Paid via Razorpay Online)`;
-            statusMsg = '✅ Payment Verified via Razorpay — Booking Confirmed!';
-        } else if (isQR) {
+        if (isQR) {
             paymentLabel = `Amount Paid: ₹${amt} (via QR - Pending Verification)`;
             statusMsg = '✅ Your TravoRents booking is registered!';
         } else if (isCash) {
