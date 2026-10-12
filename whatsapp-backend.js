@@ -6,22 +6,25 @@ const axios = require('axios');
 const nodemailer = require('nodemailer');
 const crypto = require('node:crypto');
 const path = require('path');
+const Razorpay = require('razorpay');
 const db = require('./db');
 
 const app = express();
 const PORT = originalPort || process.env.PORT || 3000;
 
 // ════════════════════════════════════════
-// PHONEPE CONFIGURATION
+// RAZORPAY CONFIGURATION
 // ════════════════════════════════════════
-const PHONEPE_MERCHANT_ID = process.env.PHONEPE_MERCHANT_ID || '';
-const PHONEPE_SALT_KEY    = process.env.PHONEPE_SALT_KEY    || '';
-const PHONEPE_SALT_INDEX  = process.env.PHONEPE_SALT_INDEX  || '1';
-const PHONEPE_ENV         = process.env.PHONEPE_ENV         || 'UAT'; // 'UAT' or 'PRODUCTION'
+const RAZORPAY_KEY_ID     = process.env.RAZORPAY_KEY_ID     || 'rzp_test_T5X9hFgwLNRiar';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'JWXCdKIMDy2wj72BYO9PrWPz';
 
-const PHONEPE_BASE_URL = PHONEPE_ENV === 'PRODUCTION'
-  ? 'https://api.phonepe.com/apis/hermes'
-  : 'https://api-preprod.phonepe.com/apis/pg-sandbox';
+let razorpay = null;
+if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: RAZORPAY_KEY_ID,
+    key_secret: RAZORPAY_KEY_SECRET,
+  });
+}
 
 // ════════════════════════════════════════
 // META WHATSAPP CLOUD API CONFIGURATION
@@ -67,9 +70,16 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'online',
     service: 'TravoRents Backend',
-    phonepe: PHONEPE_MERCHANT_ID ? 'configured' : 'NOT_CONFIGURED',
+    razorpay: RAZORPAY_KEY_ID ? 'configured' : 'NOT_CONFIGURED',
     whatsapp: WA_TOKEN ? 'configured' : 'NOT_CONFIGURED',
     timestamp: new Date().toISOString(),
+  });
+});
+
+app.get('/api/razorpay-key', (req, res) => {
+  res.json({
+    success: true,
+    keyId: RAZORPAY_KEY_ID
   });
 });
 
@@ -229,155 +239,118 @@ app.patch('/api/bookings/:ref', (req, res) => {
 });
 
 // ════════════════════════════════════════
-// PHONEPE — INITIATE PAYMENT
+// RAZORPAY — CREATE ORDER
 // ════════════════════════════════════════
-app.post('/api/initiate-payment', async (req, res) => {
-  const { bookingRef, amount, customerPhone } = req.body || {};
-  if (!bookingRef || !amount)
+app.post('/api/razorpay/create-order', async (req, res) => {
+  const { bookingRef, amount } = req.body || {};
+  if (!bookingRef || !amount) {
     return res.status(400).json({ success: false, message: 'bookingRef and amount are required' });
+  }
 
-  const merchantTransactionId = `TXN${Date.now()}`;
-  const amountInPaise = Math.round(Number(amount) * 100);
-  const mobile = (customerPhone || '').replace(/\D/g, '').slice(-10);
+  if (!razorpay) {
+    return res.status(500).json({ success: false, message: 'Razorpay is not configured on the server. Please check your credentials in .env.' });
+  }
 
-  const payload = {
-    merchantId: PHONEPE_MERCHANT_ID,
-    merchantTransactionId,
-    merchantUserId: `USR_${mobile || Date.now()}`,
-    amount: amountInPaise,
-    redirectUrl: `${APP_BASE_URL}/payment/callback?ref=${bookingRef}&txn=${merchantTransactionId}`,
-    redirectMode: 'REDIRECT',
-    callbackUrl: `${APP_BASE_URL}/api/phonepe-webhook`,
-    mobileNumber: mobile,
-    paymentInstrument: { type: 'PAY_PAGE' },
-  };
+  try {
+    const amountInPaise = Math.round(Number(amount) * 100);
+    // Razorpay receipt maximum length is 40 characters
+    const safeReceipt = `TR_${bookingRef.replace(/[^a-zA-Z0-9]/g, '').slice(-30)}`;
+    const options = {
+      amount: amountInPaise,
+      currency: 'INR',
+      receipt: safeReceipt,
+      notes: {
+        bookingRef,
+      },
+    };
 
-  const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
-  const checksumStr   = base64Payload + '/pg/v1/pay' + PHONEPE_SALT_KEY;
-  const sha256Hash    = crypto.createHash('sha256').update(checksumStr).digest('hex');
-  const checksum      = `${sha256Hash}###${PHONEPE_SALT_INDEX}`;
+    const order = await razorpay.orders.create(options);
 
-  // If PhonePe not configured, return a test-mode response
-  if (!PHONEPE_MERCHANT_ID || !PHONEPE_SALT_KEY) {
-    console.log('[PhonePe] NOT CONFIGURED — simulating payment initiation');
-    return res.json({
+    // Save order_id to booking record
+    try {
+      db.prepare(`UPDATE bookings SET order_id = ? WHERE booking_ref = ?`).run(order.id, bookingRef);
+    } catch (e) {
+      console.warn('[DB] Could not set order_id immediately:', e.message);
+    }
+
+    res.json({
       success: true,
-      simulated: true,
-      paymentUrl: `${APP_BASE_URL}/payment/callback?ref=${bookingRef}&txn=${merchantTransactionId}&simulated=1`,
-      transactionId: merchantTransactionId,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId: RAZORPAY_KEY_ID,
+    });
+  } catch (error) {
+    console.error('[Razorpay Order Creation Error]:', error);
+    res.status(500).json({
+      success: false,
+      message: error.error?.description || error.message || 'Failed to create Razorpay order',
+    });
+  }
+});
+
+// ════════════════════════════════════════
+// RAZORPAY — VERIFY PAYMENT
+// ════════════════════════════════════════
+app.post('/api/razorpay/verify-payment', async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingRef } = req.body || {};
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !bookingRef) {
+    return res.status(400).json({
+      success: false,
+      message: 'razorpay_order_id, razorpay_payment_id, razorpay_signature, and bookingRef are required',
     });
   }
 
   try {
-    const response = await axios.post(
-      `${PHONEPE_BASE_URL}/pg/v1/pay`,
-      { request: base64Payload },
-      { headers: { 'Content-Type': 'application/json', 'X-VERIFY': checksum } }
-    );
+    // Generate HMAC SHA256 expected signature
+    const hmac = crypto.createHmac('sha256', RAZORPAY_KEY_SECRET);
+    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const expectedSignature = hmac.digest('hex');
 
-    const data = response.data;
-    if (data.success && data.data && data.data.instrumentResponse) {
-      const paymentUrl = data.data.instrumentResponse.redirectInfo.url;
-      return res.json({ success: true, paymentUrl, transactionId: merchantTransactionId });
-    }
-    return res.status(500).json({ success: false, message: data.message || 'PhonePe initiation failed' });
-  } catch (error) {
-    console.error('[PhonePe] Initiation error:', error.response?.data || error.message);
-    return res.status(500).json({ success: false, message: 'Payment initiation failed' });
-  }
-});
-
-// ════════════════════════════════════════
-// PHONEPE — PAYMENT CALLBACK (REDIRECT)
-// ════════════════════════════════════════
-app.get('/payment/callback', async (req, res) => {
-  const { ref, txn, simulated } = req.query;
-  if (!ref) return res.redirect('/payment-failed.html');
-
-  let paymentSuccess = false;
-
-  if (simulated === '1') {
-    // Test mode — treat as success
-    paymentSuccess = true;
-  } else if (txn) {
-    // Verify with PhonePe
-    const endpoint     = `/pg/v1/status/${PHONEPE_MERCHANT_ID}/${txn}`;
-    const checksumStr  = endpoint + PHONEPE_SALT_KEY;
-    const sha256Hash   = crypto.createHash('sha256').update(checksumStr).digest('hex');
-    const checksum     = `${sha256Hash}###${PHONEPE_SALT_INDEX}`;
-
-    try {
-      const response = await axios.get(`${PHONEPE_BASE_URL}${endpoint}`, {
-        headers: { 'Content-Type': 'application/json', 'X-VERIFY': checksum, 'X-MERCHANT-ID': PHONEPE_MERCHANT_ID }
+    if (expectedSignature !== razorpay_signature) {
+      console.warn('[Razorpay] Signature mismatch for booking:', bookingRef);
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: invalid signature',
       });
-      paymentSuccess = response.data?.success && response.data?.data?.state === 'COMPLETED';
-    } catch (err) {
-      console.error('[PhonePe] Verification error:', err.message);
     }
-  }
 
-  if (paymentSuccess) {
-    // Update booking status in DB
+    // Signature matches! Update DB status to 'completed'
     try {
-      db.prepare(`UPDATE bookings SET payment_status = ?, order_id = ? WHERE booking_ref = ?`)
-        .run('completed', txn, ref);
-    } catch (e) { console.error('[DB] Update booking error:', e.message); }
+      db.prepare(`
+        UPDATE bookings SET
+          payment_id = ?,
+          order_id = ?,
+          payment_status = ?,
+          updated_at = datetime('now')
+        WHERE booking_ref = ?
+      `).run(razorpay_payment_id, razorpay_order_id, 'completed', bookingRef);
+    } catch (e) {
+      console.error('[DB] Update booking error:', e.message);
+    }
 
-    // Fetch booking and send WhatsApp
-    try {
-      const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(ref);
-      if (booking) {
+    // Retrieve full booking data and send WhatsApp confirmation
+    const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
+    if (booking) {
+      try {
         await Promise.all([
           sendWhatsAppToCustomer(booking),
           sendWhatsAppToOwner(booking),
         ]);
-      }
-    } catch (e) { console.error('[WhatsApp] Error sending notifications:', e.message); }
-
-    return res.redirect(`/payment-success.html?ref=${ref}`);
-  } else {
-    return res.redirect('/payment-failed.html');
-  }
-});
-
-// ════════════════════════════════════════
-// PHONEPE — SERVER WEBHOOK
-// ════════════════════════════════════════
-app.post('/api/phonepe-webhook', async (req, res) => {
-  try {
-    const xVerify = req.headers['x-verify'];
-    const { response: base64Response } = req.body || {};
-    if (!base64Response || !xVerify) return res.status(400).json({ success: false });
-
-    const checksumStr     = base64Response + PHONEPE_SALT_KEY;
-    const expectedHash    = crypto.createHash('sha256').update(checksumStr).digest('hex');
-    const expectedChecksum = `${expectedHash}###${PHONEPE_SALT_INDEX}`;
-
-    if (expectedChecksum !== xVerify) {
-      console.warn('[PhonePe Webhook] Invalid signature');
-      return res.status(403).json({ success: false });
-    }
-
-    const decoded = JSON.parse(Buffer.from(base64Response, 'base64').toString('utf-8'));
-    const { merchantTransactionId, state } = decoded.data || {};
-
-    if (state === 'COMPLETED') {
-      // Find booking by transaction id
-      const bookings = db.prepare('SELECT * FROM bookings ORDER BY id DESC').all();
-      const booking  = bookings.find(b => b.order_id === merchantTransactionId);
-      if (booking && booking.payment_status !== 'completed') {
-        db.prepare('UPDATE bookings SET payment_status = ? WHERE booking_ref = ?')
-          .run('completed', booking.booking_ref);
-        await Promise.all([
-          sendWhatsAppToCustomer(booking),
-          sendWhatsAppToOwner(booking),
-        ]);
+      } catch (err) {
+        console.error('[WhatsApp Notification Error]:', err.message);
       }
     }
-    res.status(200).json({ success: true });
+
+    res.json({
+      success: true,
+      message: 'Payment verified and booking confirmed successfully',
+      booking,
+    });
   } catch (error) {
-    console.error('[PhonePe Webhook] Error:', error.message);
-    res.status(500).json({ success: false });
+    console.error('[Razorpay Verify Error]:', error.message);
+    res.status(500).json({ success: false, message: 'Server error during payment verification' });
   }
 });
 
@@ -908,7 +881,7 @@ app.post('/webhook', (req, res) => {
 // ════════════════════════════════════════
 app.listen(PORT, () => {
   console.log(`\n🚗 TravoRents backend running → http://localhost:${PORT}`);
-  console.log(`   PhonePe: ${PHONEPE_MERCHANT_ID ? '✅ Configured' : '⚠️  Not configured (test mode)'}`);
+  console.log(`   Razorpay: ${RAZORPAY_KEY_ID ? '✅ Configured (' + RAZORPAY_KEY_ID + ')' : '⚠️  Not configured'}`);
   console.log(`   WhatsApp: ${WA_TOKEN ? '✅ Configured' : '⚠️  Not configured (simulated)'}\n`);
 });
 

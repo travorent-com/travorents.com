@@ -103,33 +103,23 @@ function updateQRAndTotal(newTotal) {
 function setPaymentMethod(method) {
   paymentMethod = method;
   const tabOnline = document.getElementById("tabOnline");
-  const tabQR = document.getElementById("tabQR");
-  const qrArea = document.getElementById("qrPaymentArea");
+  const tabCash = document.getElementById("tabCash");
   const onlineDesc = document.getElementById("onlinePaymentDesc");
+  const cashDesc = document.getElementById("cashPaymentDesc");
   const payBtn = document.querySelector(".payment-btn");
 
   if (method === "online") {
     if (tabOnline) tabOnline.classList.add("active");
-    if (tabQR) tabQR.classList.remove("active");
+    if (tabCash) tabCash.classList.remove("active");
     if (onlineDesc) onlineDesc.style.display = "block";
-    if (qrArea) qrArea.style.display = "none";
-    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span id="payBtnLabel">Confirm Booking (Pay on Visit)</span>';
+    if (cashDesc) cashDesc.style.display = "none";
+    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> <span id="payBtnLabel">Pay Now with Razorpay</span>';
   } else {
-    if (tabQR) tabQR.classList.add("active");
+    if (tabCash) tabCash.classList.add("active");
     if (tabOnline) tabOnline.classList.remove("active");
     if (onlineDesc) onlineDesc.style.display = "none";
-    if (qrArea) qrArea.style.display = "block";
-    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-mobile-screen"></i> <span id="payBtnLabel">Open UPI App / Confirm Booking</span>';
-
-    // Auto-launch UPI app on mobile if user clicks Scan QR Code tab
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isMobile) {
-      const totPrice = document.getElementById("totalPrice") ? document.getElementById("totalPrice").innerText : "0";
-      const upiLink = "upi://pay?pa=8984330609@jupiteraxis&pn=TravoRents&am=" + totPrice + "&cu=INR&tn=TravoRents";
-      setTimeout(() => {
-        window.location.href = upiLink;
-      }, 300);
-    }
+    if (cashDesc) cashDesc.style.display = "block";
+    if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-hand-holding-dollar"></i> <span id="payBtnLabel">Confirm Booking (Pay on Visit)</span>';
   }
 }
 
@@ -166,7 +156,8 @@ function makePayment(){
   currentBooking.customerName = customerName;
   currentBooking.customerPhone = customerPhone;
   currentBooking.customerEmail = customerEmail;
-  currentBooking.paymentId = paymentMethod === "online" ? "CASH_ON_VISIT" : "QR_PAYMENT";
+  currentBooking.paymentMethod = paymentMethod;
+  currentBooking.paymentId = paymentMethod === "online" ? "RAZORPAY_PENDING" : "CASH_ON_VISIT";
   localStorage.setItem("booking", JSON.stringify(currentBooking));
 
   createBookingInDb(currentBooking).then((saved) => {
@@ -175,21 +166,21 @@ function makePayment(){
       localStorage.setItem("booking", JSON.stringify(currentBooking));
       
       if (paymentMethod === "online") {
-        confirmCashBooking(currentBooking);
+        openRazorpay(currentBooking);
       } else {
-        confirmQRBooking(currentBooking);
+        confirmCashBooking(currentBooking);
       }
     } else {
       console.warn("Backend server unreachable or timed out. Falling back to local checkout.");
       const offlineRef = "TR-" + Date.now();
       currentBooking.bookingRef = offlineRef;
-      currentBooking.payment_status = paymentMethod === "online" ? "cash_on_visit" : "qr_pending";
+      currentBooking.payment_status = paymentMethod === "online" ? "pending" : "cash_on_visit";
       localStorage.setItem("booking", JSON.stringify(currentBooking));
       
       if (paymentMethod === "online") {
-        window.location.href = `payment-success.html?ref=${offlineRef}&cash=1`;
+        openRazorpay(currentBooking);
       } else {
-        window.location.href = `payment-success.html?ref=${offlineRef}&qr=1`;
+        window.location.href = `payment-success.html?ref=${offlineRef}&cash=1`;
       }
     }
   });
@@ -238,62 +229,118 @@ function updateBookingInDb(bookingRef, fields) {
     });
 }
 
-function openPhonePe(booking) {
-  const totalAmount = document.getElementById("totalPrice").innerText;
+function openRazorpay(booking) {
+  const totalAmount = document.getElementById("totalPrice")?.innerText || booking.amount;
+  const payBtn = document.querySelector(".payment-btn");
+  const originalBtnHtml = payBtn ? payBtn.innerHTML : "";
+  if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening Razorpay...';
 
-  fetch(`${API_BASE}/api/initiate-payment`, {
+  fetch(`${API_BASE}/api/razorpay/create-order`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       bookingRef: booking.bookingRef,
       amount: totalAmount,
-      customerPhone: booking.customerPhone
     })
   })
   .then(res => res.json())
-  .then(data => {
-    if (data.success && data.paymentUrl) {
-      // Redirect to PhonePe payment URL
-      window.location.href = data.paymentUrl;
-    } else {
-      alert("Payment initiation failed: " + (data.message || "Unknown error"));
+  .then(orderData => {
+    if (payBtn) {
+      payBtn.disabled = false;
+      payBtn.innerHTML = originalBtnHtml;
     }
+
+    if (!orderData.success) {
+      alert("Could not initialize Razorpay: " + (orderData.message || "Please check server status."));
+      return;
+    }
+
+    const options = {
+      key: orderData.keyId,
+      amount: orderData.amount,
+      currency: orderData.currency || "INR",
+      name: "TravoRents",
+      description: `Rental Booking ${booking.bookingRef} - ${booking.vehicleName}`,
+      image: "main%20logo.png",
+      order_id: orderData.orderId,
+      prefill: {
+        name: booking.customerName || "",
+        email: booking.customerEmail || "",
+        contact: booking.customerPhone || ""
+      },
+      theme: {
+        color: "#0C447C"
+      },
+      handler: function (response) {
+        verifyRazorpayPayment(response, booking);
+      },
+      modal: {
+        ondismiss: function () {
+          console.log("Razorpay checkout window was closed by the user.");
+          if (payBtn) {
+            payBtn.disabled = false;
+            payBtn.innerHTML = originalBtnHtml;
+          }
+        }
+      }
+    };
+
+    if (typeof Razorpay === "undefined") {
+      alert("Razorpay checkout is still loading. Please check your internet connection and try again.");
+      return;
+    }
+
+    const rzp = new Razorpay(options);
+    rzp.on("payment.failed", function (failResponse) {
+      console.error("Razorpay Payment Failed:", failResponse.error);
+      alert("Payment Failed: " + (failResponse.error.description || "The transaction was unsuccessful."));
+      if (payBtn) {
+        payBtn.disabled = false;
+        payBtn.innerHTML = originalBtnHtml;
+      }
+    });
+    rzp.open();
   })
   .catch(err => {
-    console.error("PhonePe Error:", err);
-    alert("Could not start payment. Please try again.");
+    if (payBtn) {
+      payBtn.disabled = false;
+      payBtn.innerHTML = originalBtnHtml;
+    }
+    console.error("Razorpay Error:", err);
+    alert("Could not connect to payment backend. Please ensure the server is running.");
   });
 }
 
-function confirmQRBooking(booking) {
-  sendBookingConfirmation(booking);
-  
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if (isMobile) {
-    const totPrice = document.getElementById("totalPrice") ? document.getElementById("totalPrice").innerText : (booking.amount || "0");
-    const upiLink = "upi://pay?pa=8984330609@jupiteraxis&pn=TravoRents&am=" + totPrice + "&cu=INR&tn=TravoRents";
-    // Attempt launching UPI app intent chooser
-    window.location.href = upiLink;
-  }
+function verifyRazorpayPayment(paymentResponse, booking) {
+  const payBtn = document.querySelector(".payment-btn");
+  if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...';
 
-  fetch(`${API_BASE}/api/confirm-qr-booking`, {
+  fetch(`${API_BASE}/api/razorpay/verify-payment`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      razorpay_order_id: paymentResponse.razorpay_order_id,
+      razorpay_payment_id: paymentResponse.razorpay_payment_id,
+      razorpay_signature: paymentResponse.razorpay_signature,
       bookingRef: booking.bookingRef
     })
   })
   .then(res => res.json())
   .then(data => {
-    setTimeout(() => {
-      window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
-    }, isMobile ? 1200 : 0);
+    if (data.success) {
+      booking.paymentId = paymentResponse.razorpay_payment_id;
+      booking.orderId = paymentResponse.razorpay_order_id;
+      booking.payment_status = "completed";
+      localStorage.setItem("booking", JSON.stringify(booking));
+
+      window.location.href = `payment-success.html?ref=${booking.bookingRef}&rzp=1`;
+    } else {
+      alert("Payment verification failed: " + (data.message || "Invalid signature"));
+    }
   })
   .catch(err => {
-    console.error("QR Confirm Error:", err);
-    setTimeout(() => {
-      window.location.href = `payment-success.html?ref=${booking.bookingRef}&qr=1`;
-    }, isMobile ? 1200 : 0);
+    console.error("Verification network error:", err);
+    window.location.href = `payment-success.html?ref=${booking.bookingRef}&rzp=1`;
   });
 }
 
