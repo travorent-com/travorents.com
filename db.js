@@ -163,11 +163,32 @@ module.exports = {
                 bookings[idx].payment_status = args[3];
                 bookings[idx].paymentStatus = args[3];
               }
+            } else if (args.length === 4) {
+              if (args[0] !== null) {
+                bookings[idx].payment_id = args[0];
+                bookings[idx].paymentId = args[0];
+              }
+              if (args[1] !== null) {
+                bookings[idx].order_id = args[1];
+                bookings[idx].orderId = args[1];
+              }
+              if (args[2] !== null) {
+                bookings[idx].payment_status = args[2];
+                bookings[idx].paymentStatus = args[2];
+              }
             } else if (args.length === 3) {
               bookings[idx].payment_status = args[0];
               bookings[idx].paymentStatus = args[0];
               bookings[idx].order_id = args[1];
               bookings[idx].orderId = args[1];
+            } else if (args.length === 2) {
+              if (query.includes('order_id = ?')) {
+                bookings[idx].order_id = args[0];
+                bookings[idx].orderId = args[0];
+              } else {
+                bookings[idx].payment_status = args[0];
+                bookings[idx].paymentStatus = args[0];
+              }
             }
             bookings[idx].updated_at = new Date().toISOString();
             bookings[idx] = normalizeBooking(bookings[idx]);
