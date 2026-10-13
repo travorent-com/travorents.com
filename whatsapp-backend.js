@@ -15,8 +15,8 @@ const PORT = originalPort || process.env.PORT || 3000;
 // ════════════════════════════════════════
 // RAZORPAY CONFIGURATION
 // ════════════════════════════════════════
-const RAZORPAY_KEY_ID     = process.env.RAZORPAY_KEY_ID     || 'rzp_test_T5X9hFgwLNRiar';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'JWXCdKIMDy2wj72BYO9PrWPz';
+const RAZORPAY_KEY_ID     = process.env.RAZORPAY_KEY_ID     || 'rzp_test_TnILYGoYN376d3';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '2gZrY4PWzzct1ClZxgPG6Xf5';
 
 let razorpay = null;
 if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET) {
@@ -241,118 +241,165 @@ app.patch('/api/bookings/:ref', (req, res) => {
 // ════════════════════════════════════════
 // RAZORPAY — CREATE ORDER
 // ════════════════════════════════════════
-app.post('/api/razorpay/create-order', async (req, res) => {
-  const { bookingRef, amount } = req.body || {};
-  if (!bookingRef || !amount) {
-    return res.status(400).json({ success: false, message: 'bookingRef and amount are required' });
+async function createRazorpayOrderHandler(req, res) {
+  const { amount, currency = 'INR', receipt, bookingRef } = req.body || {};
+
+  // Validate amount >= 100 paise (or minimum 100)
+  const numericAmount = Number(amount);
+  if (!amount || isNaN(numericAmount) || numericAmount < 100) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid amount. Minimum amount is 100 paise (₹1).',
+    });
   }
 
   if (!razorpay) {
-    return res.status(500).json({ success: false, message: 'Razorpay is not configured on the server. Please check your credentials in .env.' });
+    return res.status(500).json({
+      success: false,
+      message: 'Razorpay is not configured on the server. Please check your credentials in .env.',
+    });
   }
 
   try {
-    const amountInPaise = Math.round(Number(amount) * 100);
-    // Razorpay receipt maximum length is 40 characters
-    const safeReceipt = `TR_${bookingRef.replace(/[^a-zA-Z0-9]/g, '').slice(-30)}`;
+    const amountInPaise = Math.round(numericAmount);
+    const safeReceipt = receipt || (bookingRef
+      ? `TR_${bookingRef.replace(/[^a-zA-Z0-9]/g, '').slice(-30)}`
+      : `rcpt_${Date.now()}`);
+
     const options = {
       amount: amountInPaise,
-      currency: 'INR',
+      currency: currency || 'INR',
       receipt: safeReceipt,
-      notes: {
-        bookingRef,
-      },
+      notes: bookingRef ? { bookingRef } : {},
     };
 
     const order = await razorpay.orders.create(options);
 
-    // Save order_id to booking record
-    try {
-      db.prepare(`UPDATE bookings SET order_id = ? WHERE booking_ref = ?`).run(order.id, bookingRef);
-    } catch (e) {
-      console.warn('[DB] Could not set order_id immediately:', e.message);
-    }
-
-    res.json({
-      success: true,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      keyId: RAZORPAY_KEY_ID,
-    });
-  } catch (error) {
-    console.error('[Razorpay Order Creation Error]:', error);
-    res.status(500).json({
-      success: false,
-      message: error.error?.description || error.message || 'Failed to create Razorpay order',
-    });
-  }
-});
-
-// ════════════════════════════════════════
-// RAZORPAY — VERIFY PAYMENT
-// ════════════════════════════════════════
-app.post('/api/razorpay/verify-payment', async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingRef } = req.body || {};
-
-  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !bookingRef) {
-    return res.status(400).json({
-      success: false,
-      message: 'razorpay_order_id, razorpay_payment_id, razorpay_signature, and bookingRef are required',
-    });
-  }
-
-  try {
-    // Generate HMAC SHA256 expected signature
-    const hmac = crypto.createHmac('sha256', RAZORPAY_KEY_SECRET);
-    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
-    const expectedSignature = hmac.digest('hex');
-
-    if (expectedSignature !== razorpay_signature) {
-      console.warn('[Razorpay] Signature mismatch for booking:', bookingRef);
-      return res.status(400).json({
-        success: false,
-        message: 'Payment verification failed: invalid signature',
-      });
-    }
-
-    // Signature matches! Update DB status to 'completed'
-    try {
-      db.prepare(`
-        UPDATE bookings SET
-          payment_id = ?,
-          order_id = ?,
-          payment_status = ?,
-          updated_at = datetime('now')
-        WHERE booking_ref = ?
-      `).run(razorpay_payment_id, razorpay_order_id, 'completed', bookingRef);
-    } catch (e) {
-      console.error('[DB] Update booking error:', e.message);
-    }
-
-    // Retrieve full booking data and send WhatsApp confirmation
-    const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
-    if (booking) {
+    // If bookingRef is provided, save order_id to booking record
+    if (bookingRef) {
       try {
-        await Promise.all([
-          sendWhatsAppToCustomer(booking),
-          sendWhatsAppToOwner(booking),
-        ]);
-      } catch (err) {
-        console.error('[WhatsApp Notification Error]:', err.message);
+        db.prepare(`UPDATE bookings SET order_id = ? WHERE booking_ref = ?`).run(order.id, bookingRef);
+      } catch (e) {
+        console.warn('[DB] Could not set order_id immediately:', e.message);
       }
     }
 
     res.json({
       success: true,
-      message: 'Payment verified and booking confirmed successfully',
-      booking,
+      order_id: order.id,
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      key_id: RAZORPAY_KEY_ID,
+      keyId: RAZORPAY_KEY_ID,
+    });
+  } catch (error) {
+    console.error('[Razorpay Order Creation Error]:', error);
+    // Handle auth failures (return 401)
+    if (
+      error.statusCode === 401 ||
+      (error.error && error.error.code === 'BAD_REQUEST_ERROR' && error.error.description?.toLowerCase().includes('auth'))
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: 'Razorpay authentication failed. Please verify your RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.',
+      });
+    }
+    // Handle other Razorpay API errors (return 500)
+    res.status(500).json({
+      success: false,
+      message: error.error?.description || error.message || 'Failed to create Razorpay order',
+    });
+  }
+}
+
+app.post('/api/create-order', createRazorpayOrderHandler);
+app.post('/api/razorpay/create-order', createRazorpayOrderHandler);
+
+// ════════════════════════════════════════
+// RAZORPAY — VERIFY PAYMENT SIGNATURE
+// ════════════════════════════════════════
+async function verifyRazorpayPaymentHandler(req, res) {
+  const {
+    razorpay_order_id,
+    order_id,
+    razorpay_payment_id,
+    payment_id,
+    razorpay_signature,
+    signature,
+    bookingRef,
+  } = req.body || {};
+
+  const orderId = razorpay_order_id || order_id;
+  const paymentId = razorpay_payment_id || payment_id;
+  const paymentSignature = razorpay_signature || signature;
+
+  // Validate missing fields: return 400
+  if (!orderId || !paymentId || !paymentSignature) {
+    return res.status(400).json({
+      success: false,
+      message: 'order_id, payment_id, and signature are required for payment verification',
+    });
+  }
+
+  try {
+    // Generate HMAC SHA256 expected signature: HMAC-SHA256(order_id + "|" + payment_id, KEY_SECRET)
+    const hmac = crypto.createHmac('sha256', RAZORPAY_KEY_SECRET);
+    hmac.update(`${orderId}|${paymentId}`);
+    const expectedSignature = hmac.digest('hex');
+
+    // Signature mismatch: return 400, do NOT mark as paid
+    if (expectedSignature !== paymentSignature) {
+      console.warn('[Razorpay] Signature mismatch for order:', orderId);
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed: signature mismatch',
+      });
+    }
+
+    // Signature matches! Update DB status to 'completed'
+    if (bookingRef) {
+      try {
+        db.prepare(`
+          UPDATE bookings SET
+            payment_id = ?,
+            order_id = ?,
+            payment_status = ?,
+            updated_at = datetime('now')
+          WHERE booking_ref = ?
+        `).run(paymentId, orderId, 'completed', bookingRef);
+      } catch (e) {
+        console.error('[DB] Update booking error:', e.message);
+      }
+
+      // Retrieve full booking data and send WhatsApp confirmation
+      const booking = db.prepare('SELECT * FROM bookings WHERE booking_ref = ?').get(bookingRef);
+      if (booking) {
+        try {
+          await Promise.all([
+            sendWhatsAppToCustomer(booking),
+            sendWhatsAppToOwner(booking),
+          ]);
+        } catch (err) {
+          console.error('[WhatsApp Notification Error]:', err.message);
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'Payment verified and signature matches successfully',
+      order_id: orderId,
+      payment_id: paymentId,
     });
   } catch (error) {
     console.error('[Razorpay Verify Error]:', error.message);
     res.status(500).json({ success: false, message: 'Server error during payment verification' });
   }
-});
+}
+
+app.post('/api/verify-payment', verifyRazorpayPaymentHandler);
+app.post('/api/razorpay/verify-payment', verifyRazorpayPaymentHandler);
 
 // ════════════════════════════════════════
 // META WHATSAPP CLOUD API — SEND MESSAGE

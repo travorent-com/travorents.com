@@ -233,14 +233,24 @@ function openRazorpay(booking) {
   const totalAmount = document.getElementById("totalPrice")?.innerText || booking.amount;
   const payBtn = document.querySelector(".payment-btn");
   const originalBtnHtml = payBtn ? payBtn.innerHTML : "";
-  if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening Razorpay...';
+  if (payBtn) {
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening Razorpay...';
+  }
 
-  fetch(`${API_BASE}/api/razorpay/create-order`, {
+  // Convert amount to paise (1 INR = 100 paise; minimum 100 paise)
+  const numericAmount = parseFloat((totalAmount + '').replace(/[^\d.]/g, '')) || 0;
+  const amountInPaise = Math.max(100, Math.round(numericAmount * 100));
+  const safeReceipt = `TR_${(booking.bookingRef || Date.now().toString()).replace(/[^a-zA-Z0-9]/g, '').slice(-30)}`;
+
+  fetch(`${API_BASE}/api/create-order`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      amount: amountInPaise,
+      currency: "INR",
+      receipt: safeReceipt,
       bookingRef: booking.bookingRef,
-      amount: totalAmount,
     })
   })
   .then(res => res.json())
@@ -255,14 +265,17 @@ function openRazorpay(booking) {
       return;
     }
 
+    const orderId = orderData.order_id || orderData.orderId;
+    const keyId = orderData.key_id || orderData.keyId;
+
     const options = {
-      key: orderData.keyId,
+      key: keyId,
       amount: orderData.amount,
       currency: orderData.currency || "INR",
       name: "TravoRents",
-      description: `Rental Booking ${booking.bookingRef} - ${booking.vehicleName}`,
+      description: `Rental Booking ${booking.bookingRef || ''} - ${booking.vehicleName || 'Vehicle'}`,
       image: "main%20logo.png",
-      order_id: orderData.orderId,
+      order_id: orderId,
       prefill: {
         name: booking.customerName || "",
         email: booking.customerEmail || "",
@@ -286,14 +299,14 @@ function openRazorpay(booking) {
     };
 
     if (typeof Razorpay === "undefined") {
-      alert("Razorpay checkout is still loading. Please check your internet connection and try again.");
+      alert("Razorpay checkout SDK is still loading. Please check your internet connection and try again.");
       return;
     }
 
     const rzp = new Razorpay(options);
     rzp.on("payment.failed", function (failResponse) {
       console.error("Razorpay Payment Failed:", failResponse.error);
-      alert("Payment Failed: " + (failResponse.error.description || "The transaction was unsuccessful."));
+      alert("Payment Failed: " + (failResponse.error?.description || "The transaction was unsuccessful."));
       if (payBtn) {
         payBtn.disabled = false;
         payBtn.innerHTML = originalBtnHtml;
@@ -313,12 +326,18 @@ function openRazorpay(booking) {
 
 function verifyRazorpayPayment(paymentResponse, booking) {
   const payBtn = document.querySelector(".payment-btn");
-  if (payBtn) payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...';
+  if (payBtn) {
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...';
+  }
 
-  fetch(`${API_BASE}/api/razorpay/verify-payment`, {
+  fetch(`${API_BASE}/api/verify-payment`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      order_id: paymentResponse.razorpay_order_id,
+      payment_id: paymentResponse.razorpay_payment_id,
+      signature: paymentResponse.razorpay_signature,
       razorpay_order_id: paymentResponse.razorpay_order_id,
       razorpay_payment_id: paymentResponse.razorpay_payment_id,
       razorpay_signature: paymentResponse.razorpay_signature,
@@ -336,6 +355,10 @@ function verifyRazorpayPayment(paymentResponse, booking) {
       window.location.href = `payment-success.html?ref=${booking.bookingRef}&rzp=1`;
     } else {
       alert("Payment verification failed: " + (data.message || "Invalid signature"));
+      if (payBtn) {
+        payBtn.disabled = false;
+        payBtn.innerHTML = '<i class="fa-solid fa-bolt"></i> Pay Now with Razorpay';
+      }
     }
   })
   .catch(err => {
